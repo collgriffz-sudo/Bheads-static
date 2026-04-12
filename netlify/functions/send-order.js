@@ -6,25 +6,13 @@ exports.handler = async (event) => {
 
   const { TG_BOT_TOKEN, TG_CHAT_ID } = process.env;
   
-  try {
+try {
     const data = JSON.parse(event.body);
+    const message = `🚀 **НОВЫЙ ЗАКАЗ**\n👤 Имя: ${data.name}\n📞 Тел: ${data.phone}\n💰 Сумма: ${data.totalPrice}`;
 
-    // Собираем текст сообщения. 
-    // Данные (name, phone и т.д.) мы чуть позже настроим в файле корзины
-    const message = `
-🚀 **НОВЫЙ ЗАКАЗ С САЙТА**
-━━━━━━━━━━━━━━━━━━
-👤 **Имя:** ${data.name || 'Не указано'}
-📞 **Телефон:** ${data.phone || 'Не указано'}
-🏠 **Адрес:** ${data.address || 'Не указано'}
-💰 **Сумма:** ${data.totalPrice} руб.
+    console.log("Попытка отправки в Telegram...");
+    console.log("Чат ID:", TG_CHAT_ID);
 
-🛒 **ТОВАРЫ:**
-${data.itemsSummary || 'Список пуст'}
-━━━━━━━━━━━━━━━━━━
-    `;
-
-    // Отправляем в Telegram через стандартный fetch
     const response = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -35,15 +23,17 @@ ${data.itemsSummary || 'Список пуст'}
       }),
     });
 
+    const result = await response.json();
+    console.log("Ответ от Telegram:", JSON.stringify(result));
+
     if (response.ok) {
-      return { 
-        statusCode: 200, 
-        body: JSON.stringify({ status: "success" }) 
-      };
+      return { statusCode: 200, body: JSON.stringify({ status: "success" }) };
     } else {
-      return { statusCode: 500, body: "Ошибка Telegram API" };
+      console.error("Telegram вернул ошибку:", result.description);
+      return { statusCode: 500, body: JSON.stringify(result) };
     }
   } catch (error) {
+    console.error("Критическая ошибка функции:", error);
     return { statusCode: 500, body: error.toString() };
   }
 };
