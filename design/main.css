@@ -1740,3 +1740,18 @@ section {margin: 2rem 0;}
     display: none !important;
 }
 
+/* Принудительно назначаем шрифт icomoon всем элементам, которые косят под иконки */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+    font-family: 'icomoon' !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+}
+
+/* Конкретно для галочки в чекбоксах (стандарт Storeland) */
+input[type="checkbox"] + label:before {
+    font-family: 'icomoon' !important;
+}
+
+input[type="checkbox"]:checked + label:before {
+    content: "\e919" !important; /* Код твоей галочки */
+}
