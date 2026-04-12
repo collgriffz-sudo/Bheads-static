@@ -363,19 +363,37 @@ window.finishAndShowPayment = function() {
         itemsSummary: itemsSummary
     };
 
-    // Отправляем данные нашему "почтальону" в Netlify
-    fetch('/.netlify/functions/send-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-    })
-    .then(response => {
-        if (!response.ok) throw new Error('Ошибка отправки');
-        console.log('Заказ успешно ушел в Telegram');
-    })
-    .catch(error => {
-        console.error('Ошибка:', error);
-    });
+// 1. Находим форму заказа (убедись, что у твоей <form> в HTML есть id="order-form")
+const formElement = document.querySelector('#order-form');
+const formData = new FormData(formElement);
+
+// 2. Собираем объект из всех полей формы
+const orderData = {};
+formData.forEach((value, key) => {
+    // Если поле пустое, так и напишем, чтобы не гадать
+    orderData[key] = value || "не указано";
+});
+
+// 3. Добавляем вручную то, чего нет в полях (товары, общую сумму, номер заказа)
+orderData.orderNumber = `LT-${Date.now().toString().slice(-6)}`; // Генерирует номер типа LT-123456
+orderData.totalPrice = document.getElementById('total-price')?.innerText || "0"; 
+orderData.cartItems = cart; // Твой массив с товарами из корзины
+
+// 4. Отправляем "жирный" пакет данных
+fetch('/.netlify/functions/send-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+})
+.then(response => {
+    if (!response.ok) throw new Error('Ошибка отправки');
+    alert('Заказ успешно оформлен!');
+    // Здесь можно очистить корзину или перенаправить на страницу "Спасибо"
+})
+.catch(error => {
+    console.error('Ошибка:', error);
+    alert('Произошла ошибка при отправке заказа.');
+});
     // ----------------------------------------------------
 
     // 2. Подставляем номер в заголовок на 5-м шаге
