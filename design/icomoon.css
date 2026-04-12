@@ -1,13 +1,191 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('/design/fonts/icomoon.eot?v=1.1');
-  src:  url('/design/fonts/icomoon.eot?v=1.1#iefix') format('embedded-opentype'),
-    url('/design/fonts/icomoon.ttf?v=1.1') format('truetype'),
-    url('/design/fonts/icomoon.woff?v=1.1') format('woff'),
-    url('/design/fonts/icomoon.svg?v=1.1#icomoon') format('svg');
+  src:  url('./fonts/icomoon.eot?v=1.2');
+  src:  url('./fonts/icomoon.eot?v=1.2#iefix') format('embedded-opentype'),
+    url('./fonts/icomoon.ttf?v=1.2') format('truetype'),
+    url('./fonts/icomoon.woff?v=1.2') format('woff'),
+    url('./fonts/icomoon.svg?v=1.2#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
+}
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-mastercard:before {
+  content: "\e929";
+}
+.icon-mir:before {
+  content: "\e92a";
+}
+.icon-sber:before {
+  content: "\e92b";
+}
+.icon-walletone:before {
+  content: "\e92c";
+}
+.icon-yandexmoney:before {
+  content: "\e92d";
+}
+.icon-facebook:before {
+  content: "\e92e";
+}
+.icon-odnoklassniki:before {
+  content: "\e92f";
+}
+.icon-telegram:before {
+  content: "\e930";
+}
+.icon-tiktok:before {
+  content: "\e931";
+}
+.icon-viber:before {
+  content: "\e932";
+}
+.icon-whatsapp:before {
+  content: "\e933";
+}
+.icon-eye:before {
+  content: "\e90b";
+}
+.icon-bell:before {
+  content: "\e927";
+}
+.icon-filter:before {
+  content: "\e928";
+}
+.icon-maestro:before {
+  content: "\e921";
+}
+.icon-qiwi:before {
+  content: "\e922";
+}
+.icon-sberbank:before {
+  content: "\e923";
+}
+.icon-webmoney:before {
+  content: "\e924";
+}
+.icon-yandex:before {
+  content: "\e925";
+}
+.icon-visa:before {
+  content: "\e926";
+}
+.icon-minus:before {
+  content: "\e920";
+}
+.icon-twitter:before {
+  content: "\e91e";
+}
+.icon-skype:before {
+  content: "\e91f";
+}
+.icon-arrow-right:before {
+  content: "\e900";
+}
+.icon-arrow-left:before {
+  content: "\e901";
+}
+.icon-bank:before {
+  content: "\e902";
+}
+.icon-cart:before {
+  content: "\e903";
+}
+.icon-check:before {
+  content: "\e904";
+}
+.icon-clock:before {
+  content: "\e905";
+}
+.icon-close:before {
+  content: "\e906";
+}
+.icon-closex:before {
+  content: "\e907";
+}
+.icon-danger:before {
+  content: "\e908";
+}
+.icon-delivery:before {
+  content: "\e909";
+}
+.icon-flower:before {
+  content: "\e90a";
+}
+.icon-instagram:before {
+  content: "\e90c";
+}
+.icon-compare:before {
+  content: "\e90d";
+}
+.icon-list:before {
+  content: "\e90e";
+}
+.icon-users:before {
+  content: "\e90f";
+}
+.icon-location:before {
+  content: "\e910";
+}
+.icon-mail:before {
+  content: "\e911";
+}
+.icon-menu:before {
+  content: "\e912";
+}
+.icon-order:before {
+  content: "\e913";
+}
+.icon-grid:before {
+  content: "\e914";
+}
+.icon-plus:before {
+  content: "\e915";
+}
+.icon-search:before {
+  content: "\e916";
+}
+.icon-favorites:before {
+  content: "\e917";
+}
+.icon-phone:before {
+  content: "\e918";
+}
+.icon-tick:before {
+  content: "\e919";
+}
+.icon-urid:before {
+  content: "\e91a";
+}
+.icon-userbig:before {
+  content: "\e91b";
+}
+.icon-vk:before {
+  content: "\e91c";
+}
+.icon-youtube:before {
+  content: "\e91d";
+}
+
+html, body {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon' !important;
 }
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
