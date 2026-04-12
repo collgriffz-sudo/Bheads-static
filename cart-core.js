@@ -347,38 +347,65 @@ window.finishAndShowPayment = function() {
     // 1. Генерируем номер заказа
     const orderID = generateOrderNumber();
     
+    // --- НОВЫЙ БЛОК: СБОР ДАННЫХ И ОТПРАВКА В TELEGRAM ---
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalPrice = cart.reduce((sum, item) => sum + (parseInt(item.price) * (item.quantity || 1)), 0);
+    
+    // Формируем текстовый список товаров для сообщения
+    const itemsSummary = cart.map(item => `${item.name} (${item.quantity} шт.) — ${(parseInt(item.price) * item.quantity).toLocaleString()} ₽`).join('\n');
+
+    const orderData = {
+        orderID: orderID,
+        name: document.getElementById('orderName')?.value || 'Не указано',
+        phone: document.getElementById('orderPhone')?.value || 'Не указано',
+        address: document.getElementById('orderAddress')?.value || 'Не указано',
+        totalPrice: totalPrice.toLocaleString(),
+        itemsSummary: itemsSummary
+    };
+
+    // Отправляем данные нашему "почтальону" в Netlify
+    fetch('/.netlify/functions/send-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Ошибка отправки');
+        console.log('Заказ успешно ушел в Telegram');
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+    // ----------------------------------------------------
+
     // 2. Подставляем номер в заголовок на 5-м шаге
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
         titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
     }
 
-    // --- ВОТ ЭТОТ КУСОЧЕК МЫ ДОБАВЛЯЕМ ДЛЯ КНОПОК ---
-    // Находим кнопки WhatsApp и Email по их ID
+    // Кнопки WhatsApp и Email (не забудь поменять номер телефона!)
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
     
     if (waLink) {
-        // Здесь замени 79001234567 на свой реальный номер
         waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
     }
     if (emailLink) {
-        // Здесь замени почту на свою
         emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
     }
-    // ----------------------------------------------
 
-    // 3. Собираем способ оплаты
+    // 3. Собираем способ оплаты и переходим на финал
     const payment = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
     
     showPaymentDetails(payment);
     nextStep(5);
 
-    // Прячем крестик, чтобы не было соблазна закрыть окно неправильно
+    // Прячем крестик
     const closeBtn = document.querySelector('.close'); 
     if (closeBtn) closeBtn.style.display = 'none';
 
-    console.log("Заказ под номером " + orderID + " оформлен");
+    console.log("Заказ под номером " + orderID + " оформлен и отправлен");
 }
 
 /// Функция закрытия (теперь только для рабочих шагов 1-4)
