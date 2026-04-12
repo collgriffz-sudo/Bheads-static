@@ -1,19 +1,41 @@
 exports.handler = async (event) => {
-  // Разрешаем только POST запросы (отправку данных)
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
-  }
+  if (event.httpMethod !== "POST") return { statusCode: 405, body: "Method Not Allowed" };
 
   const { TG_BOT_TOKEN, TG_CHAT_ID } = process.env;
   
-try {
+  try {
     const data = JSON.parse(event.body);
-    const message = `🚀 **НОВЫЙ ЗАКАЗ**\n👤 Имя: ${data.name}\n📞 Тел: ${data.phone}\n💰 Сумма: ${data.totalPrice}`;
+    
+    // Заголовок с номером заказа (если он есть в данных)
+    const orderNum = data.orderNumber || 'БЕЗ НОМЕРА';
+    let message = `📦 **ЗАКАЗ №${orderNum}**\n`;
+    message += `──────────────────\n`;
 
-    console.log("Попытка отправки в Telegram...");
-    console.log("Чат ID:", TG_CHAT_ID);
+    // Перебираем ВСЕ поля, кроме товаров и служебных данных
+    for (const key in data) {
+      if (['cartItems', 'orderNumber'].includes(key)) continue;
+      
+      // Красивое название поля: заменяем подчеркивания на пробелы и делаем заглавную букву
+      const label = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+      
+      // Если это чекбокс (true/false), пишем "Да/Нет"
+      let value = data[key];
+      if (value === true) value = "✅ Да";
+      if (value === false) value = "❌ Нет";
+      
+      message += `**${label}**: ${value}\n`;
+    }
 
-    const response = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+    // Добавляем список товаров
+    if (data.cartItems && Array.isArray(data.cartItems)) {
+      message += `──────────────────\n`;
+      message += `🛒 **ТОВАРЫ:**\n`;
+      data.cartItems.forEach(item => {
+        message += `• ${item.name} — ${item.quantity} шт. (${item.price} руб.)\n`;
+      });
+    }
+
+    await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -23,17 +45,9 @@ try {
       }),
     });
 
-    const result = await response.json();
-    console.log("Ответ от Telegram:", JSON.stringify(result));
-
-    if (response.ok) {
-      return { statusCode: 200, body: JSON.stringify({ status: "success" }) };
-    } else {
-      console.error("Telegram вернул ошибку:", result.description);
-      return { statusCode: 500, body: JSON.stringify(result) };
-    }
+    return { statusCode: 200, body: JSON.stringify({ status: "success" }) };
   } catch (error) {
-    console.error("Критическая ошибка функции:", error);
+    console.error("Ошибка:", error);
     return { statusCode: 500, body: error.toString() };
   }
 };
