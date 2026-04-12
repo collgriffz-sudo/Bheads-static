@@ -347,83 +347,38 @@ window.finishAndShowPayment = function() {
     // 1. Генерируем номер заказа
     const orderID = generateOrderNumber();
     
-    // --- НОВЫЙ БЛОК: СБОР ДАННЫХ И ОТПРАВКА В TELEGRAM ---
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const totalPrice = cart.reduce((sum, item) => sum + (parseInt(item.price) * (item.quantity || 1)), 0);
-    
-    // Формируем текстовый список товаров для сообщения
-    const itemsSummary = cart.map(item => `${item.name} (${item.quantity} шт.) — ${(parseInt(item.price) * item.quantity).toLocaleString()} ₽`).join('\n');
-
-    const orderData = {
-        orderID: orderID,
-        name: document.getElementById('orderName')?.value || 'Не указано',
-        phone: document.getElementById('orderPhone')?.value || 'Не указано',
-        address: document.getElementById('orderAddress')?.value || 'Не указано',
-        totalPrice: totalPrice.toLocaleString(),
-        itemsSummary: itemsSummary
-    };
-
-// 1. Находим форму заказа (убедись, что у твоей <form> в HTML есть id="order-form")
-const formElement = document.querySelector('#order-form');
-const formData = new FormData(formElement);
-
-// 2. Собираем объект из всех полей формы
-const orderData = {};
-formData.forEach((value, key) => {
-    // Если поле пустое, так и напишем, чтобы не гадать
-    orderData[key] = value || "не указано";
-});
-
-// 3. Добавляем вручную то, чего нет в полях (товары, общую сумму, номер заказа)
-orderData.orderNumber = `LT-${Date.now().toString().slice(-6)}`; // Генерирует номер типа LT-123456
-orderData.totalPrice = document.getElementById('total-price')?.innerText || "0"; 
-orderData.cartItems = cart; // Твой массив с товарами из корзины
-
-// 4. Отправляем "жирный" пакет данных
-fetch('/.netlify/functions/send-order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderData)
-})
-.then(response => {
-    if (!response.ok) throw new Error('Ошибка отправки');
-    alert('Заказ успешно оформлен!');
-    // Здесь можно очистить корзину или перенаправить на страницу "Спасибо"
-})
-.catch(error => {
-    console.error('Ошибка:', error);
-    alert('Произошла ошибка при отправке заказа.');
-});
-    // ----------------------------------------------------
-
     // 2. Подставляем номер в заголовок на 5-м шаге
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
         titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
     }
 
-    // Кнопки WhatsApp и Email (не забудь поменять номер телефона!)
+    // --- ВОТ ЭТОТ КУСОЧЕК МЫ ДОБАВЛЯЕМ ДЛЯ КНОПОК ---
+    // Находим кнопки WhatsApp и Email по их ID
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
     
     if (waLink) {
+        // Здесь замени 79001234567 на свой реальный номер
         waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
     }
     if (emailLink) {
+        // Здесь замени почту на свою
         emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
     }
+    // ----------------------------------------------
 
-    // 3. Собираем способ оплаты и переходим на финал
+    // 3. Собираем способ оплаты
     const payment = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
     
     showPaymentDetails(payment);
     nextStep(5);
 
-    // Прячем крестик
+    // Прячем крестик, чтобы не было соблазна закрыть окно неправильно
     const closeBtn = document.querySelector('.close'); 
     if (closeBtn) closeBtn.style.display = 'none';
 
-    console.log("Заказ под номером " + orderID + " оформлен и отправлен");
+    console.log("Заказ под номером " + orderID + " оформлен");
 }
 
 /// Функция закрытия (теперь только для рабочих шагов 1-4)
