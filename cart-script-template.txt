@@ -1,0 +1,62 @@
+<script src="../cart-core.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var buyBtn = document.querySelector('.add-cart');
+    if (!buyBtn) return;
+    
+    var modSelect = document.querySelector('.goodsModificationsProperty select');
+    var modList = document.querySelectorAll('.goodsModificationsList');
+    var quantityInput = document.querySelector('input[name="form[goods_mod_quantity]"]');
+    var priceElem = document.querySelector('.price__now');
+    var nameElem = document.querySelector('.productView__name');
+    var baseName = nameElem ? nameElem.innerText.trim() : 'Товар';
+    
+    function getCurrentPrice() {
+        if (modSelect && modList.length > 0) {
+            var selectedValue = modSelect.value;
+            for (var i = 0; i < modList.length; i++) {
+                var mod = modList[i];
+                var modValue = mod.getAttribute('rel')             if (modValue == selectedValue) {
+                    var priceNow = mod.querySelector('input[name="price_now"]');
+                    if (priceNow) return parseInt(priceNow.value);
+                }
+            }
+        }
+        if (priceElem) {
+            var contentPrice = priceElem.getAttribute('content');
+            if (contentPrice) return parseInt(contentPrice);
+            var priceText = priceElem.innerText;
+            return parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+        }
+        return 0;
+    }
+    
+    function getModificationName() {
+        if (modSelect) {
+            var selectedOption = modSelect.options[modSelect.selectedIndex];
+            return selectedOption ? selectedOption.text : '';
+        }
+        return '';
+    }
+    
+    buyBtn.onclick = function(e) {
+        e.preventDefault();
+        var price = getCurrentPrice();
+        var mod = getModificationName();
+        var quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+        var productName = baseName;
+        if (mod) productName = baseName + ' (' + mod + ')';
+        
+        if (window.addToCart) {
+            var imgElem = document.querySelector('.productView__image img');
+            var imgSrc = imgElem ? imgElem.src : '';
+            var productUrl = window.location.href;
+            window.addToCart(productName, price, quantity, imgSrc, productUrl);
+        } else {
+            alert('Ошибка: корзина не подключена');
+        }
+        return false;
+    };
+});
+</script>

@@ -1,0 +1,421 @@
+// ========== КОРЗИНА ДЛЯ СТАТИЧЕСКОГО САЙТА ==========
+(function() {
+    // Получить корзину
+    function getCart() {
+        return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+    
+    // Сохранить корзину
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();  // Обновляем счётчик при сохранении
+    }
+    
+    // Добавить товар (с объединением одинаковых и учётом количества)
+    window.addToCart = function(name, price, quantity = 1, img = '', url = '') {
+        let cart = getCart();
+        let existing = cart.find(item => item.name === name);
+        
+        if (existing) {
+            existing.quantity = (existing.quantity || 1) + quantity;
+        } else {
+            cart.push({ name: name, price: price, quantity: quantity, img: img, url: url });
+        }
+        
+        saveCart(cart);
+        alert('✓ Товар "' + name + '" добавлен в корзину');
+    };
+    
+    // Удалить товар (уменьшить количество или удалить полностью)
+    window.removeFromCart = function(index) {
+        let cart = getCart();
+        let item = cart[index];
+        
+        if (item.quantity > 1) {
+            // Уменьшаем количество
+            item.quantity--;
+        } else {
+            // Удаляем товар
+            cart.splice(index, 1);
+        }
+        
+        saveCart(cart);
+        if (window.location.pathname.includes('cart.html')) {
+            location.reload();
+        }
+    };
+    
+    // Очистить корзину
+    window.clearCart = function() {
+        if (confirm('Очистить корзину?')) {
+            saveCart([]);
+            if (window.location.pathname.includes('cart.html')) {
+                location.reload();
+            }
+        }
+    };
+    
+    // Обновить счётчик в шапке (общее количество товаров)
+    function updateCartCount() {
+        let cart = getCart();
+        let totalCount = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+        let countElem = document.querySelector('.cart__count');
+        if (countElem) {
+            countElem.innerText = totalCount;
+        }
+    }
+    
+    // Отобразить корзину на странице cart.html
+    function displayCartPage() {
+        let cart = getCart();
+        let container = document.querySelector('.cartItems');
+        if (!container) return;
+        
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="attention" style="text-align:center; padding:40px;">
+                    <p>Корзина пуста</p>
+                    <a href="catalog.html" class="button" style="display:inline-block; margin-top:15px;">Перейти в каталог</a>
+                </div>
+            `;
+            let orderBlock = document.getElementById('order-block');
+            if (orderBlock) orderBlock.style.display = 'none';
+            return;
+        }
+        
+        let itemsHtml = '<div style="margin:20px 0;">';
+        let total = 0;
+        
+        cart.forEach((item, index) => {
+            let priceNum = parseInt(item.price) || 0;
+            let quantity = item.quantity || 1;
+            let itemTotal = priceNum * quantity;
+            total += itemTotal;
+            itemsHtml += `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee;">
+                    <div style="flex:2; display:flex; align-items:center; gap:15px;">
+                        <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:60px; height:60px; object-fit:contain; border-radius:4px; border:1px solid #eee;">
+                        <div>
+                            <strong style="display:block;">${escapeHtml(item.name)}</strong>
+                            <div style="font-size:0.75rem; color:#aca7b4;">${priceNum.toLocaleString()} ₽ за шт.</div>
+                        </div>
+                    </div>
+
+              <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:10px;">
+    <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">
+        &minus;
+    </button>
+    
+    <span style="font-weight:bold; min-width:25px; text-align:center; color:#000; font-size:15px;">${quantity}</span>
+    
+    <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">
+        &plus;
+    </button>
+</div>
+
+                    <div style="flex:1; text-align:right; font-weight:bold;">
+                        ${itemTotal.toLocaleString()} ₽
+                    </div>
+
+                    <div style="flex:0 0 80px; text-align:right;">
+                        <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; padding:0 0 2px 0; font-family:inherit; border-bottom:1px solid #999; line-height:1; transition:all 0.2s;" onmouseover="this.style.color='#ff4444'; this.style.borderColor='#ff4444'" onmouseout="this.style.color='#999'; this.style.borderColor='#999'">
+    удалить
+</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        itemsHtml += `
+            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd;">
+                Итого: ${total.toLocaleString()} ₽
+            </div>
+        </div>`;
+        
+        let orderHtml = `
+        <div style="text-align:center; margin-top:30px;">
+            <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; box-shadow:0 5px 20px rgba(179,0,32,0.3);">
+                ОФОРМИТЬ ЗАКАЗ
+            </button>
+        </div>
+    `;
+    
+    container.innerHTML = itemsHtml + orderHtml;
+
+    // Привязываем кнопку к окну
+    setTimeout(() => {
+        const btn = document.getElementById('openOrderBtn');
+        if (btn) {
+            btn.onclick = function() {
+                const modal = document.getElementById('orderModal');
+                if (modal) modal.style.display = 'flex';
+                else alert('Окно оформления не найдено');
+            };
+        }
+    }, 100);
+        
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Запуск при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        if (window.location.pathname.includes('cart.html')) {
+            displayCartPage();
+        }
+    });
+    // Глобальная функция изменения количества
+    window.changeQty = function(index, delta) {
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        if (cart[index]) {
+            let currentQty = parseInt(cart[index].quantity) || 1;
+            let newQty = currentQty + delta;
+
+            if (newQty < 1) {
+                if (confirm("Удалить этот товар из корзины?")) {
+                    cart.splice(index, 1);
+                } else {
+                    return; 
+                }
+            } else {
+                cart[index].quantity = newQty;
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Обновляем счётчик в шапке
+            updateCartCount(); 
+            
+            // ВАЖНО: вызываем ПРАВИЛЬНОЕ название функции отрисовки
+            displayCartPage(); 
+        }
+    };
+})();
+
+// Основная функция перехода по шагам
+window.nextStep = function(step) {
+    // Скрываем все шаги
+    document.querySelectorAll('.order-step').forEach(el => el.style.display = 'none');
+    // Показываем нужный
+    const target = document.getElementById('step' + step);
+    if (target) {
+        target.style.display = 'block';
+        // Прокручиваем модальное окно вверх, чтобы новый шаг был виден с начала
+        document.getElementById('orderModal').querySelector('div').scrollTop = 0;
+    }
+};
+
+// Функция подготовки финального обзора
+window.prepareReview = function() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let totalPrice = cart.reduce((sum, item) => sum + (parseInt(item.price) * (item.quantity || 1)), 0);
+
+    // --- ОБНОВЛЕННЫЙ БЛОК ОТОБРАЖЕНИЯ ТОВАРОВ С КАРТИНКОЙ ---
+    let itemsHTML = `
+        <div style="font-weight:bold; margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:5px;">🛒 Ваш заказ:</div>
+        <table style="width:100%; border-collapse:collapse; font-size:0.85rem; margin-bottom:15px;">
+    `;
+
+    cart.forEach(item => {
+        let p = parseInt(item.price) || 0;
+        let q = item.quantity || 1;
+        // Проверяем наличие картинки, если нет — ставим заглушку
+        let imgTag = `<img src="${item.img || 'images/no-photo.jpg'}" style="width:40px; height:40px; object-fit:contain; border-radius:4px; border:1px solid #eee;">`;
+
+        itemsHTML += `
+            <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:8px 0; width:45px; vertical-align:middle;">${imgTag}</td>
+                <td style="padding:8px 5px; vertical-align:middle;">
+                    <div style="font-weight:500; line-height:1.2;">${item.name}</div>
+                    <div style="font-size:0.75rem; color:#888;">${q} шт.</div>
+                </td>
+                <td style="padding:8px 0; text-align:right; font-weight:bold; vertical-align:middle; white-space:nowrap;">
+                    ${(p * q).toLocaleString()} ₽
+                </td>
+            </tr>
+        `;
+    });
+
+    itemsHTML += `
+        <tr>
+            <td colspan="2" style="padding:10px 0; font-weight:bold; font-size:1rem;">Итого:</td>
+            <td style="padding:10px 0; text-align:right; font-weight:bold; color:#b30020; font-size:1.1rem;">${totalPrice.toLocaleString()} ₽</td>
+        </tr>
+    </table>
+    `;
+
+    const cartContainer = document.getElementById('finalCartItems');
+    if (cartContainer) {
+        cartContainer.innerHTML = itemsHTML;
+    }
+
+    // --- БЛОК ДАННЫХ ПОЛУЧАТЕЛЯ (оставляем как было) ---
+    const name = document.getElementById('orderName').value || 'Не указано';
+    const phone = document.getElementById('orderPhone').value || 'Не указано';
+    const email = document.getElementById('orderEmail').value || 'Не указано';
+    const receiver = document.getElementById('orderReceiver').value || 'Не указано';
+    const address = document.getElementById('orderAddress').value || 'Не указано';
+    const comment = document.getElementById('orderComment').value || '—';
+    
+    const delivery = document.querySelector('input[name="deliveryType"]:checked')?.value || 'Не выбрано';
+    const payment = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
+
+    const reviewHTML = `
+        <div style="border-top: 1px solid #ddd; padding-top: 10px;">
+            <strong style="color: #b30020;">📍 Контактные данные:</strong><br>
+            ФИО: ${name}<br>
+            Тел: ${phone}<br>
+            Email: ${email}
+        </div>
+        <div style="margin-top:10px;">
+            <strong style="color: #b30020;">📦 Получатель и адрес:</strong><br>
+            Кому: ${receiver}<br>
+            Куда: ${address}
+        </div>
+        <div style="margin-top:10px;">
+            <strong>🚚 Доставка:</strong> ${delivery}
+        </div>
+        <div style="margin-top:10px;">
+            <strong>💳 Способ оплаты:</strong> ${payment}
+        </div>
+        <div style="margin-top:5px; font-size:0.85rem; color:#666;">
+            <strong>💬 Комментарий:</strong> ${comment}
+        </div>
+    `;
+
+    document.getElementById('finalReview').innerHTML = reviewHTML;
+    
+    nextStep(4);
+};
+
+function showPaymentDetails(paymentMethod) {
+    const container = document.getElementById('paymentContent');
+    // Очищаем контейнер перед вставкой
+    container.innerHTML = ''; 
+
+    if (paymentMethod.includes("СБП")) {
+        container.innerHTML = `
+            <div style="padding: 10px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3;">
+                <strong>Реквизиты СБП:</strong><br>
+                Перевод по номеру: +7 (9XX) XXX-XX-XX<br>
+                Банк: Тинькофф / Альфа<br>
+                Получатель: Альберт С.
+            </div>`;
+    } else if (paymentMethod.includes("Юмани")) {
+        container.innerHTML = `
+            <div style="padding: 10px; background: #f3e5f5; border-radius: 8px; border: 1px solid #9c27b0;">
+                <strong>Оплата ЮMoney:</strong><br>
+                [Сюда мы вставим твой Iframe или кнопку оплаты]
+            </div>`;
+    } else if (paymentMethod.includes("Криптовалюта")) {
+        container.innerHTML = `
+            <div style="padding: 10px; background: #fff3e0; border-radius: 8px; border: 1px solid #ff9800;">
+                <strong>Криптовалюта (USDT TRC20):</strong><br>
+                <code style="word-break: break-all;">TYourWalletAddressExample12345</code>
+            </div>`;
+    } else {
+        container.innerHTML = `
+            <div style="padding: 10px; background: #f5f5f5; border-radius: 8px; border: 1px solid #ccc;">
+                Инструкции по оплате будут предоставлены менеджером.
+            </div>`;
+    }
+}
+
+function generateOrderNumber() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    // Формат: ДеньМесяц-ЧасыМинуты (например, 1204-1545)
+    return `${day}${month}-${hours}${minutes}`;
+}
+
+// Функция, которая срабатывает при нажатии на "ВСЁ ВЕРНО, ЗАКАЗЫВАЮ!"
+window.finishAndShowPayment = function() {
+    // 1. Генерируем номер заказа
+    const orderID = generateOrderNumber();
+    
+    // 2. Подставляем номер в заголовок на 5-м шаге
+    const titleElement = document.querySelector('#step5 h2');
+    if (titleElement) {
+        titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
+    }
+
+    // --- ВОТ ЭТОТ КУСОЧЕК МЫ ДОБАВЛЯЕМ ДЛЯ КНОПОК ---
+    // Находим кнопки WhatsApp и Email по их ID
+    const waLink = document.getElementById('whatsappLink');
+    const emailLink = document.getElementById('emailLink');
+    
+    if (waLink) {
+        // Здесь замени 79001234567 на свой реальный номер
+        waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
+    }
+    if (emailLink) {
+        // Здесь замени почту на свою
+        emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
+    }
+    // ----------------------------------------------
+
+    // 3. Собираем способ оплаты
+    const payment = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
+    
+    showPaymentDetails(payment);
+    nextStep(5);
+
+    // Прячем крестик, чтобы не было соблазна закрыть окно неправильно
+    const closeBtn = document.querySelector('.close'); 
+    if (closeBtn) closeBtn.style.display = 'none';
+
+    console.log("Заказ под номером " + orderID + " оформлен");
+}
+
+/// Функция закрытия (теперь только для рабочих шагов 1-4)
+window.closeOrderModal = function() {
+    const modal = document.getElementById('orderModal');
+    const step5 = document.getElementById('step5');
+
+    // Если мы на финальном шаге — чистим и валим на главную
+    if (step5 && step5.style.display === 'block') {
+        localStorage.setItem('cart', '[]');
+        window.location.href = 'index.html'; 
+    } else {
+        // На остальных этапах просто закрываем окно
+        if (modal) modal.style.display = 'none';
+    }
+}
+
+// Закрытие при клике на темный фон (вне формы)
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('orderModal');
+    if (event.target == modal) {
+        window.closeOrderModal();
+    }
+});
+
+// Функция для полного выхода после заказа
+window.finalExit = function() {
+    console.log("Очистка корзины и выход...");
+    
+    // 1. Очищаем корзину в памяти
+    localStorage.setItem('cart', '[]');
+    
+    // 2. Сбрасываем шаг на первый (на всякий случай для будущего)
+    if (window.nextStep) {
+        window.nextStep(1);
+    }
+    
+    // 3. Уходим на главную
+    window.location.href = 'index.html'; 
+};
