@@ -1740,25 +1740,3 @@ section {margin: 2rem 0;}
     display: none !important;
 }
 
-/* Добавь это в самый конец main.css */
-#orderModal > div {
-  width: 95% !important;
-  max-width: 650px !important;
-}
-
-/* Возвращаем иконки в чекбоксы */
-input[type="checkbox"]:checked + label::before,
-.checkbox:checked + label::before,
-.custom-checkbox:checked + label::before {
-    font-family: 'icomoon' !important;
-    content: "\e919" !important; /* Код иконки tick/check из твоего icomoon */
-    display: inline-block;
-    vertical-align: middle;
-    color: #000; /* Цвет галочки, можешь поменять если надо */
-}
-
-/* Если галочки были в кружочках или квадратах через content */
-.st-checkbox:checked + label::after {
-    font-family: 'icomoon' !important;
-    content: "\e919" !important;
-}
