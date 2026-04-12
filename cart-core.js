@@ -347,34 +347,62 @@ window.finishAndShowPayment = function() {
     // 1. Генерируем номер заказа
     const orderID = generateOrderNumber();
     
+    // --- СБОР ДАННЫХ ДЛЯ TELEGRAM (Ничего не сломает) ---
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalPrice = cart.reduce((sum, item) => sum + (parseInt(item.price) * (item.quantity || 1)), 0);
+
+    const orderData = {
+        orderNumber: orderID,
+        name: document.getElementById('orderName')?.value || 'Не указано',
+        phone: document.getElementById('orderPhone')?.value || 'Не указано',
+        email: document.getElementById('orderEmail')?.value || 'Не указано',
+        receiver: document.getElementById('orderReceiver')?.value || 'Не указано',
+        address: document.getElementById('orderAddress')?.value || 'Не указано',
+        delivery: document.querySelector('input[name="deliveryType"]:checked')?.value || 'Не выбрано',
+        payment: document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано',
+        comment: document.getElementById('orderComment')?.value || '—',
+        totalPrice: totalPrice + " ₽",
+        cartItems: cart.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+        }))
+    };
+
+    // Отправляем "почтальону" в Netlify
+    fetch('/.netlify/functions/send-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => console.log("Данные ушли в Netlify"))
+    .catch(error => console.error("Ошибка отправки в Telegram:", error));
+    // --- КОНЕЦ БЛОКА TELEGRAM ---
+
     // 2. Подставляем номер в заголовок на 5-м шаге
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
         titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
     }
 
-    // --- ВОТ ЭТОТ КУСОЧЕК МЫ ДОБАВЛЯЕМ ДЛЯ КНОПОК ---
     // Находим кнопки WhatsApp и Email по их ID
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
     
     if (waLink) {
-        // Здесь замени 79001234567 на свой реальный номер
         waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
     }
     if (emailLink) {
-        // Здесь замени почту на свою
         emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
     }
-    // ----------------------------------------------
 
-    // 3. Собираем способ оплаты
-    const payment = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
+    // 3. Собираем способ оплаты для показа инструкции
+    const paymentMethod = document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано';
     
-    showPaymentDetails(payment);
+    showPaymentDetails(paymentMethod);
     nextStep(5);
 
-    // Прячем крестик, чтобы не было соблазна закрыть окно неправильно
+    // Прячем крестик
     const closeBtn = document.querySelector('.close'); 
     if (closeBtn) closeBtn.style.display = 'none';
 
