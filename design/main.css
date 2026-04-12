@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 @import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@300;400;500;600;700&display=swap');
 ﻿html {font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-webkit-font-smoothing:antialiased;}
 body {position: relative;font-family: 'Montserrat Alternates', sans-serif;font-size: 0.875rem;line-height: 1.3;font-weight: 400;background-color: #FFFFFF;color: #000000;overflow-x: hidden;margin:0;padding:0;}
@@ -1738,20 +1739,4 @@ section {margin: 2rem 0;}
 .sidebar__block.favorites,
 .sidebar__block.viewed {
     display: none !important;
-}
-
-/* Принудительно назначаем шрифт icomoon всем элементам, которые косят под иконки */
-[class^="icon-"]:before, [class*=" icon-"]:before {
-    font-family: 'icomoon' !important;
-    font-style: normal !important;
-    font-weight: normal !important;
-}
-
-/* Конкретно для галочки в чекбоксах (стандарт Storeland) */
-input[type="checkbox"] + label:before {
-    font-family: 'icomoon' !important;
-}
-
-input[type="checkbox"]:checked + label:before {
-    content: "\e919" !important; /* Код твоей галочки */
 }
