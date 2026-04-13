@@ -7,44 +7,55 @@
     <link href="https://api.cryptocloud.plus/static/widget/v2/css/app.css" rel="stylesheet">
     <style>
         body { margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f7; font-family: sans-serif; }
-        .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 550px; }
-        .order-info { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .amount { font-size: 24px; font-weight: bold; color: #b30020; }
+        .pay-container { background: white; padding: 35px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.07); text-align: center; width: 100%; max-width: 550px; }
+        .order-info { margin-bottom: 25px; border-bottom: 1px solid #f0f0f0; padding-bottom: 20px; }
+        .amount { font-size: 28px; font-weight: bold; color: #b30020; margin-top: 5px; }
+        .order-label { color: #666; font-size: 16px; margin-bottom: 5px; }
+        
+        /* Стили для картинки-логотипа */
+        .promo-logo { 
+            width: 100%;
+            max-width: 400px; /* Оптимальный размер для логотипа */
+            height: auto; 
+            margin: 0 auto 25px auto; 
+            display: block;
+        }
+        
+        #widget-container { margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <div class="pay-container">
         <div class="order-info">
-            <h2>Оплата криптовалютой</h2>
-            <p>Заказ №<span id="display_order_id"></span></p>
+            <h2 style="margin-top: 0;">Оплата заказа</h2>
+            <div class="order-label">Заказ №<span id="display_order_id"></span></div>
             <div class="amount"><span id="display_total_sum"></span> руб.</div>
         </div>
+
+        <img src="CC.png" alt="CryptoCloud" class="promo-logo">
 
         <div id="widget-container"></div>
     </div>
 
     <script>
-        // 1. Берем данные из памяти
         const sum = localStorage.getItem('cryptocloud_amount') || '0';
         const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
 
-        // 2. Отображаем их в тексте
         document.getElementById('display_total_sum').innerText = Number(sum).toLocaleString();
         document.getElementById('display_order_id').innerText = orderId;
 
-        // 3. Динамически создаем тег виджета с нужной суммой
         const container = document.getElementById('widget-container');
-        const widgetTag = document.createElement('vue-widget');
-        
-        widgetTag.setAttribute('shop_id', '7zTuAWJTvjF0Vf9A');
-        widgetTag.setAttribute('api_key', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiTWpjMk5nPT0iLCJ0eXBlIjoicHJvamVjdCIsInYiOiJlNjc2ODU0ZGNmYjFkODBhMTk1NGMyNzQ1ZWYxOGY5MmNmYWE1ZDBlNDRiMjFkNDcwOWU4Y2FiZWNmODdlNmVmIiwiZXhwIjo4ODExMDU4NjA1NX0.xbWPetI-mvot4yzjfXM4ksJ0O8NE4OnXVKIk5xOC7mc'); // Оставляем пустым, как в твоем коде
-        widgetTag.setAttribute('currency', 'RUB');
-        widgetTag.setAttribute('amount', sum); // Твоя сумма
-        widgetTag.setAttribute('locale', 'ru');
-        widgetTag.setAttribute('order_id', orderId);
-
-        container.appendChild(widgetTag);
+        if (sum !== '0') {
+            const widgetTag = document.createElement('vue-widget');
+            widgetTag.setAttribute('shop_id', '7zTuAWJTvjF0Vf9A');
+            widgetTag.setAttribute('api_key', '');
+            widgetTag.setAttribute('currency', 'RUB');
+            widgetTag.setAttribute('amount', sum);
+            widgetTag.setAttribute('locale', 'ru');
+            widgetTag.setAttribute('order_id', orderId);
+            container.appendChild(widgetTag);
+        }
     </script>
 
     <script src="https://api.cryptocloud.plus/static/widget/v2/js/app.js"></script>
