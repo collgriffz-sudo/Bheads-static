@@ -4,71 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оплата заказа | LordTitle</title>
+    <link href="https://api.cryptocloud.plus/static/widget/v2/css/app.css" rel="stylesheet">
     <style>
         body { margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f7; font-family: sans-serif; }
-        .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 500px; }
+        .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 550px; }
         .order-info { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .amount { font-size: 24px; font-weight: bold; color: #b30020; }
-        .loader { margin: 20px; color: #666; }
     </style>
 </head>
 <body>
+
     <div class="pay-container">
         <div class="order-info">
             <h2>Оплата криптовалютой</h2>
-            <p>Заказ №<span id="order_id">...</span></p>
-            <div class="amount"><span id="total_sum">0</span> руб.</div>
+            <p>Заказ №<span id="display_order_id"></span></p>
+            <div class="amount"><span id="display_total_sum"></span> руб.</div>
         </div>
-        
-        <div id="crypto-form" class="cc-payment-form">
-            <p class="loader" id="status-text">Загрузка платежной формы...</p>
-        </div>
+
+        <div id="widget-container"></div>
     </div>
 
-   <script>
-    const sum = localStorage.getItem('cryptocloud_amount') || '0';
-    const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
-    
-    document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
-    document.getElementById('order_id').innerText = orderId;
+    <script>
+        // 1. Берем данные из памяти
+        const sum = localStorage.getItem('cryptocloud_amount') || '0';
+        const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
 
-    function initWidget() {
-        const script = document.createElement('script');
-        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+        // 2. Отображаем их в тексте
+        document.getElementById('display_total_sum').innerText = Number(sum).toLocaleString();
+        document.getElementById('display_order_id').innerText = orderId;
+
+        // 3. Динамически создаем тег виджета с нужной суммой
+        const container = document.getElementById('widget-container');
+        const widgetTag = document.createElement('vue-widget');
         
-        // Эти три строки лечат твою ошибку в логе:
-        script.setAttribute('crossorigin', 'anonymous');
-        script.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-        script.async = true;
+        widgetTag.setAttribute('shop_id', '7zTuAWJTvjF0Vf9A');
+        widgetTag.setAttribute('api_key', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiTWpjMk5nPT0iLCJ0eXBlIjoicHJvamVjdCIsInYiOiJlNjc2ODU0ZGNmYjFkODBhMTk1NGMyNzQ1ZWYxOGY5MmNmYWE1ZDBlNDRiMjFkNDcwOWU4Y2FiZWNmODdlNmVmIiwiZXhwIjo4ODExMDU4NjA1NX0.xbWPetI-mvot4yzjfXM4ksJ0O8NE4OnXVKIk5xOC7mc'); // Оставляем пустым, как в твоем коде
+        widgetTag.setAttribute('currency', 'RUB');
+        widgetTag.setAttribute('amount', sum); // Твоя сумма
+        widgetTag.setAttribute('locale', 'ru');
+        widgetTag.setAttribute('order_id', orderId);
 
-        script.onload = function() {
-            if (window.CryptoCloudWidget) {
-                // Скрываем текст загрузки, если он есть
-                const status = document.getElementById('status-text');
-                if (status) status.style.display = 'none';
+        container.appendChild(widgetTag);
+    </script>
 
-                window.CryptoCloudWidget.CreateInvoiceForm({
-                    shop_id: "7zTuAWJTvjF0Vf9A",
-                    amount: sum,
-                    currency: "RUB",
-                    locale: "ru",
-                    template: "white",
-                    order_id: orderId
-                }).mount('.cc-payment-form');
-            }
-        };
+    <script src="https://api.cryptocloud.plus/static/widget/v2/js/app.js"></script>
 
-        script.onerror = function() {
-            const status = document.getElementById('status-text');
-            if (status) status.innerText = 'Ошибка загрузки модуля оплаты. Проверьте соединение.';
-        };
-
-        document.head.appendChild(script);
-    }
-
-    if (sum !== '0') {
-        initWidget();
-    }
-</script>
 </body>
 </html>
