@@ -332,13 +332,12 @@ function showPaymentDetails(paymentMethod) {
             <div style="padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3;">
                 <strong>Реквизиты СБП:</strong><br>
                 Сумма к переводу: <b>${sum} ₽</b><br>
-                Номер: +7 (922) 371-74-16<br>
-                Банк: ЮМани<br>
-                Получатель: Богдан Н.
+                Номер: <br>
+                Банк: <br>
+                Получатель:  Н.
             </div>`;
 
     } else if (paymentMethod.includes("Юмани")) {
-        // Твой Iframe ЮMoney (сумма подставляется автоматически)
         container.innerHTML = `
             <div style="text-align: center;">
                 <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
@@ -346,21 +345,19 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
 
     } else if (paymentMethod.includes("Карты")) {
-        // Твой Iframe ЮMoney (сумма подставляется автоматически)
         container.innerHTML = `
             <div style="text-align: center;">
                 <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
                 width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
             </div>`;
         
-} else if (paymentMethod.includes("Криптовалюта")) {
-        // 1. Очищаем контейнер и задаем ему ширину, чтобы форма не схлопывалась
+    } else if (paymentMethod.includes("Криптовалюта")) {
+        // 1. Очищаем контейнер и задаем ему ширину
         container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 200px;"></div>';
         
-        // 2. Функция для монтирования (внутри, чтобы точно видела сумму)
+        // 2. Функция для монтирования
         const runMount = (amount) => {
             if (window.CryptoCloudWidget) {
-                // Если форма уже была создана, её нужно инициализировать заново в новом контейнере
                 window.CryptoCloudWidget.CreateInvoiceForm({
                     shop_id: "7zTuAWJTvjF0Vf9A",
                     amount: amount,
@@ -377,14 +374,13 @@ function showPaymentDetails(paymentMethod) {
         if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            // Как только скрипт загрузится — запускаем
             script.onload = () => runMount(sum);
             document.body.appendChild(script);
         } else {
-            // Если скрипт уже есть (повторный клик), просто запускаем
             runMount(sum);
         }
     }
+}
 function generateOrderNumber() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
