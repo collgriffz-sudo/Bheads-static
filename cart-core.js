@@ -387,7 +387,7 @@ function showPaymentDetails(paymentMethod) {
             runMount(sum);
         }
     }
-}
+
 function generateOrderNumber() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
