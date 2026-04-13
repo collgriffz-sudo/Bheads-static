@@ -424,32 +424,31 @@ window.finalExit = function() {
     window.location.href = 'index.html'; 
 };
 
-// Ждем, пока документ загрузится, и вешаем обработчик на кнопку оформления
+// Улучшенный обработчик клика
 document.addEventListener('click', function(e) {
-    // Проверяем, что нажата именно кнопка "Оформить заказ"
-    if (e.target && e.target.id === 'placeOrderBtn') {
+    // Ищем кнопку, которая содержит текст "Оформить заказ" или вызывает placeOrder
+    const btn = e.target.closest('button');
+    if (!btn) return;
+
+    if (btn.innerText.includes('Оформить заказ') || (btn.onclick && btn.onclick.toString().includes('placeOrder'))) {
         
-        // 1. Получаем выбранный способ оплаты
-        const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
-        
-        // 2. Получаем итоговую сумму (из элемента с итогом)
-        const totalText = document.getElementById('finalTotal')?.innerText || "0";
-        const cleanSum = totalText.replace(/\D/g, ''); // Оставляем только цифры
-        
-        // 3. Если выбрана криптовалюта — сохраняем данные и открываем окно
-        if (paymentMethod === 'crypto') {
-            const orderID = Math.floor(100000 + Math.random() * 900000);
-            
-            localStorage.setItem('cryptocloud_amount', cleanSum);
-            localStorage.setItem('cryptocloud_order_id', orderID);
-            
-            // Открываем страницу оплаты в новой вкладке
-            window.open('pay.html', '_blank');
-            
-            // Саму корзину на основном сайте переводим на шаг 5 (финал)
-            if (typeof nextStep === 'function') {
-                nextStep(5);
+        // Даем основной логике сработать
+        setTimeout(() => {
+            // Проверяем, какой метод выбран (ищем по тексту или значению)
+            const cryptoInput = document.querySelector('input[value*="crypto"], input[id*="crypto"]');
+            const isCrypto = cryptoInput ? cryptoInput.checked : document.body.innerText.includes('Криптовалюта');
+
+            if (isCrypto) {
+                const totalText = document.getElementById('finalTotal')?.innerText || "0";
+                const cleanSum = totalText.replace(/\D/g, '');
+                const orderID = document.querySelector('#step5 h2')?.innerText.replace(/\D/g, '') || Math.floor(100000 + Math.random() * 900000);
+
+                localStorage.setItem('cryptocloud_amount', cleanSum);
+                localStorage.setItem('cryptocloud_order_id', orderID);
+
+                console.log("Пытаюсь открыть окно оплаты...");
+                window.open('pay.html', '_blank');
             }
-        }
+        }, 200);
     }
-});
+}, true); // Добавили true для перехвата события
