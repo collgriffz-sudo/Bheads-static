@@ -395,7 +395,22 @@ window.finishAndShowPayment = function() {
     if (waLink) waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
     if (emailLink) emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
 
+    // Показываем стандартные детали оплаты
     showPaymentDetails(orderData.payment);
+    
+    // ЛОГИКА ДЛЯ КРИПТЫ
+    if (orderData.payment && (orderData.payment.includes('Криптовалюта') || orderData.payment.includes('crypto'))) {
+        const cleanSum = orderData.total.replace(/\D/g, '');
+        
+        // Сохраняем данные
+        localStorage.setItem('cryptocloud_amount', cleanSum);
+        localStorage.setItem('cryptocloud_order_id', orderID);
+
+        // Открываем окно БЕЗ задержки, чтобы браузер не считал это спамом
+        console.log("Крипта выбрана, открываю pay.html");
+        window.open('pay.html', '_blank');
+    }
+
     nextStep(5);
 
     const closeBtn = document.querySelector('.close'); 
