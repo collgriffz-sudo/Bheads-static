@@ -9,64 +9,66 @@
         .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 500px; }
         .order-info { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .amount { font-size: 24px; font-weight: bold; color: #b30020; }
+        .loader { margin: 20px; color: #666; }
     </style>
 </head>
 <body>
     <div class="pay-container">
         <div class="order-info">
             <h2>Оплата криптовалютой</h2>
-            <p>Заказ №<span id="order_id"></span></p>
-            <div class="amount"><span id="total_sum"></span> руб.</div>
+            <p>Заказ №<span id="order_id">...</span></p>
+            <div class="amount"><span id="total_sum">0</span> руб.</div>
         </div>
-        <div class="cc-payment-form"></div>
+        
+        <div id="crypto-form" class="cc-payment-form">
+            <p class="loader" id="status-text">Загрузка платежной формы...</p>
+        </div>
     </div>
-    <script>
-    const sum = localStorage.getItem('cryptocloud_amount') || '0';
-    const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
-    
-    // Сразу выводим текст, чтобы юзер видел номер и сумму
-    document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
-    document.getElementById('order_id').innerText = orderId;
 
-    function loadWidget() {
-        if (sum === '0') {
-            console.error("Сумма заказа не найдена в localStorage");
-            return;
+    <script>
+        // 1. Сразу берем данные из памяти
+        const sum = localStorage.getItem('cryptocloud_amount') || '0';
+        const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
+        
+        document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
+        document.getElementById('order_id').innerText = orderId;
+
+        // 2. Функция безопасной загрузки скрипта
+        function initWidget() {
+            const script = document.createElement('script');
+            script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+            
+            // ВАЖНО: Эти параметры лечат ошибки в твоем логе
+            script.crossOrigin = "anonymous"; 
+            script.referrerPolicy = "no-referrer-when-downgrade";
+            
+            script.onload = function() {
+                if (window.CryptoCloudWidget) {
+                    document.getElementById('status-text').style.display = 'none';
+                    window.CryptoCloudWidget.CreateInvoiceForm({
+                        shop_id: "7zTuAWJTvjF0Vf9A",
+                        amount: sum,
+                        currency: "RUB",
+                        locale: "ru",
+                        template: "white",
+                        order_id: orderId
+                    }).mount('#crypto-form');
+                }
+            };
+
+            script.onerror = function() {
+                document.getElementById('status-text').innerText = 'Ошибка загрузки модуля оплаты. Попробуйте обновить страницу.';
+            };
+
+            document.head.appendChild(script);
         }
 
-        const script = document.createElement('script');
-        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-        script.async = true;
-        // Добавляем защиту от блокировки CORS
-        script.setAttribute('crossorigin', 'anonymous');
-        
-        script.onload = function() {
-            if (window.CryptoCloudWidget) {
-                console.log("Виджет загружен, создаю форму для суммы:", sum);
-                window.CryptoCloudWidget.CreateInvoiceForm({
-                    shop_id: "7zTuAWJTvjF0Vf9A",
-                    amount: sum,
-                    currency: "RUB",
-                    locale: "ru",
-                    template: "white",
-                    order_id: orderId
-                }).mount('.cc-payment-form');
-            } else {
-                console.error("CryptoCloudWidget не найден после загрузки скрипта");
-            }
-        };
-
-        script.onerror = function() {
-            console.error("Не удалось загрузить скрипт виджета. Проверьте блокировщики рекламы.");
-        };
-
-        document.head.appendChild(script);
-    }
-
-    // Запускаем через небольшую паузу, чтобы страница успела "продышаться"
-    window.addEventListener('load', function() {
-        setTimeout(loadWidget, 500);
-    });
-</script>
+        // Запуск
+        if (sum !== '0') {
+            initWidget();
+        } else {
+            document.getElementById('status-text').innerText = 'Ошибка: Сумма заказа не получена.';
+        }
+    </script>
 </body>
 </html>
