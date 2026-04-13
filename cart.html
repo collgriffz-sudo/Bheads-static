@@ -882,39 +882,40 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
 
       <div id="step2" class="order-step" style="display:none;">
-        <h2 style="margin-top:0; font-size:1.4rem; color: #333;">2. Способ доставки</h2>
-        
-        <div style="margin:15px 0;">
-            <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="radio" name="deliveryType" value="Прямая доставка из Гуанчжоу (490 руб)" checked style="width: 20px; height: 20px; cursor: pointer; -webkit-appearance: radio; -moz-appearance: radio; appearance: radio; margin: 0;">
-                        <strong style="font-size:1rem;">Прямая доставка из Гуанчжоу</strong>
-                    </div>
-                    <span style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-weight:bold;">490 руб.</span>
+    <h2 style="margin-top:0; font-size:1.4rem; color: #333;">2. Способ доставки</h2>
+    
+    <div style="margin:15px 0;">
+        <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <input type="radio" name="deliveryType" value="Прямая доставка из Гуанчжоу (490 руб)" data-price="490" checked style="width: 20px; height: 20px; cursor: pointer;">
+                    <strong style="font-size:1rem;">Прямая доставка из Гуанчжоу</strong>
                 </div>
-                <p style="margin:10px 0 0 32px; font-size:0.85rem; color:#666; line-height:1.4;">
-                    📍 Китай → Россия<br>
-                    ⌛ Срок: 14-28 дней<br>
-                    📦 Предоставляется трек-номер
-                </p>
-            </label>
+                <span style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-weight:bold;">490 руб.</span>
+            </div>
+            <p style="margin:10px 0 0 32px; font-size:0.85rem; color:#666; line-height:1.4;">
+                📍 Китай → Россия<br>
+                ⌛ Срок: 14-28 дней<br>
+                📦 Предоставляется трек-номер
+            </p>
+        </label>
 
-            <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="radio" name="deliveryType" value="Ускоренная доставка из Гуанчжоу (1500 руб)" style="width: 20px; height: 20px; cursor: pointer; -webkit-appearance: radio; -moz-appearance: radio; appearance: radio; margin: 0;">
-                        <strong style="font-size:1rem;">Ускоренная доставка</strong>
-                    </div>
-                    <span style="background:#fff3e0; color:#ef6c00; padding:4px 8px; border-radius:5px; font-weight:bold;">1500 руб.</span>
+        <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <input type="radio" name="deliveryType" value="Ускоренная доставка из Гуанчжоу (1500 руб)" data-price="1500" style="width: 20px; height: 20px; cursor: pointer;">
+                    <strong style="font-size:1rem;">Ускоренная доставка</strong>
                 </div>
-                <p style="margin:10px 0 0 32px; font-size:0.85rem; color:#666; line-height:1.4;">
-                    🚀 Китай → Россия (Авиа)<br>
-                    ⌛ Срок: 10-12 дней<br>
-                    📦 Предоставляется трек-номер
-                </p>
-            </label>
-        </div>
+                <span style="background:#fff3e0; color:#ef6c00; padding:4px 8px; border-radius:5px; font-weight:bold;">1500 руб.</span>
+            </div>
+            <p style="margin:10px 0 0 32px; font-size:0.85rem; color:#666; line-height:1.4;">
+                🚀 Китай → Россия (Авиа)<br>
+                ⌛ Срок: 10-12 дней<br>
+                📦 Предоставляется трек-номер
+            </p>
+        </label>
+    </div>
+</div>
 
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button onclick="nextStep(1)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
