@@ -310,9 +310,7 @@ const container = document.getElementById('paymentContent');
         container.style.minHeight = '450px'; 
         container.style.height = 'auto';
     }
-    
-    const container = document.getElementById('paymentContent');
-    if (!container) return;
+        if (!container) return;
     
     container.innerHTML = ''; 
 
