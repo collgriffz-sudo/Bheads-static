@@ -888,7 +888,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <input type="radio" name="deliveryType" value="Прямая доставка из Гуанчжоу (490 руб)" data-price="490" checked style="width: 20px; height: 20px; cursor: pointer;">
+                    <input type="radio" name="deliveryType" value="Прямая доставка из Гуанчжоу (490 руб)" data-price="490" checked style="width: 20px; height: 20px; cursor: pointer; -webkit-appearance: radio; appearance: radio; margin: 0;">
                     <strong style="font-size:1rem;">Прямая доставка из Гуанчжоу</strong>
                 </div>
                 <span style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-weight:bold;">490 руб.</span>
@@ -903,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <label style="display:block; padding:15px; border:1px solid #ddd; border-radius:10px; margin-bottom:15px; cursor:pointer; background: #fdfdfd; transition: 0.3s;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <input type="radio" name="deliveryType" value="Ускоренная доставка из Гуанчжоу (1500 руб)" data-price="1500" style="width: 20px; height: 20px; cursor: pointer;">
+                    <input type="radio" name="deliveryType" value="Ускоренная доставка из Гуанчжоу (1500 руб)" data-price="1500" style="width: 20px; height: 20px; cursor: pointer; -webkit-appearance: radio; appearance: radio; margin: 0;">
                     <strong style="font-size:1rem;">Ускоренная доставка</strong>
                 </div>
                 <span style="background:#fff3e0; color:#ef6c00; padding:4px 8px; border-radius:5px; font-weight:bold;">1500 руб.</span>
@@ -915,13 +915,12 @@ document.addEventListener('DOMContentLoaded', function() {
             </p>
         </label>
     </div>
-</div>
 
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button onclick="nextStep(1)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
-            <button onclick="nextStep(3)" style="flex:1; background:#b30020; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ДАЛЕЕ →</button>
-        </div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+        <button onclick="nextStep(1)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
+        <button onclick="nextStep(3)" style="flex:1; background:#b30020; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ДАЛЕЕ →</button>
     </div>
+</div>
 
     <div id="step3" class="order-step" style="display:none;">
       <h2 style="margin-top:0; font-size:1.4rem; color: #333;">3. Способ оплаты</h2>
