@@ -294,34 +294,57 @@ window.prepareReview = function() {
 
 function showPaymentDetails(paymentMethod) {
     const container = document.getElementById('paymentContent');
-    // Очищаем контейнер перед вставкой
+    if (!container) return;
+    
     container.innerHTML = ''; 
+
+    // Получаем чистую сумму (только цифры)
+    const totalElement = document.getElementById('finalTotal');
+    const sum = totalElement ? totalElement.innerText.replace(/\D/g, '') : '0';
 
     if (paymentMethod.includes("СБП")) {
         container.innerHTML = `
-            <div style="padding: 10px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3;">
+            <div style="padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3;">
                 <strong>Реквизиты СБП:</strong><br>
-                Перевод по номеру: +7 (9XX) XXX-XX-XX<br>
-                Банк: Тинькофф / Альфа<br>
-                Получатель: Альберт С.
+                Сумма к переводу: <b>${sum} ₽</b><br>
+                Номер: +7 (922) 371-74-16<br>
+                Банк: ЮМани<br>
+                Получатель: Богдан Н.
             </div>`;
+
     } else if (paymentMethod.includes("Юмани")) {
+        // Твой Iframe ЮMoney (сумма подставляется автоматически)
         container.innerHTML = `
-            <div style="padding: 10px; background: #f3e5f5; border-radius: 8px; border: 1px solid #9c27b0;">
-                <strong>Оплата ЮMoney:</strong><br>
-                [Сюда мы вставим твой Iframe или кнопку оплаты]
+            <div style="text-align: center;">
+                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
+                width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
             </div>`;
+
+    } else if (paymentMethod.includes("Карты")) {
+        // Твой Iframe ЮMoney (сумма подставляется автоматически)
+        container.innerHTML = `
+            <div style="text-align: center;">
+                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
+                width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+            </div>`;
+        
     } else if (paymentMethod.includes("Криптовалюта")) {
+        // Виджет CryptoCloud
         container.innerHTML = `
-            <div style="padding: 10px; background: #fff3e0; border-radius: 8px; border: 1px solid #ff9800;">
-                <strong>Криптовалюта (USDT TRC20):</strong><br>
-                <code style="word-break: break-all;">TYourWalletAddressExample12345</code>
+            <div id="crypto-widget-container">
+                <vue-widget 
+                    shop_id="7zTuAWJTvjF0Vf9A" 
+                    api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiTWpjMk5nPT0iLCJ0eXBlIjoicHJvamVjdCIsInYiOiJlNjc2ODU0ZGNmYjFkODBhMTk1NGMyNzQ1ZWYxOGY5MmNmYWE1ZDBlNDRiMjFkNDcwOWU4Y2FiZWNmODdlNmVmIiwiZXhwIjo4ODExMDU4NjA1NX0.xbWPetI-mvot4yzjfXM4ksJ0O8NE4OnXVKIk5xOC7mc" 
+                    currency="RUB" 
+                    amount="${sum}" 
+                    locale="ru">
+                </vue-widget>
             </div>`;
-    } else {
-        container.innerHTML = `
-            <div style="padding: 10px; background: #f5f5f5; border-radius: 8px; border: 1px solid #ccc;">
-                Инструкции по оплате будут предоставлены менеджером.
-            </div>`;
+        
+        // Перезагружаем скрипт виджета, чтобы он "увидел" новый элемент
+        const script = document.createElement('script');
+        script.src = "https://api.cryptocloud.plus/static/widget/v2/js/app.js";
+        document.body.appendChild(script);
     }
 }
 
