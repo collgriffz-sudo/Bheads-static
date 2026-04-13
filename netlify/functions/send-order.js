@@ -8,7 +8,7 @@ exports.handler = async (event) => {
     
     // Заголовок с номером заказа (если он есть в данных)
     const orderNum = data.orderNumber || 'БЕЗ НОМЕРА';
-    let message = `📦 **ЗАКАЗ №${orderNum}**\n`;
+    let message = `BHeads7.ru 📦 **ЗАКАЗ №${orderNum}**\n`;
     message += `──────────────────\n`;
 
     // Перебираем ВСЕ поля, кроме товаров и служебных данных
