@@ -302,20 +302,21 @@ window.prepareReview = function() {
     
     nextStep(4);
 };
-
 function showPaymentDetails(paymentMethod) {
     const container = document.getElementById('paymentContent');
     if (container) {
-        // РАСШИРЯЕМ ВШИРЬ:
-        container.style.width = '100%';
-        container.style.minWidth = '380px'; // Чтобы виджет CryptoCloud не сжимался по бокам
-        container.style.minHeight = '450px'; 
+        // Убираем всё лишнее: высоту, серые фоны и рамки
+        container.style.minHeight = 'auto'; 
+        container.style.height = 'auto';
+        container.style.background = 'transparent';
+        container.style.border = 'none';
+        container.style.padding = '0';
         
-        // Находим само белое модальное окно и тоже даем ему ширину
-        const modalMain = container.closest('.modal-content') || container.parentElement;
-        if (modalMain) {
-            modalMain.style.width = '95%';
-            modalMain.style.maxWidth = '500px'; // Делаем само окно шире, чтобы форма влезла
+        // Убираем серое оформление у родительского блока, если оно там есть
+        const parentDiv = container.parentElement;
+        if (parentDiv) {
+            parentDiv.style.background = 'transparent';
+            parentDiv.style.boxShadow = 'none';
         }
     }
     
@@ -359,6 +360,8 @@ function showPaymentDetails(paymentMethod) {
                 <vue-widget 
                     shop_id="7zTuAWJTvjF0Vf9A" 
                     api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiTWpjMk5nPT0iLCJ0eXBlIjoicHJvamVjdCIsInYiOiJlNjc2ODU0ZGNmYjFkODBhMTk1NGMyNzQ1ZWYxOGY5MmNmYWE1ZDBlNDRiMjFkNDcwOWU4Y2FiZWNmODdlNmVmIiwiZXhwIjo4ODExMDU4NjA1NX0.xbWPetI-mvot4yzjfXM4ksJ0O8NE4OnXVKIk5xOC7mc" 
+                    emailRequired: false
+                    buttonText: "Оплатить",
                     currency="RUB" 
                     amount="${sum}" 
                     locale="ru">
