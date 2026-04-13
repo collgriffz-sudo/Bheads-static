@@ -6,17 +6,8 @@
     <title>Оплата заказа | LordTitle</title>
     <script src="https://cdn.cryptocloud.plus/widget/v1/widget.js"></script>
     <style>
-        body {
-            margin: 0; padding: 20px;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
-            background-color: #f4f4f7; font-family: sans-serif;
-        }
-        .pay-container {
-            background: white; padding: 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center; width: 100%; max-width: 500px;
-        }
+        body { margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f7; font-family: sans-serif; }
+        .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 500px; }
         .order-info { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .amount { font-size: 24px; font-weight: bold; color: #b30020; }
     </style>
@@ -28,15 +19,11 @@
             <p>Заказ №<span id="order_id"></span></p>
             <div class="amount"><span id="total_sum"></span> руб.</div>
         </div>
-        
         <div class="cc-payment-form"></div>
     </div>
-
     <script>
-        // Получаем данные из localStorage
         const sum = localStorage.getItem('cryptocloud_amount') || '0';
         const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
-
         document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
         document.getElementById('order_id').innerText = orderId;
 
@@ -44,12 +31,10 @@
             if (window.CryptoCloudWidget) {
                 window.CryptoCloudWidget.CreateInvoiceForm({
                     shop_id: "7zTuAWJTvjF0Vf9A",
-                    amount: sum, // Сумма теперь передается автоматически
-                    buttonText: "Оплатить заказ",
+                    amount: sum,
                     currency: "RUB",
                     locale: "ru",
                     template: "white",
-                    emailRequired: false,
                     order_id: orderId
                 }).mount('.cc-payment-form');
             }
