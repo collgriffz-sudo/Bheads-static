@@ -1,34 +1,64 @@
 export async function onRequestPost(context) {
   try {
-    // Получаем данные из формы
-    const data = await context.request.formData();
-    const name = data.get('name');
-    const phone = data.get('phone');
-    const item = data.get('item'); // если есть поле с названием товара
-
-    // Достаем ключи из настроек Cloudflare
+    // 1. Читаем JSON (в Cloudflare это делается через .json(), а не event.body)
+    const data = await context.request.json();
+    
+    // 2. Достаем ключи из настроек Cloudflare (Variables)
     const token = context.env.TELEGRAM_TOKEN;
     const chatId = context.env.TELEGRAM_CHAT_ID;
 
-    // Формируем текст сообщения
-    const text = `🚀 Новый заказ!\n\nИмя: ${name}\nТелефон: ${phone}\nТовар: ${item}`;
+    if (!token || !chatId) {
+        return new Response('Ошибка: Токен или ChatID не настроены в панели Cloudflare', { status: 500 });
+    }
 
-    // Отправляем в Telegram
+    // 3. Формируем заголовок заказа
+    const orderNum = data.orderNumber || 'БЕЗ НОМЕРА';
+    let message = `BHeads7.ru 📦 **ЗАКАЗ №${orderNum}**\n`;
+    message += `──────────────────\n`;
+
+    // 4. Перебираем ВСЕ поля (как в твоем старом коде)
+    for (const key in data) {
+      if (['cartItems', 'orderNumber'].includes(key)) continue;
+      
+      const label = key.replace(/_/g, ' ').replace(/^\w/, c => c.toUpperCase());
+      
+      let value = data[key];
+      if (value === true) value = "✅ Да";
+      if (value === false) value = "❌ Нет";
+      
+      message += `**${label}**: ${value}\n`;
+    }
+
+    // 5. Добавляем список товаров
+    if (data.cartItems && Array.isArray(data.cartItems)) {
+      message += `──────────────────\n`;
+      message += `🛒 **ТОВАРЫ:**\n`;
+      data.cartItems.forEach(item => {
+        message += `• ${item.name} — ${item.quantity} шт. (${item.price} руб.)\n`;
+      });
+    }
+
+    // 6. Отправка в Telegram
     const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: chatId,
-        text: text,
-        parse_mode: 'HTML'
+        text: message,
+        parse_mode: 'Markdown' // Твой старый код использовал Markdown
       })
     });
 
-    // После отправки перенаправляем пользователя на страницу "Спасибо" или обратно
-    return Response.redirect(context.request.headers.get('origin') + '/thanks.html', 303);
+    if (!response.ok) {
+        return new Response('Ошибка Telegram API', { status: 500 });
+    }
+
+    return new Response(JSON.stringify({ status: "success" }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
 
   } catch (err) {
-    return new Response('Ошибка при отправке: ' + err.message, { status: 500 });
+    return new Response('Ошибка сервера: ' + err.message, { status: 500 });
   }
 }
