@@ -352,37 +352,51 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
         
    } else if (paymentMethod.includes("Криптовалюта")) {
-        // 1. Очищаем старое содержимое
-        container.innerHTML = '';
-
-        // 2. Подключаем официальные стили V2 (если их еще нет на странице)
-        if (!document.querySelector('link[href*="cryptocloud.plus"]')) {
-            const link = document.createElement('link');
-            link.href = "https://api.cryptocloud.plus/static/widget/v2/css/app.css";
-            link.rel = "stylesheet";
-            document.head.appendChild(link);
-        }
-
-        // 3. Создаем официальный тег виджета
-        // Вместо {ORDER_SUM} подставляем нашу переменную 'sum'
-        const widget = document.createElement('vue-widget');
-        widget.setAttribute('shop_id', '7zTuAWJTvjF0Vf9A');
-        widget.setAttribute('api_key', ''); // Оставляем пустым, как в их инструкции
-        widget.setAttribute('currency', 'RUB');
-        widget.setAttribute('amount', sum); 
-        widget.setAttribute('locale', 'ru');
+        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 200px;"></div>';
         
-        container.appendChild(widget);
+        const runMount = (amount) => {
+            if (window.CryptoCloudWidget) {
+                window.CryptoCloudWidget.CreateInvoiceForm({
+                    shop_id: "7zTuAWJTvjF0Vf9A",
+                    amount: amount,
+                    currency: "RUB",
+                    buttonText: "Оплатить",
+                    locale: "ru",
+                    template: "light",
+                    emailRequired: false
+                }).mount('.cc-payment-form');
+            }
+        };
 
-        // 4. Загружаем официальный скрипт V2, который активирует этот тег
-        if (!document.querySelector('script[src*="cryptocloud.plus"]')) {
+        if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
-            script.src = "https://api.cryptocloud.plus/static/widget/v2/js/app.js";
-            script.crossOrigin = "anonymous"; // Это критически важно для обхода ошибок в консоли
-            document.body.appendChild(script);
+            script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+            
+            // Набор "анти-блокировка":
+            script.async = true;
+            script.crossOrigin = "anonymous"; 
+            script.referrerPolicy = "no-referrer-when-downgrade"; // Чтобы не пугать их сервер
+            
+            script.onload = () => {
+                console.log("CryptoCloud загружен успешно");
+                runMount(sum);
+            };
+            
+            script.onerror = () => {
+                // Если даже так не грузится - даем прямую ссылку, чтобы юзер не ушел
+                container.innerHTML = `
+                    <div style="text-align:center; padding:20px;">
+                        <p style="color:#666;">Виджет заблокирован вашим браузером.</p>
+                        <a href="https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${sum}&currency=RUB" 
+                           target="_blank" 
+                           style="display:inline-block; padding:12px 25px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
+                           Открыть страницу оплаты
+                        </a>
+                    </div>`;
+            };
+            document.head.appendChild(script);
         } else {
-            // Если скрипт уже загружен (второй клик), иногда нужно пнуть Vue, 
-            // но обычно V2 сам подхватывает новые теги в DOM.
+            runMount(sum);
         }
     }
 
