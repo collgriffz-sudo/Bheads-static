@@ -367,14 +367,15 @@ function showPaymentDetails(paymentMethod) {
             }
         };
 
-        const showBackupButton = () => {
+        }; // Конец showBackupButton
+
+const showBackupButton = () => {
             container.innerHTML = `
-                <div style="text-align:center; padding: 20px; border: 1px dashed #fb8c00; border-radius: 12px; background: #fffaf5;">
-                    <p style="font-size: 14px; color: #555; margin-bottom: 15px;">Виджет оплаты недоступен из-за сетевых ограничений.</p>
+                <div style="text-align:center; padding:20px; border:1px dashed #fb8c00; border-radius:12px;">
+                    <p style="font-size:14px; color:#555;">Виджет недоступен. Используйте прямую ссылку:</p>
                     <a href="https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${sum}&currency=RUB" 
-                       target="_blank" 
-                       style="display: inline-block; padding: 14px 28px; background: #fb8c00; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 12px rgba(251, 140, 0, 0.3);">
-                       Оплатить криптовалютой (прямая ссылка)
+                       target="_blank" style="display:inline-block; padding:10px 20px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px;">
+                       Оплатить криптовалютой
                     </a>
                 </div>`;
         };
@@ -384,45 +385,15 @@ function showPaymentDetails(paymentMethod) {
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
             script.async = true;
             script.crossOrigin = "anonymous";
-            
-            // Если за 5 секунд не загрузилось — значит, блок по IP или CORS
-            const loadTimeout = setTimeout(showBackupButton, 5000);
+            script.onload = () => { runMount(sum); };
+            script.onerror = showBackupButton;
+            document.head.appendChild(script);
+        } else {
+            runMount(sum);
+        }
 
-            script.onload = () => {
-                clearTimeout(loadTimeout);
-                container.innerHTML = '<div class="cc-payment-form"></div>';
-                runMount(sum);
-            };
-            
-            script.onerror = () => {
-                clearTimeout(loadTimeout);
-                showBackupButton();
-            };
-            
-            document.head.appendChild(script);
-        } else {
-            container.innerHTML = '<div class="cc-payment-form"></div>';
-            runMount(sum);
-        }
-    }
-            
-            script.onerror = () => {
-                // Если даже так не грузится - даем прямую ссылку, чтобы юзер не ушел
-                container.innerHTML = `
-                    <div style="text-align:center; padding:20px;">
-                        <p style="color:#666;">Виджет заблокирован вашим браузером.</p>
-                        <a href="https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${sum}&currency=RUB" 
-                           target="_blank" 
-                           style="display:inline-block; padding:12px 25px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold;">
-                           Открыть страницу оплаты
-                        </a>
-                    </div>`;
-            };
-            document.head.appendChild(script);
-        } else {
-            runMount(sum);
-        }
-    }
+    } // Закрывает else if ("Криптовалюта")
+} // Закрывает функцию showPaymentDetails
 
 function generateOrderNumber() {
     const now = new Date();
