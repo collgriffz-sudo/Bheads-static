@@ -1,22 +1,25 @@
 export async function onRequestPost(context) {
   try {
-    // 1. Читаем JSON (в Cloudflare это делается через .json(), а не event.body)
+    // 1. Читаем данные заказа
     const data = await context.request.json();
     
-    // 2. Достаем ключи из настроек Cloudflare (Variables)
+    // 2. Достаем ключи из настроек Cloudflare
     const token = context.env.TELEGRAM_TOKEN;
     const chatId = context.env.TELEGRAM_CHAT_ID;
+    const resendKey = context.env.RESEND_API_KEY;
 
     if (!token || !chatId) {
         return new Response('Ошибка: Токен или ChatID не настроены в панели Cloudflare', { status: 500 });
     }
 
-    // 3. Формируем заголовок заказа
+    // 3. Формируем заголовок и основное сообщение (универсально для TG и Email)
     const orderNum = data.orderNumber || 'БЕЗ НОМЕРА';
-    let message = `BHeads7.ru 📦 **ЗАКАЗ №${orderNum}**\n`;
-    message += `──────────────────\n`;
+    const emailTarget = 'ВСТАВЬ_СЮДА_СВОЮ_ПОЧТУ'; // Почта, на которую регистрировал Resend
 
-    // 4. Перебираем ВСЕ поля (как в твоем старом коде)
+    let messageText = `BHeads7.ru 📦 **ЗАКАЗ №${orderNum}**\n`;
+    messageText += `──────────────────\n`;
+
+    // 4. Перебираем ВСЕ поля (твой проверенный цикл)
     for (const key in data) {
       if (['cartItems', 'orderNumber'].includes(key)) continue;
       
@@ -26,35 +29,58 @@ export async function onRequestPost(context) {
       if (value === true) value = "✅ Да";
       if (value === false) value = "❌ Нет";
       
-      message += `**${label}**: ${value}\n`;
+      messageText += `**${label}**: ${value}\n`;
     }
 
     // 5. Добавляем список товаров
+    let itemsHtml = ""; // Для письма
     if (data.cartItems && Array.isArray(data.cartItems)) {
-      message += `──────────────────\n`;
-      message += `🛒 **ТОВАРЫ:**\n`;
+      messageText += `──────────────────\n`;
+      messageText += `🛒 **ТОВАРЫ:**\n`;
       data.cartItems.forEach(item => {
-        message += `• ${item.name} — ${item.quantity} шт. (${item.price} руб.)\n`;
+        const line = `• ${item.name} — ${item.quantity} шт. (${item.price} руб.)`;
+        messageText += line + `\n`;
+        itemsHtml += `<li>${line}</li>`;
       });
     }
 
     // 6. Отправка в Telegram
-    const url = `https://api.telegram.org/bot${token}/sendMessage`;
-    const response = await fetch(url, {
+    const tgUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+    const tgResponse = await fetch(tgUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: chatId,
-        text: message,
-        parse_mode: 'Markdown' // Твой старый код использовал Markdown
+        text: messageText,
+        parse_mode: 'Markdown'
       })
     });
 
-    if (!response.ok) {
-        return new Response('Ошибка Telegram API', { status: 500 });
+    // 7. Отправка на Email через Resend
+    let emailSent = false;
+    if (resendKey) {
+      const emailResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'BHeads <onboarding@resend.dev>',
+          to: emailTarget,
+          subject: `Новый заказ №${orderNum}`,
+          // Превращаем Markdown в простой текст с переносами строк для письма
+          html: messageText.replace(/\*\*/g, '').replace(/\n/g, '<br>')
+        })
+      });
+      emailSent = emailResponse.ok;
     }
 
-    return new Response(JSON.stringify({ status: "success" }), {
+    return new Response(JSON.stringify({ 
+        status: "success", 
+        tg_sent: tgResponse.ok, 
+        email_sent: emailSent 
+    }), {
       headers: { 'Content-Type': 'application/json' }
     });
 
