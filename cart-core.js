@@ -298,52 +298,63 @@ function showPaymentDetails(paymentMethod) {
                 Сумма к переводу: <b>${sum} ₽</b><br>
                 Номер: <br> Банк: <br> Получатель: Н.
             </div>`;
+        
     } else if (paymentMethod.includes("Юмани") || paymentMethod.includes("Карты")) {
         container.innerHTML = `
             <div style="text-align: center;">
                 <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
                 width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
             </div>`;
-    } else if (paymentMethod.includes("Криптовалюта")) {
-        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 150px; display: flex; justify-content: center; align-items: center;">Загрузка способов оплаты...</div>';
         
-        const runMount = (amount) => {
-            if (window.CryptoCloudWidget) {
-                window.CryptoCloudWidget.CreateInvoiceForm({
-                    shop_id: "7zTuAWJTvjF0Vf9A",
-                    amount: amount,
-                    currency: "RUB",
-                    buttonText: "Оплатить",
-                    locale: "ru",
-                    template: "light"
-                }).mount('.cc-payment-form');
-            }
-        };
-
+    } else if (paymentMethod.includes("Криптовалюта")) {
+        // Сначала создаем контейнер
+        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 150px; display: flex; justify-content: center; align-items: center; flex-direction: column;">Загрузка способов оплаты...</div>';
+        
+        // Функция-запасной вариант (кнопка), если виджет не загрузился
         const showBackupButton = () => {
+            const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
+            const paymentUrl = `https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${finalSum}&currency=RUB`;
+            
             container.innerHTML = `
-                <div style="text-align:center; padding:20px; border:1px dashed #fb8c00; border-radius:12px;">
-                    <p style="font-size:14px; color:#555;">Виджет недоступен. Используйте прямую ссылку:</p>
-                    <a href="https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${sum}&currency=RUB" 
-                       target="_blank" style="display:inline-block; padding:10px 20px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px;">
-                       Оплатить криптовалютой
+                <div style="text-align:center; padding:20px; border:1px dashed #fb8c00; border-radius:12px; background: #fffaf0;">
+                    <p style="font-size:14px; color:#555; margin-bottom:15px;">Виджет оплаты не загрузился из-за настроек сети.<br>Воспользуйтесь прямой ссылкой:</p>
+                    <a href="${paymentUrl}" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       style="display:inline-block; padding:12px 24px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; box-shadow: 0 4px 12px rgba(251,140,0,0.3);">
+                       ОПЛАТИТЬ КРИПТОВАЛЮТОЙ
                     </a>
                 </div>`;
         };
 
+        // Пытаемся загрузить виджет
         if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
             script.async = true;
             script.crossOrigin = "anonymous";
-            script.onload = () => { runMount(sum); };
+            script.onload = () => {
+                const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
+                if (window.CryptoCloudWidget) {
+                    window.CryptoCloudWidget.CreateInvoiceForm({
+                        shop_id: "7zTuAWJTvjF0Vf9A",
+                        amount: finalSum,
+                        currency: "RUB",
+                        buttonText: "Оплатить",
+                        locale: "ru",
+                        template: "light"
+                    }).mount('.cc-payment-form');
+                } else {
+                    showBackupButton();
+                }
+            };
             script.onerror = showBackupButton;
             document.head.appendChild(script);
         } else {
-            runMount(sum);
+            const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
+            runMount(finalSum); // или сразу CryptoCloudWidget.CreateInvoiceForm
         }
     }
-}
 
 function generateOrderNumber() {
     const now = new Date();
