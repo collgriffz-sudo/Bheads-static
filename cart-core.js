@@ -307,7 +307,7 @@ function showPaymentDetails(paymentMethod) {
 
 const container = document.getElementById('paymentContent');
     if (container) {
-        container.style.minHeight = '350px'; 
+        container.style.minHeight = '450px'; 
         container.style.height = 'auto';
     }
     
@@ -396,7 +396,8 @@ window.finishAndShowPayment = function() {
         delivery: document.querySelector('input[name="deliveryType"]:checked')?.value || 'Не выбрано',
         payment: document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано',
         comment: document.getElementById('orderComment')?.value || '—',
-        totalPrice: totalPrice + " ₽",
+        // Берем сумму прямо с экрана (из того самого поля finalTotal, где уже есть доставка)
+totalPrice: (document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || totalPrice) + " ₽",
         cartItems: cart.map(item => ({
             name: item.name,
             quantity: item.quantity,
