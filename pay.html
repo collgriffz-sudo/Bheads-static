@@ -25,50 +25,50 @@
         </div>
     </div>
 
-    <script>
-        // 1. Сразу берем данные из памяти
-        const sum = localStorage.getItem('cryptocloud_amount') || '0';
-        const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
+   <script>
+    const sum = localStorage.getItem('cryptocloud_amount') || '0';
+    const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
+    
+    document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
+    document.getElementById('order_id').innerText = orderId;
+
+    function initWidget() {
+        const script = document.createElement('script');
+        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
         
-        document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
-        document.getElementById('order_id').innerText = orderId;
+        // Эти три строки лечат твою ошибку в логе:
+        script.setAttribute('crossorigin', 'anonymous');
+        script.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+        script.async = true;
 
-        // 2. Функция безопасной загрузки скрипта
-        function initWidget() {
-            const script = document.createElement('script');
-            script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            
-            // ВАЖНО: Эти параметры лечат ошибки в твоем логе
-            script.crossOrigin = "anonymous"; 
-            script.referrerPolicy = "no-referrer-when-downgrade";
-            
-            script.onload = function() {
-                if (window.CryptoCloudWidget) {
-                    document.getElementById('status-text').style.display = 'none';
-                    window.CryptoCloudWidget.CreateInvoiceForm({
-                        shop_id: "7zTuAWJTvjF0Vf9A",
-                        amount: sum,
-                        currency: "RUB",
-                        locale: "ru",
-                        template: "white",
-                        order_id: orderId
-                    }).mount('#crypto-form');
-                }
-            };
+        script.onload = function() {
+            if (window.CryptoCloudWidget) {
+                // Скрываем текст загрузки, если он есть
+                const status = document.getElementById('status-text');
+                if (status) status.style.display = 'none';
 
-            script.onerror = function() {
-                document.getElementById('status-text').innerText = 'Ошибка загрузки модуля оплаты. Попробуйте обновить страницу.';
-            };
+                window.CryptoCloudWidget.CreateInvoiceForm({
+                    shop_id: "7zTuAWJTvjF0Vf9A",
+                    amount: sum,
+                    currency: "RUB",
+                    locale: "ru",
+                    template: "white",
+                    order_id: orderId
+                }).mount('.cc-payment-form');
+            }
+        };
 
-            document.head.appendChild(script);
-        }
+        script.onerror = function() {
+            const status = document.getElementById('status-text');
+            if (status) status.innerText = 'Ошибка загрузки модуля оплаты. Проверьте соединение.';
+        };
 
-        // Запуск
-        if (sum !== '0') {
-            initWidget();
-        } else {
-            document.getElementById('status-text').innerText = 'Ошибка: Сумма заказа не получена.';
-        }
-    </script>
+        document.head.appendChild(script);
+    }
+
+    if (sum !== '0') {
+        initWidget();
+    }
+</script>
 </body>
 </html>
