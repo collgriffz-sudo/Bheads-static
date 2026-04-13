@@ -735,12 +735,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('orderDetailsInput').value = details.join('\n');
   }
   
-  orderBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    updateOrderDetails();
-    modal.style.display = 'block';
-    overlay.style.display = 'block';
-  });
+
   
   function closeModal() {
     modal.style.display = 'none';
