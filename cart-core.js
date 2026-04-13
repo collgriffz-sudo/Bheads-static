@@ -401,19 +401,20 @@ window.finishAndShowPayment = function() {
 // ЛОГИКА ДЛЯ КРИПТЫ
     if (orderData.payment && (orderData.payment.includes('Криптовалюта') || orderData.payment.includes('crypto'))) {
         
-        // ВАЖНО: берем totalPrice, так как в твоем объекте orderData сумма лежит там
-        // Убираем всё кроме цифр
-        const cleanSum = orderData.totalPrice.replace(/\D/g, '');
+        // В твоем коде сумма лежит в переменной totalPriceDisplay (строка ~300)
+        // Мы берем её, так как она точно существует и содержит итоговую сумму
+        const cleanSum = totalPriceDisplay.replace(/\D/g, '');
         
         // Сохраняем данные для pay.html
         localStorage.setItem('cryptocloud_amount', cleanSum);
         localStorage.setItem('cryptocloud_order_id', orderID);
 
         // Открываем окно оплаты
-        console.log("Крипта выбрана, открываю pay.html");
+        console.log("Крипта выбрана, открываю pay.html для суммы:", cleanSum);
         window.open('pay.html', '_blank');
     }
 
+    // Переходим на финальный шаг модального окна
     nextStep(5);
 
     const closeBtn = document.querySelector('.close'); 
