@@ -304,15 +304,23 @@ window.prepareReview = function() {
 };
 
 function showPaymentDetails(paymentMethod) {
-
-const container = document.getElementById('paymentContent');
+    const container = document.getElementById('paymentContent');
     if (container) {
+        // РАСШИРЯЕМ ВШИРЬ:
+        container.style.width = '100%';
+        container.style.minWidth = '380px'; // Чтобы виджет CryptoCloud не сжимался по бокам
         container.style.minHeight = '450px'; 
-        container.style.height = 'auto';
+        
+        // Находим само белое модальное окно и тоже даем ему ширину
+        const modalMain = container.closest('.modal-content') || container.parentElement;
+        if (modalMain) {
+            modalMain.style.width = '95%';
+            modalMain.style.maxWidth = '500px'; // Делаем само окно шире, чтобы форма влезла
+        }
     }
-        if (!container) return;
     
-    container.innerHTML = ''; 
+    if (!container) return;
+    container.innerHTML = '';
 
     // Получаем чистую сумму (только цифры)
     const totalElement = document.getElementById('finalTotal');
