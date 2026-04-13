@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
 
     // 3. Формируем заголовок и основное сообщение (универсально для TG и Email)
     const orderNum = data.orderNumber || 'БЕЗ НОМЕРА';
-    const emailTarget = 'ВСТАВЬ_СЮДА_СВОЮ_ПОЧТУ'; // Почта, на которую регистрировал Resend
+    const emailTarget = 'mrbheads7@gmail.com'; // Почта, на которую регистрировал Resend
 
     let messageText = `BHeads7.ru 📦 **ЗАКАЗ №${orderNum}**\n`;
     messageText += `──────────────────\n`;
