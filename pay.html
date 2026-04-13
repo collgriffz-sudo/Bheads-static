@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оплата заказа | LordTitle</title>
-    <script src="https://cdn.cryptocloud.plus/widget/v1/widget.js"></script>
     <style>
         body { margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f7; font-family: sans-serif; }
         .pay-container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 100%; max-width: 500px; }
@@ -22,13 +21,28 @@
         <div class="cc-payment-form"></div>
     </div>
     <script>
-        const sum = localStorage.getItem('cryptocloud_amount') || '0';
-        const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
-        document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
-        document.getElementById('order_id').innerText = orderId;
+    const sum = localStorage.getItem('cryptocloud_amount') || '0';
+    const orderId = localStorage.getItem('cryptocloud_order_id') || '---';
+    
+    // Сразу выводим текст, чтобы юзер видел номер и сумму
+    document.getElementById('total_sum').innerText = Number(sum).toLocaleString();
+    document.getElementById('order_id').innerText = orderId;
 
-        window.onload = function() {
+    function loadWidget() {
+        if (sum === '0') {
+            console.error("Сумма заказа не найдена в localStorage");
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+        script.async = true;
+        // Добавляем защиту от блокировки CORS
+        script.setAttribute('crossorigin', 'anonymous');
+        
+        script.onload = function() {
             if (window.CryptoCloudWidget) {
+                console.log("Виджет загружен, создаю форму для суммы:", sum);
                 window.CryptoCloudWidget.CreateInvoiceForm({
                     shop_id: "7zTuAWJTvjF0Vf9A",
                     amount: sum,
@@ -37,8 +51,22 @@
                     template: "white",
                     order_id: orderId
                 }).mount('.cc-payment-form');
+            } else {
+                console.error("CryptoCloudWidget не найден после загрузки скрипта");
             }
         };
-    </script>
+
+        script.onerror = function() {
+            console.error("Не удалось загрузить скрипт виджета. Проверьте блокировщики рекламы.");
+        };
+
+        document.head.appendChild(script);
+    }
+
+    // Запускаем через небольшую паузу, чтобы страница успела "продышаться"
+    window.addEventListener('load', function() {
+        setTimeout(loadWidget, 500);
+    });
+</script>
 </body>
 </html>
