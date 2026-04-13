@@ -369,12 +369,27 @@ window.finishAndShowPayment = function() {
         }))
     };
 
-    // Отправляем "почтальону" в Netlify
+/*    // Отправляем "почтальону" в Netlify
     fetch('/.netlify/functions/send-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
-    })
+    }) */
+
+// Новый код для Cloudflare
+fetch('/send-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderData)
+})
+.then(response => {
+    if (response.ok) {
+        console.log("Заказ успешно отправлен в Cloudflare");
+    }
+})
+.catch(error => console.error("Ошибка отправки:", error));
+    
+    
     .then(response => console.log("Данные ушли в Netlify"))
     .catch(error => console.error("Ошибка отправки в Telegram:", error));
     // --- КОНЕЦ БЛОКА TELEGRAM ---
