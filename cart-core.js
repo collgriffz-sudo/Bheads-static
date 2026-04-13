@@ -354,36 +354,37 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
         
 } else if (paymentMethod.includes("Криптовалюта")) {
-        // Очищаем контейнер под новый виджет
-        container.innerHTML = '<div class="cc-payment-form"></div>';
+        // 1. Очищаем контейнер и задаем ему ширину, чтобы форма не схлопывалась
+        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 200px;"></div>';
         
-        // Проверяем, загружен ли скрипт виджета, если нет — добавляем
+        // 2. Функция для монтирования (внутри, чтобы точно видела сумму)
+        const runMount = (amount) => {
+            if (window.CryptoCloudWidget) {
+                // Если форма уже была создана, её нужно инициализировать заново в новом контейнере
+                window.CryptoCloudWidget.CreateInvoiceForm({
+                    shop_id: "7zTuAWJTvjF0Vf9A",
+                    amount: amount,
+                    currency: "RUB",
+                    buttonText: "Оплатить криптовалютой",
+                    locale: "ru",
+                    template: "light",
+                    emailRequired: false
+                }).mount('.cc-payment-form');
+            }
+        };
+
+        // 3. Загрузка скрипта с проверкой
         if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            script.onload = () => mountCryptoWidget(sum);
+            // Как только скрипт загрузится — запускаем
+            script.onload = () => runMount(sum);
             document.body.appendChild(script);
         } else {
-            mountCryptoWidget(sum);
+            // Если скрипт уже есть (повторный клик), просто запускаем
+            runMount(sum);
         }
     }
-}
-
-// Вспомогательная функция для запуска виджета
-function mountCryptoWidget(amount) {
-    if (window.CryptoCloudWidget) {
-        window.CryptoCloudWidget.CreateInvoiceForm({
-            shop_id: "7zTuAWJTvjF0Vf9A",
-            amount: amount, // Передаем итоговую сумму заказа
-            buttonText: "Оплатить",
-            currency: "RUB",
-            locale: "ru",
-            template: "light", // Ставим светлую тему, чтобы вписалось в твое белое окно
-            emailRequired: false
-        }).mount('.cc-payment-form');
-    }
-}
-
 function generateOrderNumber() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
