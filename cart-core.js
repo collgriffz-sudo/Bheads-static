@@ -209,10 +209,15 @@ window.nextStep = function(step) {
     }
 };
 
-// Функция подготовки финального обзора
 window.prepareReview = function() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     let totalPrice = cart.reduce((sum, item) => sum + (parseInt(item.price) * (item.quantity || 1)), 0);
+
+    // Достаем цену доставки из атрибута data-price выбранной кнопки
+    const shipEl = document.querySelector('input[name="deliveryType"]:checked');
+    const shipPrice = parseInt(shipEl?.getAttribute('data-price') || 0);
+    const deliveryName = shipEl?.value || 'Не выбрана';
+    const grandTotal = totalPrice + shipPrice;
 
     // --- ОБНОВЛЕННЫЙ БЛОК ОТОБРАЖЕНИЯ ТОВАРОВ С КАРТИНКОЙ ---
     let itemsHTML = `
@@ -223,7 +228,6 @@ window.prepareReview = function() {
     cart.forEach(item => {
         let p = parseInt(item.price) || 0;
         let q = item.quantity || 1;
-        // Проверяем наличие картинки, если нет — ставим заглушку
         let imgTag = `<img src="${item.img || 'images/no-photo.jpg'}" style="width:40px; height:40px; object-fit:contain; border-radius:4px; border:1px solid #eee;">`;
 
         itemsHTML += `
@@ -240,10 +244,17 @@ window.prepareReview = function() {
         `;
     });
 
+    // Вставляем строку доставки и считаем общий ИТОГ
     itemsHTML += `
         <tr>
-            <td colspan="2" style="padding:10px 0; font-weight:bold; font-size:1rem;">Итого:</td>
-            <td style="padding:10px 0; text-align:right; font-weight:bold; color:#b30020; font-size:1.1rem;">${totalPrice.toLocaleString()} ₽</td>
+            <td colspan="2" style="padding:10px 0 5px 0; color:#666;">Доставка: ${deliveryName}</td>
+            <td style="padding:10px 0 5px 0; text-align:right; color:#666;">+ ${shipPrice.toLocaleString()} ₽</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="padding:10px 0; font-weight:bold; font-size:1rem;">Итого к оплате:</td>
+            <td style="padding:10px 0; text-align:right; font-weight:bold; color:#b30020; font-size:1.1rem;">
+                <span id="finalTotal">${grandTotal}</span> ₽
+            </td>
         </tr>
     </table>
     `;
