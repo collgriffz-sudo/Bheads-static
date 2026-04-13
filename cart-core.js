@@ -39,19 +39,15 @@
             cart.splice(index, 1);
         }
         
-        saveCart(cart);
-        if (window.location.pathname.includes('cart.html')) {
-            location.reload();
-        }
+saveCart(cart);
+        location.reload();
     };
     
     // Очистить корзину
     window.clearCart = function() {
-        if (confirm('Очистить корзину?')) {
+if (confirm('Очистить корзину?')) {
             saveCart([]);
-            if (window.location.pathname.includes('cart.html')) {
-                location.reload();
-            }
+            location.reload();
         }
     };
     
@@ -166,12 +162,10 @@
         });
     }
     
-    // Запуск при загрузке страницы
+// Запуск при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
         updateCartCount();
-        if (window.location.pathname.includes('cart.html')) {
-            displayCartPage();
-        }
+        displayCartPage();
     });
     // Глобальная функция изменения количества
     window.changeQty = function(index, delta) {
