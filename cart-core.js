@@ -307,54 +307,49 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
         
     } else if (paymentMethod.includes("Криптовалюта")) {
-        // Сначала создаем контейнер
-        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 150px; display: flex; justify-content: center; align-items: center; flex-direction: column;">Загрузка способов оплаты...</div>';
-        
-        // Функция-запасной вариант (кнопка), если виджет не загрузился
-        const showBackupButton = () => {
-            const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
-            const paymentUrl = `https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${finalSum}&currency=RUB`;
-            
-            container.innerHTML = `
-                <div style="text-align:center; padding:20px; border:1px dashed #fb8c00; border-radius:12px; background: #fffaf0;">
-                    <p style="font-size:14px; color:#555; margin-bottom:15px;">Виджет оплаты не загрузился из-за настроек сети.<br>Воспользуйтесь прямой ссылкой:</p>
-                    <a href="${paymentUrl}" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       style="display:inline-block; padding:12px 24px; background:#fb8c00; color:#fff; text-decoration:none; border-radius:8px; font-weight:bold; box-shadow: 0 4px 12px rgba(251,140,0,0.3);">
-                       ОПЛАТИТЬ КРИПТОВАЛЮТОЙ
-                    </a>
-                </div>`;
-        };
+    // 1. Берем сумму из итоговой строки (убираем всё кроме цифр)
+    const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
+    
+    // 2. Создаем контейнер для кнопки
+    container.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px;">
+            <p style="font-weight: bold; color: #333;">К оплате: ${finalSum} руб.</p>
+            <div class="cc-payment-button"></div>
+        </div>
+    `;
 
-        // Пытаемся загрузить виджет
-        if (!window.CryptoCloudWidget) {
-            const script = document.createElement('script');
-            script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            script.async = true;
-            script.crossOrigin = "anonymous";
-            script.onload = () => {
-                const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
-                if (window.CryptoCloudWidget) {
-                    window.CryptoCloudWidget.CreateInvoiceForm({
-                        shop_id: "7zTuAWJTvjF0Vf9A",
-                        amount: finalSum,
-                        currency: "RUB",
-                        buttonText: "Оплатить",
-                        locale: "ru",
-                        template: "light"
-                    }).mount('.cc-payment-form');
-                } else {
-                    showBackupButton();
-                }
-            };
-            script.onerror = showBackupButton;
-            document.head.appendChild(script);
-        } else {
-            const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
-            runMount(finalSum); // или сразу CryptoCloudWidget.CreateInvoiceForm
-        }
+    // 3. Подгружаем скрипт и сразу вешаем создание кнопки на его загрузку
+    if (!window.CryptoCloudWidget) {
+        const script = document.createElement('script');
+        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+        script.async = true;
+        script.onload = () => {
+            if (window.CryptoCloudWidget) {
+                window.CryptoCloudWidget.CreateInvoiceButton({
+                    size: "standard",
+                    template: "variant1:dark",
+                    text: "Оплатить криптовалютой",
+                    amount: finalSum,
+                    currency: "RUB",
+                    shop_id: "7zTuAWJTvjF0Vf9A",
+                    locale: "ru",
+                }).mount('.cc-payment-button');
+            }
+        };
+        document.head.appendChild(script);
+    } else {
+        // Если скрипт уже был на странице, просто рисуем кнопку
+        window.CryptoCloudWidget.CreateInvoiceButton({
+            size: "standard",
+            template: "variant1:dark",
+            text: "Оплатить криптовалютой",
+            amount: finalSum,
+            currency: "RUB",
+            shop_id: "7zTuAWJTvjF0Vf9A",
+            locale: "ru",
+        }).mount('.cc-payment-button');
     }
+}
 }
 function generateOrderNumber() {
     const now = new Date();
