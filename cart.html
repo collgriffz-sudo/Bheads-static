@@ -613,8 +613,9 @@
           if (countSpan) countSpan.innerText = cart.length;
           
           // Если мы на странице корзины — показываем содержимое
-          if (window.location.pathname.includes('cart.html')) {
-              let container = document.querySelector('.cartItems');
+// Если мы на странице корзины — показываем содержимое
+if (true) {
+    let container = document.querySelector('.cartItems');
               if (!container) return;
               
               if (cart.length === 0) {
@@ -664,7 +665,7 @@
 
 
 
-<script src="./cart-core.js"></script>
+<script src="cart-core.js?v=1"></script>
 
 
 <style>
