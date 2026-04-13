@@ -352,7 +352,7 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
         
    } else if (paymentMethod.includes("Криптовалюта")) {
-        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 200px;"></div>';
+        container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 150px; display: flex; justify-content: center; align-items: center;">Загрузка способов оплаты...</div>';
         
         const runMount = (amount) => {
             if (window.CryptoCloudWidget) {
@@ -362,25 +362,49 @@ function showPaymentDetails(paymentMethod) {
                     currency: "RUB",
                     buttonText: "Оплатить",
                     locale: "ru",
-                    template: "light",
-                    emailRequired: false
+                    template: "light"
                 }).mount('.cc-payment-form');
             }
+        };
+
+        const showBackupButton = () => {
+            container.innerHTML = `
+                <div style="text-align:center; padding: 20px; border: 1px dashed #fb8c00; border-radius: 12px; background: #fffaf5;">
+                    <p style="font-size: 14px; color: #555; margin-bottom: 15px;">Виджет оплаты недоступен из-за сетевых ограничений.</p>
+                    <a href="https://app.cryptocloud.plus/checkout/7zTuAWJTvjF0Vf9A?amount=${sum}&currency=RUB" 
+                       target="_blank" 
+                       style="display: inline-block; padding: 14px 28px; background: #fb8c00; color: #fff; text-decoration: none; border-radius: 8px; font-weight: bold; box-shadow: 0 4px 12px rgba(251, 140, 0, 0.3);">
+                       Оплатить криптовалютой (прямая ссылка)
+                    </a>
+                </div>`;
         };
 
         if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            
-            // Набор "анти-блокировка":
             script.async = true;
-            script.crossOrigin = "anonymous"; 
-            script.referrerPolicy = "no-referrer-when-downgrade"; // Чтобы не пугать их сервер
+            script.crossOrigin = "anonymous";
             
+            // Если за 5 секунд не загрузилось — значит, блок по IP или CORS
+            const loadTimeout = setTimeout(showBackupButton, 5000);
+
             script.onload = () => {
-                console.log("CryptoCloud загружен успешно");
+                clearTimeout(loadTimeout);
+                container.innerHTML = '<div class="cc-payment-form"></div>';
                 runMount(sum);
             };
+            
+            script.onerror = () => {
+                clearTimeout(loadTimeout);
+                showBackupButton();
+            };
+            
+            document.head.appendChild(script);
+        } else {
+            container.innerHTML = '<div class="cc-payment-form"></div>';
+            runMount(sum);
+        }
+    }
             
             script.onerror = () => {
                 // Если даже так не грузится - даем прямую ссылку, чтобы юзер не ушел
