@@ -352,17 +352,16 @@ function showPaymentDetails(paymentMethod) {
             </div>`;
         
     } else if (paymentMethod.includes("Криптовалюта")) {
-        // 1. Очищаем контейнер и задаем ему ширину
+        // 1. Создаем контейнер для формы
         container.innerHTML = '<div class="cc-payment-form" style="width: 100%; min-height: 200px;"></div>';
         
-        // 2. Функция для монтирования
         const runMount = (amount) => {
             if (window.CryptoCloudWidget) {
                 window.CryptoCloudWidget.CreateInvoiceForm({
                     shop_id: "7zTuAWJTvjF0Vf9A",
                     amount: amount,
                     currency: "RUB",
-                    buttonText: "Оплатить криптовалютой",
+                    buttonText: "Оплатить",
                     locale: "ru",
                     template: "light",
                     emailRequired: false
@@ -370,17 +369,24 @@ function showPaymentDetails(paymentMethod) {
             }
         };
 
-        // 3. Загрузка скрипта с проверкой
+        // 2. Загрузка скрипта с ПРАВИЛЬНЫМИ заголовками (чтобы не было ошибки в консоли)
         if (!window.CryptoCloudWidget) {
             const script = document.createElement('script');
             script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+            
+            // Эти две строки лечат ошибку "Cancelled load", которую ты скинул в логах:
+            script.crossOrigin = "anonymous"; 
+            script.setAttribute('data-cross-origin', 'anonymous');
+            
             script.onload = () => runMount(sum);
+            script.onerror = () => {
+                container.innerHTML = '<p style="color:red;text-align:center;padding:20px;">Ошибка загрузки платежного модуля. Попробуйте еще раз.</p>';
+            };
             document.body.appendChild(script);
         } else {
             runMount(sum);
         }
     }
-}
 function generateOrderNumber() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
