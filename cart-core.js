@@ -304,6 +304,13 @@ window.prepareReview = function() {
 };
 
 function showPaymentDetails(paymentMethod) {
+
+const container = document.getElementById('paymentContent');
+    if (container) {
+        container.style.minHeight = '350px'; 
+        container.style.height = 'auto';
+    }
+    
     const container = document.getElementById('paymentContent');
     if (!container) return;
     
