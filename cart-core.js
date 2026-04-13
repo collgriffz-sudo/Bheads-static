@@ -398,15 +398,18 @@ window.finishAndShowPayment = function() {
     // Показываем стандартные детали оплаты
     showPaymentDetails(orderData.payment);
     
-    // ЛОГИКА ДЛЯ КРИПТЫ
+// ЛОГИКА ДЛЯ КРИПТЫ
     if (orderData.payment && (orderData.payment.includes('Криптовалюта') || orderData.payment.includes('crypto'))) {
-        const cleanSum = orderData.total.replace(/\D/g, '');
         
-        // Сохраняем данные
+        // ВАЖНО: берем totalPrice, так как в твоем объекте orderData сумма лежит там
+        // Убираем всё кроме цифр
+        const cleanSum = orderData.totalPrice.replace(/\D/g, '');
+        
+        // Сохраняем данные для pay.html
         localStorage.setItem('cryptocloud_amount', cleanSum);
         localStorage.setItem('cryptocloud_order_id', orderID);
 
-        // Открываем окно БЕЗ задержки, чтобы браузер не считал это спамом
+        // Открываем окно оплаты
         console.log("Крипта выбрана, открываю pay.html");
         window.open('pay.html', '_blank');
     }
@@ -438,35 +441,3 @@ window.finalExit = function() {
     if (window.nextStep) window.nextStep(1);
     window.location.href = 'index.html'; 
 };
-
-// Финальный и самый простой вариант для cart-core.js
-document.addEventListener('click', function(e) {
-    // 1. Ищем клик по кнопке подтверждения
-    const btn = e.target.closest('button');
-    if (!btn) return;
-
-    // Проверяем, что это кнопка оформления (по тексту или функции)
-    if (btn.innerText.includes('Оформить заказ') || (btn.onclick && btn.onclick.toString().includes('placeOrder'))) {
-        
-        // Даем основной функции 300мс, чтобы отправить данные в Телеграм
-        setTimeout(function() {
-            // Проверяем способ оплаты через текст на странице (самый надежный способ в твоем случае)
-            const pageText = document.body.innerText;
-            const isCrypto = pageText.includes('Криптовалюта') || pageText.includes('Crypto');
-
-            if (isCrypto) {
-                // Берем сумму из элемента finalTotal
-                const totalElement = document.getElementById('finalTotal');
-                const cleanSum = totalElement ? totalElement.innerText.replace(/\D/g, '') : "0";
-                
-                // Сохраняем сумму
-                localStorage.setItem('cryptocloud_amount', cleanSum);
-                localStorage.setItem('cryptocloud_order_id', Math.floor(Math.random() * 900000) + 100000);
-
-                // ВЫЗОВ ОКНА
-                console.log("Пробую открыть pay.html для суммы:", cleanSum);
-                window.open('pay.html', '_blank');
-            }
-        }, 300);
-    }
-}, true);
