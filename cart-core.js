@@ -423,3 +423,33 @@ window.finalExit = function() {
     if (window.nextStep) window.nextStep(1);
     window.location.href = 'index.html'; 
 };
+
+// Ждем, пока документ загрузится, и вешаем обработчик на кнопку оформления
+document.addEventListener('click', function(e) {
+    // Проверяем, что нажата именно кнопка "Оформить заказ"
+    if (e.target && e.target.id === 'placeOrderBtn') {
+        
+        // 1. Получаем выбранный способ оплаты
+        const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
+        
+        // 2. Получаем итоговую сумму (из элемента с итогом)
+        const totalText = document.getElementById('finalTotal')?.innerText || "0";
+        const cleanSum = totalText.replace(/\D/g, ''); // Оставляем только цифры
+        
+        // 3. Если выбрана криптовалюта — сохраняем данные и открываем окно
+        if (paymentMethod === 'crypto') {
+            const orderID = Math.floor(100000 + Math.random() * 900000);
+            
+            localStorage.setItem('cryptocloud_amount', cleanSum);
+            localStorage.setItem('cryptocloud_order_id', orderID);
+            
+            // Открываем страницу оплаты в новой вкладке
+            window.open('pay.html', '_blank');
+            
+            // Саму корзину на основном сайте переводим на шаг 5 (финал)
+            if (typeof nextStep === 'function') {
+                nextStep(5);
+            }
+        }
+    }
+});
