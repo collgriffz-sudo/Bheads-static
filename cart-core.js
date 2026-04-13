@@ -355,7 +355,7 @@ function showPaymentDetails(paymentMethod) {
             runMount(finalSum); // или сразу CryptoCloudWidget.CreateInvoiceForm
         }
     }
-
+}
 function generateOrderNumber() {
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
