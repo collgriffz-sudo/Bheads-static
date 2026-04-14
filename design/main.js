@@ -3324,30 +3324,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Фикс белого экрана при наведении (подгрузка второго фото)
-document.addEventListener("DOMContentLoaded", function() {
-    function fixHoverImages() {
-        // Находим все картинки внутри блоков ховера, у которых есть data-src
-        var images = document.querySelectorAll('.product__img--hover img[data-src]');
-        images.forEach(function(img) {
-            var src = img.getAttribute('data-src');
-            // Если src еще не равен реальному адресу, заменяем его
-            if (src && img.getAttribute('src') !== src) {
-                img.setAttribute('src', src);
-                img.classList.remove('owl-lazy');
-                img.style.opacity = "1";
+$(document).ready(function() {
+    // Функция для "проявки" скрытых фото
+    function revealHoverImages() {
+        $('.product__img--hover img[data-src]').each(function() {
+            var $img = $(this);
+            var realSrc = $img.attr('data-src');
+            
+            // Если картинка еще не загружена (в src заглушка)
+            if (realSrc && $img.attr('src') !== realSrc) {
+                // Создаем виртуальный объект картинки, чтобы она загрузилась в кэш браузера
+                var tempImg = new Image();
+                tempImg.src = realSrc;
+                tempImg.onload = function() {
+                    // Только когда картинка РЕАЛЬНО скачалась, подставляем её в верстку
+                    $img.attr('src', realSrc).css('opacity', '1').removeClass('owl-lazy');
+                };
             }
         });
     }
 
-    // Запускаем через небольшую паузу, чтобы не мешать основной загрузке
-    setTimeout(fixHoverImages, 500);
-    
-    // Повторяем на всякий случай через 2 секунды (для медленного интернета)
-    setTimeout(fixHoverImages, 2000);
+    // Запускаем через секунду, когда основная верстка точно встала
+    setTimeout(revealHoverImages, 1500);
 });
-
-
 
 
 
