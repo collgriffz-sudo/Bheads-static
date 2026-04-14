@@ -3323,34 +3323,3 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.files = dataTransfer.files;
     }
 });
-
-$(window).on('load', function() {
-    // Даем сайту 2 секунды, чтобы "успокоиться" после загрузки
-    setTimeout(function() {
-        $('.product__img--hover img[data-src]').each(function() {
-            var $img = $(this);
-            var path = $img.attr('data-src');
-
-            if (path) {
-                // Создаем "невидимый" клон картинки в памяти
-                var ghost = new Image();
-                ghost.src = path;
-
-                ghost.onload = function() {
-                    // Только когда файл РЕАЛЬНО загрузился без ошибок:
-                    $img.attr('src', path);
-                    $img.css('opacity', '1');
-                    // Важно: НЕ удаляем owl-lazy, чтобы не триггерить пересчет карусели
-                };
-                
-                ghost.onerror = function() {
-                    // Если картинка не нашлась, пробуем добавить точку перед путем
-                    // (иногда для GitHub Pages это критично: ./3/1754...)
-                    if (!path.startsWith('.')) {
-                        this.src = '.' + path;
-                    }
-                };
-            }
-        });
-    }, 2000);
-});
