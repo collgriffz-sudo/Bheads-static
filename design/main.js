@@ -3325,25 +3325,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 $(window).on('load', function() {
-    // Ждем 1 секунду, пока карусели на главной окончательно встанут
+    // Даем сайту 2 секунды, чтобы "успокоиться" после загрузки
     setTimeout(function() {
         $('.product__img--hover img[data-src]').each(function() {
             var $img = $(this);
-            var realPath = $img.attr('data-src');
-            
-            if (realPath) {
-                // Если путь начинается со слэша /3/..., а сайт лежит в папке, 
-                // мы проверяем, нужно ли добавить точку в начало
-                if (realPath.startsWith('/') && !realPath.startsWith('//')) {
-                    // Оставляем как есть или пробуем убрать слэш, если не грузит
-                }
+            var path = $img.attr('data-src');
 
-                // Мягко подменяем путь
-                $img.attr('src', realPath);
+            if (path) {
+                // Создаем "невидимый" клон картинки в памяти
+                var ghost = new Image();
+                ghost.src = path;
+
+                ghost.onload = function() {
+                    // Только когда файл РЕАЛЬНО загрузился без ошибок:
+                    $img.attr('src', path);
+                    $img.css('opacity', '1');
+                    // Важно: НЕ удаляем owl-lazy, чтобы не триггерить пересчет карусели
+                };
                 
-                // Удаляем класс ленивой загрузки, чтобы Owl его не трогал
-                $img.removeClass('owl-lazy');
+                ghost.onerror = function() {
+                    // Если картинка не нашлась, пробуем добавить точку перед путем
+                    // (иногда для GitHub Pages это критично: ./3/1754...)
+                    if (!path.startsWith('.')) {
+                        this.src = '.' + path;
+                    }
+                };
             }
         });
-    }, 1000);
+    }, 2000);
 });
