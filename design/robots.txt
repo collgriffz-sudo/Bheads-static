@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /design/
+Disallow: /js/
+
+Sitemap: https://BHeads7.ru/sitemap.xml
