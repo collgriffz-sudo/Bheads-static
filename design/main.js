@@ -3324,7 +3324,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Фикс белого экрана при наведении (подгрузка второго фото)
+document.addEventListener("DOMContentLoaded", function() {
+    function fixHoverImages() {
+        // Находим все картинки внутри блоков ховера, у которых есть data-src
+        var images = document.querySelectorAll('.product__img--hover img[data-src]');
+        images.forEach(function(img) {
+            var src = img.getAttribute('data-src');
+            // Если src еще не равен реальному адресу, заменяем его
+            if (src && img.getAttribute('src') !== src) {
+                img.setAttribute('src', src);
+                img.classList.remove('owl-lazy');
+                img.style.opacity = "1";
+            }
+        });
+    }
 
+    // Запускаем через небольшую паузу, чтобы не мешать основной загрузке
+    setTimeout(fixHoverImages, 500);
+    
+    // Повторяем на всякий случай через 2 секунды (для медленного интернета)
+    setTimeout(fixHoverImages, 2000);
+});
 
 
 
