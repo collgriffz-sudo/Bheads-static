@@ -3324,19 +3324,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Этот код просто "прогревает" кэш браузера
-$(window).on('load', function() {
-    $('.product__img--hover img[data-src]').each(function() {
-        var link = $(this).attr('data-src');
-        if (link) {
-            // Создаем невидимый элемент, который просто скачивает файл
-            var img = new Image();
-            img.src = link; 
-            
-            // Как только скачалось - подменяем аккуратно
-            img.onload = function() {
-                $('[data-src="'+link+'"]').attr('src', link).removeClass('owl-lazy');
-            };
-        }
-    });
-});
+
