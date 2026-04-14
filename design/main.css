@@ -1743,40 +1743,16 @@ section {margin: 2rem 0;}
     display: none !important;
 }
 
-/* --- Исправление белого экрана при наведении на товар --- */
 
-/* 1. Делаем картинку в блоке ховера видимой по умолчанию */
+
+
+
+/* Прячем знаки вопроса и рамки, пока картинка не прогрузилась */
 .product__img--hover img {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* 2. Если на главной/в каталоге используется Lazy Load, 
-   мы заставляем браузер показать картинку, даже если скрипт "спит" */
-.product__img--hover img.owl-lazy {
-    display: block !important;
-}
-
-/* 3. Фикс, чтобы верстка не ехала: 
-   задаем минимальную высоту, чтобы карточка не "схлопывалась" 
-   пока картинка подгружается */
-.product__image .product__img, 
-.product__image .product__img--hover {
-    min-height: 200px; /* Примерная высота, подстроится под контент */
-    display: block;
-}
-
-/* 4. Принудительно подтягиваем изображение из data-src, 
-   если оно там застряло (только для современных браузеров) */
-@media (hover: hover) {
-    .product__item:hover .product__img--hover img[data-src] {
-        content: url(attr(data-src));
-    }
-}
-/* Убираем рамки и знаки вопроса у картинок, которые в процессе загрузки */
-.product__img--hover img {
-    opacity: 1 !important;
-    display: block !important;
     border: none !important;
-    text-indent: -10000px; /* Скрывает иконку битого фото */
+    outline: none !important;
+    -moz-force-broken-image-icon: 0 !important; /* Для Firefox */
+}
+.product__img--hover img:not([src*="/"]) {
+    opacity: 0 !important;
 }
