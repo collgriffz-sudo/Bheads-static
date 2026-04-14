@@ -3323,25 +3323,3 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.files = dataTransfer.files;
     }
 });
-
-$(window).on('load', function() {
-    // Ждем полной загрузки страницы, чтобы не мешать основному дизайну
-    setTimeout(function() {
-        $('.product__img--hover img[data-src]').each(function() {
-            var $img = $(this);
-            var realSrc = $img.attr('data-src');
-
-            if (realSrc) {
-                // Создаем невидимый элемент для предзагрузки в кэш
-                var preloader = new Image();
-                preloader.src = realSrc;
-                
-                preloader.onload = function() {
-                    // Когда картинка скачалась в кэш браузера, 
-                    // мы просто меняем атрибут, но максимально мягко
-                    $img.attr('src', realSrc).removeClass('owl-lazy').css('opacity', '1');
-                };
-            }
-        });
-    }, 2000); // Задержка 2 секунды, чтобы всё встало на свои места
-});
