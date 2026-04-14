@@ -1773,3 +1773,10 @@ section {margin: 2rem 0;}
         content: url(attr(data-src));
     }
 }
+/* Убираем рамки и знаки вопроса у картинок, которые в процессе загрузки */
+.product__img--hover img {
+    opacity: 1 !important;
+    display: block !important;
+    border: none !important;
+    text-indent: -10000px; /* Скрывает иконку битого фото */
+}
