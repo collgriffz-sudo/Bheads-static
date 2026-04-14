@@ -3324,4 +3324,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+$(window).on('load', function() {
+    // Ждем 1 секунду, пока карусели на главной окончательно встанут
+    setTimeout(function() {
+        $('.product__img--hover img[data-src]').each(function() {
+            var $img = $(this);
+            var realPath = $img.attr('data-src');
+            
+            if (realPath) {
+                // Если путь начинается со слэша /3/..., а сайт лежит в папке, 
+                // мы проверяем, нужно ли добавить точку в начало
+                if (realPath.startsWith('/') && !realPath.startsWith('//')) {
+                    // Оставляем как есть или пробуем убрать слэш, если не грузит
+                }
 
+                // Мягко подменяем путь
+                $img.attr('src', realPath);
+                
+                // Удаляем класс ленивой загрузки, чтобы Owl его не трогал
+                $img.removeClass('owl-lazy');
+            }
+        });
+    }, 1000);
+});
