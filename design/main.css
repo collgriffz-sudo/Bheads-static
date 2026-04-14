@@ -1747,12 +1747,13 @@ section {margin: 2rem 0;}
 
 
 
-/* Прячем знаки вопроса и рамки, пока картинка не прогрузилась */
-.product__img--hover img {
-    border: none !important;
-    outline: none !important;
-    -moz-force-broken-image-icon: 0 !important; /* Для Firefox */
+/* Полностью отключаем смену картинок при наведении */
+.product__img--hover {
+    display: none !important; /* Убираем блок со второй картинкой */
 }
-.product__img--hover img:not([src*="/"]) {
-    opacity: 0 !important;
+
+/* На всякий случай фиксируем основную картинку, чтобы она не меняла прозрачность */
+.product__img img {
+    opacity: 1 !important;
+    visibility: visible !important;
 }
