@@ -3324,38 +3324,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-$(document).ready(function() {
-    // Функция для "проявки" скрытых фото
-    function revealHoverImages() {
+$(window).on('load', function() {
+    // Ждем полной загрузки страницы, чтобы не мешать основному дизайну
+    setTimeout(function() {
         $('.product__img--hover img[data-src]').each(function() {
             var $img = $(this);
             var realSrc = $img.attr('data-src');
-            
-            // Если картинка еще не загружена (в src заглушка)
-            if (realSrc && $img.attr('src') !== realSrc) {
-                // Создаем виртуальный объект картинки, чтобы она загрузилась в кэш браузера
-                var tempImg = new Image();
-                tempImg.src = realSrc;
-                tempImg.onload = function() {
-                    // Только когда картинка РЕАЛЬНО скачалась, подставляем её в верстку
-                    $img.attr('src', realSrc).css('opacity', '1').removeClass('owl-lazy');
+
+            if (realSrc) {
+                // Создаем невидимый элемент для предзагрузки в кэш
+                var preloader = new Image();
+                preloader.src = realSrc;
+                
+                preloader.onload = function() {
+                    // Когда картинка скачалась в кэш браузера, 
+                    // мы просто меняем атрибут, но максимально мягко
+                    $img.attr('src', realSrc).removeClass('owl-lazy').css('opacity', '1');
                 };
             }
         });
-    }
-
-    // Запускаем через секунду, когда основная верстка точно встала
-    setTimeout(revealHoverImages, 1500);
+    }, 2000); // Задержка 2 секунды, чтобы всё встало на свои места
 });
-
-
-
-
-
-
-
-
-
-
-
-
