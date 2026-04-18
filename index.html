@@ -1064,8 +1064,7 @@ if (!cartContainer) return;
 var oldDropdown = cartContainer.querySelector('.addto__cart');
 if (oldDropdown) oldDropdown.remove();
 var dropdown = document.createElement('div');
-dropdown.style.cssText = "width:350px !important; min-width:350px !important; max-width:350px !important; position:absolute !important; right:0 !important; left:auto !important; display:block !important; visibility:visible !important; z-index:999999 !important; overflow:hidden !important;";	
-dropdown.className = 'addto__cart';
+dropdown.style.cssText = "width:350px !important; min-width:350px !important; max-width:350px !important; position:absolute !important; right:0 !important; left:auto !important; z-index:999999 !important; overflow:hidden !important; background:#ffffff !important; border:1px solid #e5e5e5 !important; box-sizing:border-box !important;";dropdown.className = 'addto__cart';
 cartContainer.appendChild(dropdown);
 function getCart() {
 return JSON.parse(localStorage.getItem('cart') || '[]');
