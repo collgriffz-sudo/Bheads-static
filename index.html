@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>  
   <meta name="yandex-verification" content="21628e31f27ee4ad" />
@@ -1057,19 +1057,23 @@
 </style>
 
 <script>
-// Корзина (всплывающее окно) — с учётом количества
-document.addEventListener('DOMContentLoaded', function() {
-var cartContainer = document.querySelector('.cart');
-if (!cartContainer) return;
-var oldDropdown = cartContainer.querySelector('.addto__cart');
-if (oldDropdown) oldDropdown.remove();
-var dropdown = document.createElement('div');
-dropdown.style.cssText = "width:250px !important; min-width:250px !important; max-width:250px !important; right:0 !important; left:auto !important;";
-	function getCart() {
-return JSON.parse(localStorage.getItem('cart') || '[]');
-}
-a>
-function updateCartDropdown() {
+  // Корзина (всплывающее окно) — с учётом количества
+  document.addEventListener('DOMContentLoaded', function() {
+      var cartContainer = document.querySelector('.cart');
+      if (!cartContainer) return;
+      
+      var oldDropdown = cartContainer.querySelector('.addto__cart');
+      if (oldDropdown) oldDropdown.remove();
+      
+      var dropdown = document.createElement('div');
+dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; display:block !important; visibility:visible !important; z-index:999999 !important; overflow:hidden !important;";      dropdown.className = 'addto__cart';
+      cartContainer.appendChild(dropdown);
+      
+      function getCart() {
+          return JSON.parse(localStorage.getItem('cart') || '[]');
+      }
+      
+      function updateCartDropdown() {
           var cart = getCart();
           
         if (cart.length === 0) {
@@ -1096,23 +1100,21 @@ function updateCartDropdown() {
               <div class="addto__items">
           `;
           
-cart.forEach(function(item, index) {
+          cart.forEach(function(item, index) {
               var price = parseInt(item.price) || 0;
               var quantity = item.quantity || 1;
               var itemTotal = price * quantity;
-              
               itemsHtml += `
-                  <div class="addto__item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-                      <div class="addto__image" style="margin-right: 10px;">
-                          ${item.img ? `<img src="${escapeHtml(item.img)}" style="width:50px; height:50px; object-fit: contain;">` : '<span style="font-size:24px;">📦</span>'}
+                  <div class="addto__item">
+                      <div class="addto__image">
+    ${item.img ? `<img src="${escapeHtml(item.img)}" style="max-width:50px; max-height:50px;">` : '<span style="font-size:24px;">📦</span>'}
+</div>
+                      <div class="addto__info">
+                          <a href="${item.url || '#'}" class="addto__name">${escapeHtml(item.name)}</a>
+                          <div class="addto__quantity">${quantity} x ${price.toLocaleString()} ₽</div>
                       </div>
-                      <div class="addto__info" style="flex: 1;">
-                          <a href="${item.url || '#'}" class="addto__name" style="display: block; font-size: 13px; color: #333; text-decoration: none; margin-bottom: 5px;">${escapeHtml(item.name)}</a>
-                          <div class="addto__quantity" style="font-weight: bold; font-size: 16px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
-                      </div>
-                      <div class="addto__remove-container" style="margin-left: 10px;">
-                          <span class="addto__remove" data-index="${index}" style="cursor: pointer; color: #999; font-size: 18px;" title="Удалить">×</span>
-                      </div>
+                      <div class="addto__price">${itemTotal.toLocaleString()} ₽</div>
+                      <span class="addto__remove" data-index="${index}">Удалить</span>
                   </div>
               `;
           });
@@ -1364,7 +1366,6 @@ cart.forEach(function(item, index) {
       width: 250px !important;
     }
   }
-	
 </style>
 <script src="cart.js"></script>
 </body>
