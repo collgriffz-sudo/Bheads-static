@@ -1318,46 +1318,28 @@
       cursor: default;
   }
 
-  /* ЖЕСТКИЙ ФИКС РАЗМЕРА КОРЗИНЫ */
+/* УСТАНАВЛИВАЕМ ФИКСИРОВАННЫЙ РАЗМЕР */
   .dropdown-cart {
-      display: block !important;
-      width: 300px !important;    
-      min-width: 300px !important;
-      max-width: 300px !important;
-      right: 0 !important;        
-      left: auto !important;      
+      width: 250px !important;      /* Вот твои 250px ширины */
+      min-width: 250px !important;
+      max-width: 250px !important;
+      right: 0 !important;          /* Прижимаем вправо */
+      left: auto !important;
+      overflow: hidden !important;  /* Всё, что шире 250px, просто исчезнет */
+      padding: 10px !important;
+  }
+
+  /* Внутренние элементы тоже заставляем быть не шире 250px */
+  .dropdown-cart * {
+      max-width: 100% !important;
       box-sizing: border-box !important;
-      overflow: visible !important; /* Разрешаем блоку расти вниз */
+      white-space: normal !important; /* Разрешаем перенос текста, чтобы не распирало */
   }
 
-  /* Исправляем название товара: убираем ограничение в 2 строки */
-  .dropdown-cart .item .name, 
-  .dropdown-cart .cart-products .name {
-      white-space: normal !important; 
-      word-break: break-word !important;
-      display: block !important;
-      width: 100% !important;
-      max-height: none !important;    /* Убираем ограничение по высоте */
-      -webkit-line-clamp: unset !important; /* Отключаем обрезку строк */
-      -webkit-box-orient: vertical !important;
-      overflow: visible !important;
-  }
-
-  /* Ограничиваем картинки */
+  /* Картинки товаров делаем мелкими */
   .dropdown-cart img {
-      max-width: 50px !important;
+      width: 40px !important;
       height: auto !important;
-  }
-
-  /* Для мобилок */
-  @media screen and (max-width: 480px) {
-      .dropdown-cart {
-          width: 280px !important;
-          min-width: 280px !important;
-          max-width: 280px !important;
-          position: absolute !important;
-          right: 0 !important;
-      }
   }
 </style>
 
