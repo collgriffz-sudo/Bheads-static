@@ -1066,8 +1066,7 @@
       if (oldDropdown) oldDropdown.remove();
       
       var dropdown = document.createElement('div');
-dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; z-index:999999 !important; background-color:#ffffff !important; border:1px solid #e5e5e5 !important; box-sizing:border-box !important; padding:15px !important; pointer-events:auto !important;";      
-      function getCart() {
+dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; z-index:999999 !important; box-sizing:border-box !important; padding:15px !important; pointer-events: auto !important;";      function getCart() {
           return JSON.parse(localStorage.getItem('cart') || '[]');
       }
       
