@@ -1318,7 +1318,35 @@
   }
   </style>
 
+<style>
+  /* Отключаем иконки избранное, сравнение, пользователь */
+  .addto__links .favorites,
+  .addto__links .compare,
+  .addto__links .users {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: default;
+  }
 
+  /* ФИКС КОРЗИНЫ: чтобы не вылезала за края и была узкой */
+  #header .links-right .dropdown-cart, 
+  .dropdown-cart,
+  #cart-drop { 
+      width: 280px !important;    /* Делаем узкой как на оригинале */
+      right: 0 !important;        /* Прижимаем к правому краю экрана */
+      left: auto !important;      /* Отменяем растягивание влево */
+      max-width: 90vw !important; /* Страховка для очень маленьких телефонов */
+      box-sizing: border-box;
+      position: absolute;         /* Чтобы позиционирование сработало */
+  }
+
+  /* Уменьшаем шрифты внутри корзины для компактности */
+  .dropdown-cart .item .name, 
+  .dropdown-cart .item .price {
+      font-size: 12px !important;
+  }
+</style>
+	
 <script src="cart.js"></script>
 </body>
 </html>
