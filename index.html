@@ -1318,28 +1318,51 @@
       cursor: default;
   }
 
-/* УСТАНАВЛИВАЕМ ФИКСИРОВАННЫЙ РАЗМЕР */
+  /* 1. Отключаем иконки (как было) */
+  .addto__links .favorites, .addto__links .compare, .addto__links .users {
+    opacity: 0.5; pointer-events: none;
+  }
+
+  /* 2. ГЛАВНЫЙ ФИКС КОРЗИНЫ: зажимаем само окно */
+  #header-right .dropdown-cart, 
   .dropdown-cart {
-      width: 250px !important;      /* Вот твои 250px ширины */
-      min-width: 250px !important;
-      max-width: 250px !important;
-      right: 0 !important;          /* Прижимаем вправо */
-      left: auto !important;
-      overflow: hidden !important;  /* Всё, что шире 250px, просто исчезнет */
-      padding: 10px !important;
+    width: 260px !important;      /* Вот нужный тебе размер */
+    min-width: 260px !important;
+    max-width: 260px !important;
+    right: 0 !important;          /* Прижимаем вправо */
+    left: auto !important;
+    position: absolute !important;
+    overflow: hidden !important;  /* Обрезаем всё лишнее */
+    visibility: visible; 
   }
 
-  /* Внутренние элементы тоже заставляем быть не шире 250px */
-  .dropdown-cart * {
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      white-space: normal !important; /* Разрешаем перенос текста, чтобы не распирало */
+  /* 3. ФИКС ВНУТРЕННОСТЕЙ: чтобы контент не распирал окно */
+  .dropdown-cart .cart-products, 
+  .dropdown-cart .item,
+  .dropdown-cart .cart-items {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
   }
 
-  /* Картинки товаров делаем мелкими */
-  .dropdown-cart img {
-      width: 40px !important;
-      height: auto !important;
+  /* 4. ТЕКСТ: заставляем его переноситься (убиваем nowrap из main.css) */
+  .dropdown-cart .name, 
+  .dropdown-cart .price {
+    white-space: normal !important; 
+    display: block !important;
+    line-height: 1.2 !important;
+    font-size: 13px !important;
+  }
+
+  /* 5. МОБИЛКА: чтобы на телефонах точно стояло ровно */
+  @media screen and (max-width: 480px) {
+    #header-right .dropdown-cart, .dropdown-cart {
+      width: 260px !important;
+      right: 0px !important;
+      position: fixed !important; /* Фиксируем, чтобы не «уплывала» */
+      top: 50px !important;
+    }
   }
 </style>
 <script src="cart.js"></script>
