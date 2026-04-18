@@ -1307,16 +1307,7 @@
 </style>
 
 
-<style>
-  /* Отключаем иконки избранное, сравнение, пользователь */
-  .addto__links .favorites,
-  .addto__links .compare,
-  .addto__links .users {
-      opacity: 0.5;
-      pointer-events: none;
-      cursor: default;
-  }
-  </style>
+	
 
 <style>
   /* Отключаем иконки избранное, сравнение, пользователь */
@@ -1328,25 +1319,43 @@
       cursor: default;
   }
 
-  /* ФИКС КОРЗИНЫ: чтобы не вылезала за края и была узкой */
-  #header .links-right .dropdown-cart, 
-  .dropdown-cart,
-  #cart-drop { 
-      width: 280px !important;    /* Делаем узкой как на оригинале */
-      right: 0 !important;        /* Прижимаем к правому краю экрана */
-      left: auto !important;      /* Отменяем растягивание влево */
-      max-width: 90vw !important; /* Страховка для очень маленьких телефонов */
-      box-sizing: border-box;
-      position: absolute;         /* Чтобы позиционирование сработало */
+  /* ЖЕСТКИЙ ФИКС КОРЗИНЫ */
+  .dropdown-cart {
+      left: auto !important;
+      right: 0 !important;
+      width: 300px !important;
+      min-width: 300px !important;
+      z-index: 9999 !important;
   }
 
-  /* Уменьшаем шрифты внутри корзины для компактности */
-  .dropdown-cart .item .name, 
-  .dropdown-cart .item .price {
-      font-size: 12px !important;
+  /* Контейнер, в котором лежит корзина */
+  .header-right, .links-right {
+      position: relative !important;
+  }
+
+  /* Исправляем внутренности */
+  .dropdown-cart .item {
+      width: 100% !important;
+      display: block !important;
+  }
+
+  .dropdown-cart .item .name {
+      white-space: normal !important; 
+      display: block !important;
+  }
+
+  /* Фикс для мобилок до 480px */
+  @media (max-width: 480px) {
+      .dropdown-cart {
+          width: 280px !important;
+          min-width: 280px !important;
+          position: fixed !important; 
+          top: 60px !important; 
+          right: 10px !important;
+      }
   }
 </style>
-	
+
 <script src="cart.js"></script>
 </body>
 </html>
