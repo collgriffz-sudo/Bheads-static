@@ -1066,6 +1066,7 @@
       if (oldDropdown) oldDropdown.remove();
       
       var dropdown = document.createElement('div');
+	  dropdown.style.cssText = "width:280px !important; min-width:280px !important; max-width:280px !important; position:absolute !important; right:0 !important; left:auto !important; display:block !important; visibility:visible !important; z-index:999999 !important;";
       dropdown.className = 'addto__cart';
       cartContainer.appendChild(dropdown);
       
@@ -1078,7 +1079,7 @@
           
         if (cart.length === 0) {
               dropdown.innerHTML = `
-                  <div class="addto__empty">В корзине пусто!!!!!!</div>
+                  <div class="addto__empty">В корзине пусто</div>
                   <div class="addto__buttons">
                       <a href="catalog.html" class="button small">Продолжить покупки</a>
                       <a href="cart.html" class="button small">В корзину</a>
