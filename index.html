@@ -1308,7 +1308,6 @@
 
 
 	
-
 <style>
   /* Отключаем ненужные иконки */
   .addto__links .favorites,
@@ -1322,22 +1321,29 @@
   /* ЖЕСТКИЙ ФИКС РАЗМЕРА КОРЗИНЫ */
   .dropdown-cart {
       display: block !important;
-      width: 300px !important;    /* Фиксируем ширину */
+      width: 300px !important;    
       min-width: 300px !important;
       max-width: 300px !important;
-      right: 0 !important;        /* Прижимаем к правому краю */
-      left: auto !important;      /* Чтобы не росло влево */
+      right: 0 !important;        
+      left: auto !important;      
       box-sizing: border-box !important;
-      overflow: hidden !important;
+      overflow: visible !important; /* Разрешаем блоку расти вниз */
   }
 
-  /* Заставляем текст внутри переноситься, а не растягивать окно */
-  .dropdown-cart *, .dropdown-cart .item .name {
+  /* Исправляем название товара: убираем ограничение в 2 строки */
+  .dropdown-cart .item .name, 
+  .dropdown-cart .cart-products .name {
       white-space: normal !important; 
       word-break: break-word !important;
+      display: block !important;
+      width: 100% !important;
+      max-height: none !important;    /* Убираем ограничение по высоте */
+      -webkit-line-clamp: unset !important; /* Отключаем обрезку строк */
+      -webkit-box-orient: vertical !important;
+      overflow: visible !important;
   }
 
-  /* Ограничиваем картинки, чтобы не выдавливали стенки */
+  /* Ограничиваем картинки */
   .dropdown-cart img {
       max-width: 50px !important;
       height: auto !important;
@@ -1349,6 +1355,8 @@
           width: 280px !important;
           min-width: 280px !important;
           max-width: 280px !important;
+          position: absolute !important;
+          right: 0 !important;
       }
   }
 </style>
