@@ -1096,21 +1096,23 @@ function updateCartDropdown() {
               <div class="addto__items">
           `;
           
-          cart.forEach(function(item, index) {
+cart.forEach(function(item, index) {
               var price = parseInt(item.price) || 0;
               var quantity = item.quantity || 1;
               var itemTotal = price * quantity;
+              
               itemsHtml += `
-                  <div class="addto__item">
-                      <div class="addto__image">
-    ${item.img ? `<img src="${escapeHtml(item.img)}" style="max-width:50px; max-height:50px;">` : '<span style="font-size:24px;">📦</span>'}
-</div>
-                      <div class="addto__info">
-                          <a href="${item.url || '#'}" class="addto__name">${escapeHtml(item.name)}</a>
-                          <div class="addto__quantity">${quantity} x ${price.toLocaleString()} ₽</div>
+                  <div class="addto__item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                      <div class="addto__image" style="margin-right: 10px;">
+                          ${item.img ? `<img src="${escapeHtml(item.img)}" style="width:50px; height:50px; object-fit: contain;">` : '<span style="font-size:24px;">📦</span>'}
                       </div>
-                      <div class="addto__price">${itemTotal.toLocaleString()} ₽</div>
-                      <span class="addto__remove" data-index="${index}">Удалить</span>
+                      <div class="addto__info" style="flex: 1;">
+                          <a href="${item.url || '#'}" class="addto__name" style="display: block; font-size: 13px; color: #333; text-decoration: none; margin-bottom: 5px;">${escapeHtml(item.name)}</a>
+                          <div class="addto__quantity" style="font-weight: bold; font-size: 16px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
+                      </div>
+                      <div class="addto__remove-container" style="margin-left: 10px;">
+                          <span class="addto__remove" data-index="${index}" style="cursor: pointer; color: #999; font-size: 18px;" title="Удалить">×</span>
+                      </div>
                   </div>
               `;
           });
