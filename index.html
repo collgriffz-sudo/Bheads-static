@@ -1057,17 +1057,20 @@
 </style>
 
 <script>
-  // Корзина (всплывающее окно) — с учётом количества
-  document.addEventListener('DOMContentLoaded', function() {
-      var cartContainer = document.querySelector('.cart');
-      if (!cartContainer) return;
-      
-      var oldDropdown = cartContainer.querySelector('.addto__cart');
-      if (oldDropdown) oldDropdown.remove();
-      
-      var dropdown = document.createElement('div');
-dropdown.style.cssText = "width:280px !important; min-width:280px !important; max-width:280px !important; position:absolute !important; right:0 !important; left:auto !important; display:block !important; visibility:visible !important; z-index:999999 !important;";
-      function updateCartDropdown() {
+// Корзина (всплывающее окно) — с учётом количества
+document.addEventListener('DOMContentLoaded', function() {
+var cartContainer = document.querySelector('.cart');
+if (!cartContainer) return;
+var oldDropdown = cartContainer.querySelector('.addto__cart');
+if (oldDropdown) oldDropdown.remove();
+var dropdown = document.createElement('div');
+dropdown.className = 'addto__cart';
+cartContainer.appendChild(dropdown);
+function getCart() {
+return JSON.parse(localStorage.getItem('cart') || '[]');
+}
+a>
+function updateCartDropdown() {
           var cart = getCart();
           
         if (cart.length === 0) {
