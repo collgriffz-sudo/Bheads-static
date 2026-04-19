@@ -66,25 +66,17 @@
 
 
     
-    // Отобразить корзину на странице cart.html
     function displayCartPage() {
         let cart = getCart();
         let container = document.querySelector('.cartItems');
         if (!container) return;
         
         if (cart.length === 0) {
-            container.innerHTML = `
-                <div class="attention" style="text-align:center; padding:40px;">
-                    <p>Корзина пуста</p>
-                    <a href="catalog.html" class="button" style="display:inline-block; margin-top:15px;">Перейти в каталог</a>
-                </div>
-            `;
-            let orderBlock = document.getElementById('order-block');
-            if (orderBlock) orderBlock.style.display = 'none';
+            container.innerHTML = `<div class="attention" style="text-align:center; padding:40px;"><p>Корзина пуста</p></div>`;
             return;
         }
         
-        let itemsHtml = '<div style="margin:20px 0;">';
+        let itemsHtml = '<div class="my-cart-list" style="margin:20px 0;">';
         let total = 0;
         
         cart.forEach((item, index) => {
@@ -93,61 +85,54 @@
             let itemTotal = priceNum * quantity;
             total += itemTotal;
 
-            // Оставляем твою родную структуру, меняем только способ выравнивания
+            // Используем классы и flex-wrap, чтобы оно само прыгало в столбик на мобилках
             itemsHtml += `
-                <div style="display:flex; align-items:flex-start; padding:15px 0; border-bottom:1px solid #eee; gap:15px;">
-                    <div style="flex:0 0 60px;">
-                        <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:60px; height:60px; object-fit:contain; border-radius:4px; border:1px solid #eee;">
+                <div class="cart-row-wrapper" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee; gap:10px;">
+                    
+                    <div style="flex: 2; min-width: 250px; display:flex; align-items:center; gap:15px;">
+                        <img src="${item.img || 'images/no-photo.jpg'}" style="width:60px; height:60px; object-fit:contain; border-radius:4px;">
+                        <div>
+                            <strong style="display:block; font-family:inherit;">${escapeHtml(item.name)}</strong>
+                            <div style="font-size:0.75rem; color:#aca7b4;">${priceNum.toLocaleString()} ₽ за шт.</div>
+                        </div>
                     </div>
 
-                    <div style="flex:1; display:flex; flex-direction:column; gap:5px; text-align:left;">
-                        
-                        <strong style="display:block; font-family: inherit;">${escapeHtml(item.name)}</strong>
-                        <div style="font-size:0.75rem; color:#aca7b4; font-family: inherit;">${priceNum.toLocaleString()} ₽ за шт.</div>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&minus;</button>
-                                <span style="font-weight:bold; min-width:25px; text-align:center; color:#000; font-size:15px; font-family: inherit;">${quantity}</span>
-                                <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&plus;</button>
-                            </div>
-                            
-                            <div style="font-weight:bold; font-family: inherit;">
-                                ${itemTotal.toLocaleString()} ₽
-                            </div>
+                    <div style="flex: 1; min-width: 250px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">&minus;</button>
+                            <span style="font-weight:bold; min-width:25px; text-align:center;">${quantity}</span>
+                            <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">&plus;</button>
                         </div>
 
-                        <div style="margin-top:5px;">
-                            <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; padding:0; font-family:inherit; border-bottom:1px solid #999; line-height:1;">
-                                удалить
-                            </button>
-                        </div>
+                        <div style="font-weight:bold; min-width:80px; text-align:right;">${itemTotal.toLocaleString()} ₽</div>
+
+                        <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; cursor:pointer; text-decoration:underline; font-style:italic; font-family:inherit;">удалить</button>
                     </div>
                 </div>
             `;
         });
         
         itemsHtml += `
-            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd; font-family: inherit;">
+            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd; font-family:inherit;">
                 Итого: ${total.toLocaleString()} ₽
             </div>
         </div>`;
         
-        container.innerHTML = itemsHtml;
-
+        // Кнопка оформления
         let orderHtml = `
             <div style="text-align:center; margin-top:30px;">
-                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; box-shadow:0 5px 20px rgba(179,0,32,0.3); font-family: inherit;">
+                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px;">
                     ОФОРМИТЬ ЗАКАЗ
                 </button>
             </div>
         `;
         
-        container.insertAdjacentHTML('beforeend', orderHtml);
-        
+        container.innerHTML = itemsHtml + orderHtml;
+
+        // Логика кнопки оформления
         const btn = document.getElementById('openOrderBtn');
         if (btn) {
-            btn.onclick = function() {
+            btn.onclick = () => {
                 const modal = document.getElementById('orderModal');
                 if (modal) modal.style.display = 'block';
             };
