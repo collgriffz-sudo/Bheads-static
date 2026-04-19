@@ -114,7 +114,7 @@
                         </button>
                     </div>
 
-                  <div style="flex: 1 0 100%; text-align:right; font-weight:bold; margin-top: 5px; order: 2;">
+                  <div style="flex: 1 0 100%; text-align:right; font-weight:bold; margin-top: 5px; order: 2; font-size: 1.3rem;">
     ${itemTotal.toLocaleString()} ₽
 </div>
 
