@@ -82,6 +82,11 @@
         let itemsHtml = '<div style="margin:20px 0;">';
         let total = 0;
         
+        cart.forEach((item, index) => {
+            let priceNum = parseInt(item.price) || 0;
+            let quantity = item.quantity || 1;
+            let itemTotal = priceNum * quantity;
+            total += itemTotal;
         itemsHtml += `
     <div class="cart-item" style="display: flex; align-items: flex-start; padding: 15px 0; border-bottom: 1px solid #eee; gap: 15px;">
         <div style="width: 70px; min-width: 70px;">
