@@ -1160,13 +1160,17 @@ cart.forEach(function(item, index) {
           }
       }
       
+// Показываем при наведении на контейнер
       cartContainer.addEventListener('mouseenter', function() {
           updateCartDropdown();
+          dropdown.style.display = 'block'; // Принудительно показываем
           dropdown.classList.add('active');
       });
       
+      // Скрываем, когда мышь уходит за пределы ВСЕЙ области (и кнопки, и выпадашки)
       cartContainer.addEventListener('mouseleave', function() {
           dropdown.classList.remove('active');
+          dropdown.style.display = 'none'; // Принудительно скрываем
       });
       
       function escapeHtml(str) {
