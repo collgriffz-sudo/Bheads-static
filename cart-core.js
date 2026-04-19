@@ -93,29 +93,34 @@
             let itemTotal = priceNum * quantity;
             total += itemTotal;
 
-            // Измененный блок: из строчки в столбик
+            // Оставляем твою родную структуру, меняем только способ выравнивания
             itemsHtml += `
-                <div class="cart-item-row" style="display:flex; align-items:flex-start; padding:15px 0; border-bottom:1px solid #eee; gap:15px;">
-                    <div style="width:70px; min-width:70px;">
-                        <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:100%; height:auto; object-fit:contain; border-radius:4px; border:1px solid #eee;">
+                <div style="display:flex; align-items:flex-start; padding:15px 0; border-bottom:1px solid #eee; gap:15px;">
+                    <div style="flex:0 0 60px;">
+                        <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:60px; height:60px; object-fit:contain; border-radius:4px; border:1px solid #eee;">
                     </div>
 
-                    <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
-                        <strong style="display:block; font-size:14px; line-height:1.2; color:#000;">${escapeHtml(item.name)}</strong>
+                    <div style="flex:1; display:flex; flex-direction:column; gap:5px; text-align:left;">
                         
-                        <div style="font-size:12px; color:#aca7b4;">${priceNum.toLocaleString()} ₽ за шт.</div>
+                        <strong style="display:block; font-family: inherit;">${escapeHtml(item.name)}</strong>
+                        <div style="font-size:0.75rem; color:#aca7b4; font-family: inherit;">${priceNum.toLocaleString()} ₽ за шт.</div>
 
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-                            <div style="display:flex; align-items:center; gap:8px;">
-                                <button type="button" onclick="window.changeQty(${index}, -1)" style="width:30px; height:30px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px;">&minus;</button>
-                                <span style="font-weight:bold; min-width:20px; text-align:center; font-size:15px;">${quantity}</span>
-                                <button type="button" onclick="window.changeQty(${index}, 1)" style="width:30px; height:30px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px;">&plus;</button>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&minus;</button>
+                                <span style="font-weight:bold; min-width:25px; text-align:center; color:#000; font-size:15px; font-family: inherit;">${quantity}</span>
+                                <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&plus;</button>
                             </div>
-                            <div style="font-weight:bold; font-size:16px;">${itemTotal.toLocaleString()} ₽</div>
+                            
+                            <div style="font-weight:bold; font-family: inherit;">
+                                ${itemTotal.toLocaleString()} ₽
+                            </div>
                         </div>
 
                         <div style="margin-top:5px;">
-                            <span onclick="window.changeQty(${index}, -${quantity})" style="cursor:pointer; color:#999; font-size:12px; text-decoration:underline; font-style:italic;">удалить</span>
+                            <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; padding:0; font-family:inherit; border-bottom:1px solid #999; line-height:1;">
+                                удалить
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -123,25 +128,23 @@
         });
         
         itemsHtml += `
-            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd;">
+            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd; font-family: inherit;">
                 Итого: ${total.toLocaleString()} ₽
             </div>
         </div>`;
         
-        container.innerHTML = itemsHtml; // Отрисовка списка товаров
+        container.innerHTML = itemsHtml;
 
         let orderHtml = `
             <div style="text-align:center; margin-top:30px;">
-                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; box-shadow:0 5px 20px rgba(179,0,32,0.3);">
+                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; box-shadow:0 5px 20px rgba(179,0,32,0.3); font-family: inherit;">
                     ОФОРМИТЬ ЗАКАЗ
                 </button>
             </div>
         `;
         
-        // Вставляем кнопку оформления после товаров
         container.insertAdjacentHTML('beforeend', orderHtml);
         
-        // Вешаем событие на кнопку после того, как она появилась в DOM
         const btn = document.getElementById('openOrderBtn');
         if (btn) {
             btn.onclick = function() {
