@@ -118,7 +118,8 @@
                             удалить
                         </button>
                     </div>
-                    `;
+                </div>
+            `;
         });
         
         itemsHtml += `
