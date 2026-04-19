@@ -73,10 +73,42 @@
         
         if (cart.length === 0) {
             container.innerHTML = `<div class="attention" style="text-align:center; padding:40px;"><p>Корзина пуста</p></div>`;
+            let orderBlock = document.getElementById('order-block');
+            if (orderBlock) orderBlock.style.display = 'none';
             return;
         }
         
-        let itemsHtml = '<div class="my-cart-list" style="margin:20px 0;">';
+        // 1. Добавляем стили прямо здесь, чтобы они работали только в корзине
+        let itemsHtml = `
+            <style>
+                .cart-item-adaptive {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 15px 0;
+                    border-bottom: 1px solid #eee;
+                }
+                /* Настройка для мобильных (экраны меньше 768px) */
+                @media (max-width: 768px) {
+                    .cart-item-adaptive {
+                        flex-direction: column !important;
+                        align-items: flex-start !important;
+                        gap: 10px;
+                    }
+                    .cart-item-adaptive .info-part {
+                        width: 100%;
+                        justify-content: space-between;
+                        display: flex;
+                        align-items: center;
+                    }
+                    .cart-item-adaptive .title-part {
+                        margin-bottom: 5px;
+                    }
+                }
+            </style>
+            <div style="margin:20px 0;">
+        `;
+        
         let total = 0;
         
         cart.forEach((item, index) => {
@@ -85,28 +117,30 @@
             let itemTotal = priceNum * quantity;
             total += itemTotal;
 
-            // Используем классы и flex-wrap, чтобы оно само прыгало в столбик на мобилках
             itemsHtml += `
-                <div class="cart-row-wrapper" style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee; gap:10px;">
-                    
-                    <div style="flex: 2; min-width: 250px; display:flex; align-items:center; gap:15px;">
-                        <img src="${item.img || 'images/no-photo.jpg'}" style="width:60px; height:60px; object-fit:contain; border-radius:4px;">
+                <div class="cart-item-adaptive">
+                    <div class="title-part" style="display:flex; align-items:center; gap:15px; flex: 2;">
+                        <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:60px; height:60px; object-fit:contain; border-radius:4px; border:1px solid #eee;">
                         <div>
                             <strong style="display:block; font-family:inherit;">${escapeHtml(item.name)}</strong>
-                            <div style="font-size:0.75rem; color:#aca7b4;">${priceNum.toLocaleString()} ₽ за шт.</div>
+                            <div style="font-size:0.75rem; color:#aca7b4; font-family:inherit;">${priceNum.toLocaleString()} ₽ за шт.</div>
                         </div>
                     </div>
 
-                    <div style="flex: 1; min-width: 250px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                    <div class="info-part" style="flex: 1; display:flex; align-items:center; justify-content: flex-end; gap:20px;">
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">&minus;</button>
-                            <span style="font-weight:bold; min-width:25px; text-align:center;">${quantity}</span>
-                            <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; border-radius:4px; cursor:pointer;">&plus;</button>
+                            <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px;">&minus;</button>
+                            <span style="font-weight:bold; min-width:25px; text-align:center; font-family:inherit;">${quantity}</span>
+                            <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px;">&plus;</button>
                         </div>
 
-                        <div style="font-weight:bold; min-width:80px; text-align:right;">${itemTotal.toLocaleString()} ₽</div>
+                        <div style="font-weight:bold; font-family:inherit; white-space: nowrap;">
+                            ${itemTotal.toLocaleString()} ₽
+                        </div>
 
-                        <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; cursor:pointer; text-decoration:underline; font-style:italic; font-family:inherit;">удалить</button>
+                        <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; text-decoration:underline; font-family:inherit;">
+                            удалить
+                        </button>
                     </div>
                 </div>
             `;
@@ -118,10 +152,9 @@
             </div>
         </div>`;
         
-        // Кнопка оформления
         let orderHtml = `
             <div style="text-align:center; margin-top:30px;">
-                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px;">
+                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; font-family:inherit;">
                     ОФОРМИТЬ ЗАКАЗ
                 </button>
             </div>
@@ -129,10 +162,9 @@
         
         container.innerHTML = itemsHtml + orderHtml;
 
-        // Логика кнопки оформления
         const btn = document.getElementById('openOrderBtn');
         if (btn) {
-            btn.onclick = () => {
+            btn.onclick = function() {
                 const modal = document.getElementById('orderModal');
                 if (modal) modal.style.display = 'block';
             };
