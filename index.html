@@ -1110,7 +1110,7 @@ cart.forEach(function(item, index) {
                 ${item.img ? `<img src="${escapeHtml(item.img)}" style="width:50px; height:50px; object-fit: contain; margin-right:10px;">` : '<span style="font-size:24px; margin-right:10px;">📦</span>'}
             </div>
             <div class="addto__info" style="flex: 1;">
-			<a href="${item.url || '#'}" class="addto__name" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: #333; text-decoration: none; line-height: 1.2; max-height: 3.6em;">${escapeHtml(item.name)}</a>
+			<a href="${item.url || '#'}" class="addto__name" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: #333; text-decoration: none; line-height: 1.2; max-height: 4.8em;">${escapeHtml(item.name)}</a>
                 <div class="addto__quantity" style="font-weight: bold; font-size: 16px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
             </div>
             <div class="addto__remove-wrapper" style="margin-left: 10px;">
