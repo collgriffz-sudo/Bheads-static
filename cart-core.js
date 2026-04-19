@@ -102,7 +102,7 @@
                         </div>
                     </div>
 
-                    <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:10px;">
+                    <div style="flex:1 0 100%; display:flex; align-items:center; justify-content:flex-start; gap:10px; margin-top: 10px; order: 1;">
                         <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">
                             &minus;
                         </button>
