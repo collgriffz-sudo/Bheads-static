@@ -1066,7 +1066,8 @@
       if (oldDropdown) oldDropdown.remove();
       
       var dropdown = document.createElement('div');
-dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; display:none !important; visibility:visible !important; z-index:999999 !important; overflow:hidden !important;";      dropdown.className = 'addto__cart';
+      dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; display:none !important; visibility:visible !important; z-index:999999 !important; overflow:hidden !important;";      
+      dropdown.className = 'addto__cart';
       cartContainer.appendChild(dropdown);
       
       function getCart() {
@@ -1076,7 +1077,7 @@ dropdown.style.cssText = "width:300px !important; min-width:300px !important; ma
       function updateCartDropdown() {
           var cart = getCart();
           
-        if (cart.length === 0) {
+          if (cart.length === 0) {
               dropdown.innerHTML = `
                   <div class="addto__empty">В корзине пусто</div>
                   <div class="addto__buttons">
@@ -1100,25 +1101,24 @@ dropdown.style.cssText = "width:300px !important; min-width:300px !important; ma
               <div class="addto__items">
           `;
           
-cart.forEach(function(item, index) {
-    var price = parseInt(item.price) || 0;
-    var quantity = item.quantity || 1;
-    var itemTotal = price * quantity;
-    itemsHtml += `
-        <div class="addto__item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
-            <div class="addto__image">
-                ${item.img ? `<img src="${escapeHtml(item.img)}" style="width:50px; height:50px; object-fit: contain; margin-right:10px;">` : '<span style="font-size:24px; margin-right:10px;">📦</span>'}
-            </div>
-            <div class="addto__info" style="flex: 1;">
-			<a href="${item.url || '#'}" class="addto__name" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: #333; text-decoration: none; line-height: 1.2; max-height: 4.8em;">${escapeHtml(item.name)}</a>
-                <div class="addto__quantity" style="font-weight: bold; font-size: 16px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
-            </div>
-            <div class="addto__remove-wrapper" style="margin-left: 10px;">
-                <span class="addto__remove" data-index="${index}" style="cursor: pointer; color: #999; font-size: 20px;">×</span>
-            </div>
-        </div>
-    `;
-});
+          cart.forEach(function(item, index) {
+              var price = parseInt(item.price) || 0;
+              var quantity = item.quantity || 1;
+              itemsHtml += `
+                  <div class="addto__item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                      <div class="addto__image">
+                          ${item.img ? `<img src="${escapeHtml(item.img)}" style="width:50px; height:50px; object-fit: contain; margin-right:10px;">` : '<span style="font-size:24px; margin-right:10px;">📦</span>'}
+                      </div>
+                      <div class="addto__info" style="flex: 1;">
+                          <a href="${item.url || '#'}" class="addto__name" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: #333; text-decoration: none; line-height: 1.2; max-height: 4.8em;">${escapeHtml(item.name)}</a>
+                          <div class="addto__quantity" style="font-weight: bold; font-size: 16px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
+                      </div>
+                      <div class="addto__remove-wrapper" style="margin-left: 10px;">
+                          <span class="addto__remove" data-index="${index}" style="cursor: pointer; color: #999; font-size: 20px;">×</span>
+                      </div>
+                  </div>
+              `;
+          });
           
           itemsHtml += `
               </div>
@@ -1128,9 +1128,11 @@ cart.forEach(function(item, index) {
               </div>
           `;
           
-          // ОДИН обработчик на весь контейнер (решает проблему мобилок)
+          // ВАЖНО: Вставляем созданный HTML в меню
+          dropdown.innerHTML = itemsHtml;
+          
+          // Обработчик кликов (делегирование)
           dropdown.onclick = function(e) {
-              // 1. Проверяем клик по КРЕСТИКУ
               var removeBtn = e.target.closest('.addto__remove');
               if (removeBtn) {
                   e.preventDefault();
@@ -1139,7 +1141,7 @@ cart.forEach(function(item, index) {
                   var cart = getCart();
                   cart.splice(index, 1);
                   localStorage.setItem('cart', JSON.stringify(cart));
-                  updateCartDropdown(); // Перерисовали — и всё сразу снова работает
+                  updateCartDropdown();
                   
                   var countElem = document.querySelector('.cart__count');
                   if (countElem) {
@@ -1149,7 +1151,6 @@ cart.forEach(function(item, index) {
                   return;
               }
 
-              // 2. Проверяем клик по "ОЧИСТИТЬ"
               if (e.target.classList.contains('clear-cart')) {
                   e.preventDefault();
                   localStorage.removeItem('cart');
@@ -1159,18 +1160,19 @@ cart.forEach(function(item, index) {
                   return;
               }
           };
-      
-// Показываем при наведении на контейнер
+      } // Конец функции updateCartDropdown
+
+      // Показываем при наведении
       cartContainer.addEventListener('mouseenter', function() {
           updateCartDropdown();
-          dropdown.style.display = 'block'; // Принудительно показываем
+          dropdown.style.display = 'block';
           dropdown.classList.add('active');
       });
       
-      // Скрываем, когда мышь уходит за пределы ВСЕЙ области (и кнопки, и выпадашки)
+      // Скрываем при отведении
       cartContainer.addEventListener('mouseleave', function() {
           dropdown.classList.remove('active');
-          dropdown.style.display = 'none'; // Принудительно скрываем
+          dropdown.style.display = 'none';
       });
       
       function escapeHtml(str) {
@@ -1183,7 +1185,7 @@ cart.forEach(function(item, index) {
           });
       }
   });
-  </script>
+</script>
 
 <script>
     // Слайдер
