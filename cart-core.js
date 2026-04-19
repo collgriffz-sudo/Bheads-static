@@ -128,7 +128,7 @@
         });
         
         itemsHtml += `
-            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd;">
+            <div style="text-align:right; padding:15px 0; font-size:1.2rem; font-weight:bold; border-top:2px solid #ddd;">
                 Итого: ${total.toLocaleString()} ₽
             </div>
         </div>`;
