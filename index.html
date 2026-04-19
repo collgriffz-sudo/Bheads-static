@@ -1128,37 +1128,37 @@ cart.forEach(function(item, index) {
               </div>
           `;
           
-          dropdown.innerHTML = itemsHtml;
-          
-                    // Удаление товара
-          dropdown.querySelectorAll('.addto__remove').forEach(function(btn) {
-              btn.addEventListener('click', function(e) {
+          // ОДИН обработчик на весь контейнер (решает проблему мобилок)
+          dropdown.onclick = function(e) {
+              // 1. Проверяем клик по КРЕСТИКУ
+              var removeBtn = e.target.closest('.addto__remove');
+              if (removeBtn) {
+                  e.preventDefault();
                   e.stopPropagation();
-                  var index = parseInt(this.getAttribute('data-index'));
+                  var index = parseInt(removeBtn.getAttribute('data-index'));
                   var cart = getCart();
                   cart.splice(index, 1);
                   localStorage.setItem('cart', JSON.stringify(cart));
-                  updateCartDropdown();
+                  updateCartDropdown(); // Перерисовали — и всё сразу снова работает
+                  
                   var countElem = document.querySelector('.cart__count');
                   if (countElem) {
                       var totalCount = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
                       countElem.innerText = totalCount;
                   }
-              });
-          });
-          
-          // Очистка корзины
-          var clearBtn = dropdown.querySelector('.clear-cart');
-          if (clearBtn) {
-              clearBtn.addEventListener('click', function(e) {
+                  return;
+              }
+
+              // 2. Проверяем клик по "ОЧИСТИТЬ"
+              if (e.target.classList.contains('clear-cart')) {
                   e.preventDefault();
                   localStorage.removeItem('cart');
                   updateCartDropdown();
                   var countElem = document.querySelector('.cart__count');
                   if (countElem) countElem.innerText = '0';
-              });
-          }
-      }
+                  return;
+              }
+          };
       
 // Показываем при наведении на контейнер
       cartContainer.addEventListener('mouseenter', function() {
