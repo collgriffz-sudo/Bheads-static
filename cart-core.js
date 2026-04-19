@@ -120,7 +120,7 @@
     ${itemTotal.toLocaleString()} ₽
 </div>
 
-                    <div style="flex:0 0 480px; text-align:right;">
+                    <div style="flex:0 0 100%; text-align:right;">
                         <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; padding:0 0 2px 0; font-family:inherit; border-bottom:1px solid #999; line-height:1; transition:all 0.2s;" onmouseover="this.style.color='#ff4444'; this.style.borderColor='#ff4444'" onmouseout="this.style.color='#999'; this.style.borderColor='#999'">
                             удалить
                         </button>
