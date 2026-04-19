@@ -66,8 +66,7 @@
 
 
     
-// Отобразить корзину на странице cart.html
-    function displayCartPage() {
+function displayCartPage() {
         let cart = getCart();
         let container = document.querySelector('.cartItems');
         if (!container) return;
@@ -92,13 +91,13 @@
             let quantity = item.quantity || 1;
             let itemTotal = priceNum * quantity;
             total += itemTotal;
-            
-            // Мы используем flex-wrap и обычные отступы. 
-            // Если экран узкий - блоки сами упадут друг под друга.
+
+            // РЕШЕНИЕ: Мы делаем блоки по 100% ширины. 
+            // На мобилке они ВСТАНУТ ДРУГ ПОД ДРУГОМ (как с </br>).
             itemsHtml += `
                 <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:15px 0; border-bottom:1px solid #eee; gap:10px;">
                     
-                    <div style="display:flex; align-items:center; gap:15px; min-width:250px; flex:1;">
+                    <div style="display:flex; align-items:center; gap:15px; flex: 1 0 100%; max-width: 100%;">
                         <img src="${item.img || 'images/no-photo.jpg'}" alt="" style="width:60px; height:60px; object-fit:contain; border-radius:4px; border:1px solid #eee;">
                         <div>
                             <strong style="display:block;">${escapeHtml(item.name)}</strong>
@@ -106,43 +105,26 @@
                         </div>
                     </div>
 
-                    <div style="display:flex; align-items:center; justify-content:space-between; flex:1; min-width:250px; gap:10px;">
-                        
+                    <div style="display:flex; align-items:center; justify-content:space-between; flex: 1 0 100%; max-width: 100%; background: #f9f9f9; padding: 10px; border-radius: 8px;">
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&minus;</button>
-                            <span style="font-weight:bold; min-width:25px; text-align:center; color:#000; font-size:15px;">${quantity}</span>
-                            <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; padding:0; line-height:1;">&plus;</button>
+                            <button type="button" onclick="window.changeQty(${index}, -1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer;">&minus;</button>
+                            <span style="font-weight:bold; min-width:25px; text-align:center;">${quantity}</span>
+                            <button type="button" onclick="window.changeQty(${index}, 1)" style="width:28px; height:28px; border:1px solid #ccc; background:#fff; color:#000; border-radius:4px; cursor:pointer;">&plus;</button>
                         </div>
-
-                        <div style="font-weight:bold; text-align:right; flex:1;">
-                            ${itemTotal.toLocaleString()} ₽
-                        </div>
-
-                        <div style="text-align:right;">
-                            <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; font-style:italic; cursor:pointer; padding:0 0 2px 0; font-family:inherit; border-bottom:1px solid #999; line-height:1;">
-                                удалить
-                            </button>
-                        </div>
+                        <div style="font-weight:bold;">${itemTotal.toLocaleString()} ₽</div>
+                        <button onclick="window.changeQty(${index}, -${quantity})" style="background:none; border:none; color:#999; font-size:12px; border-bottom:1px solid #999; cursor:pointer;">удалить</button>
                     </div>
                 </div>
             `;
         });
         
-        itemsHtml += `
-            <div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd;">
-                Итого: ${total.toLocaleString()} ₽
-            </div>
-        </div>`;
+        itemsHtml += `<div style="text-align:right; padding:15px 0; font-size:1.2em; font-weight:bold; border-top:2px solid #ddd;">Итого: ${total.toLocaleString()} ₽</div></div>`;
         
-        let orderHtml = `
-            <div style="text-align:center; margin-top:30px;">
-                <button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px; box-shadow:0 5px 20px rgba(179,0,32,0.3);">
-                    ОФОРМИТЬ ЗАКАЗ
-                </button>
-            </div>
-        `;
-        
-        container.innerHTML = itemsHtml + orderHtml;
+        container.innerHTML = itemsHtml;
+
+        // Кнопка оформления
+        let orderHtml = `<div style="text-align:center; margin-top:30px;"><button type="button" id="openOrderBtn" style="background:#b30020; color:#fff; border:none; padding:18px 50px; border-radius:35px; font-size:1.2rem; font-weight:bold; cursor:pointer; width:100%; max-width:400px;">ОФОРМИТЬ ЗАКАЗ</button></div>`;
+        container.insertAdjacentHTML('beforeend', orderHtml);
 
         const btn = document.getElementById('openOrderBtn');
         if (btn) {
