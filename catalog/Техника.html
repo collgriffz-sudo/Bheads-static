@@ -1052,6 +1052,20 @@
   document.addEventListener('DOMContentLoaded', function() {
       var cartContainer = document.querySelector('.cart');
       if (!cartContainer) return;
+
+	        // 1. ФУНКЦИЯ ОБНОВЛЕНИЯ ЦИФРЫ (БАДЖА) в красном кружочке корзины 
+      function updateBadge() {
+          var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          var countElem = document.querySelector('.cart__count');
+          if (countElem) {
+              var totalCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+              countElem.innerText = totalCount;
+              countElem.style.display = totalCount > 0 ? 'block' : 'none';
+          }
+      }
+  
+      // Сразу обновляем цифру при загрузке
+      updateBadge();
       
       var oldDropdown = cartContainer.querySelector('.addto__cart');
       if (oldDropdown) oldDropdown.remove();
