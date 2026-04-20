@@ -1162,5 +1162,65 @@
   });
 </script>
 
+<style>
+  /* Отключаем ненужные иконки */
+  .addto__links .favorites,
+  .addto__links .compare,
+  .addto__links .users {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: default;
+  }
+
+  /* 1. Отключаем лишнее */
+  .addto__links .favorites, .addto__links .compare, .addto__links .users {
+    opacity: 0.5; pointer-events: none;
+  }
+
+  /* 2. ПРИНУДИТЕЛЬНОЕ СУЖЕНИЕ ШАПКИ (чтобы не давила на корзину) */
+  #header-right, .header-right {
+    width: auto !important;
+    max-width: 300px !important; /* Ограничиваем саму зону корзины */
+    float: right !important;
+  }
+
+  /* 3. ЖЕСТКИЙ ФИКС ОКНА КОРЗИНЫ */
+  #cart-drop, .dropdown-cart {
+    display: block !important;
+    width: 250px !important;      /* Вот твои 250px */
+    min-width: 250px !important;
+    max-width: 250px !important;
+    position: absolute !important;
+    right: 0 !important;          /* Прижать к правому краю */
+    left: auto !important;
+    overflow: hidden !important;  /* Обрезать всё, что шире 250px */
+    z-index: 99999 !important;
+    background: #fff !important;
+  }
+
+  /* 4. УБИВАЕМ РАСПИРАНИЕ ИЗНУТРИ */
+  .dropdown-cart *, #cart-drop * {
+    white-space: normal !important; /* Разрешить перенос текста */
+    word-break: break-all !important;
+    max-width: 100% !important;
+  }
+
+  /* 5. КАРТИНКИ (чтобы не были огромными) */
+  .dropdown-cart img {
+    width: 40px !important;
+    height: auto !important;
+  }
+
+  /* ФИКС ДЛЯ МОБИЛОК (самый важный) */
+  @media screen and (max-width: 480px) {
+    #cart-drop, .dropdown-cart {
+      right: 0 !important;
+      position: fixed !important; /* Фиксируем положение относительно экрана */
+      top: 60px !important;
+      width: 250px !important;
+    }
+  }
+</style>
+	
 </body> 
 </html>
