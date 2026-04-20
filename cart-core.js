@@ -389,13 +389,28 @@ window.finishAndShowPayment = function() {
         cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price }))
     };
 
-    fetch('/send-order', {
+
+    // отправка для Vercel
+ /*   fetch('/send-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
     })
     .then(response => { if (response.ok) console.log("Заказ отправлен"); })
     .catch(error => console.error("Ошибка:", error));
+*/
+
+    // отправка для гугл таблицу
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
+
+    fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors', // Обязательно для работы с Google
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+    })
+    .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
+    .catch(error => console.error("Ошибка Google Script:", error));
 
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
