@@ -168,7 +168,7 @@
             
             
              
-                          <div class="addto__links" style="display: none;">
+                          <div class="addto__links">
                             <div class="favorites">
                               <a href="javascript:void(0);" class="addto__label" title="Избранное" style="cursor: default;">
                                 <i class="icon-favorites"></i>
@@ -1231,129 +1231,214 @@ window.addToCart(productName, price, quantity, imgSrc, productUrl);
       background: #1d8884;
   }
   </style>
-  <script>
-  // Всплывающее окно корзины для страницы товара
+// Обновление выпадающей корзины
+<script>
   document.addEventListener('DOMContentLoaded', function() {
       var cartContainer = document.querySelector('.cart');
       if (!cartContainer) return;
+
+
+      // 1. ФУНКЦИЯ ОБНОВЛЕНИЯ ЦИФРЫ (БАДЖА) в красном кружочке корзины 
+      function updateBadge() {
+          var cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          var countElem = document.querySelector('.cart__count');
+          if (countElem) {
+              var totalCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+              countElem.innerText = totalCount;
+              countElem.style.display = totalCount > 0 ? 'block' : 'none';
+          }
+      }
+  
+      // Сразу обновляем цифру при загрузке
+      updateBadge();
+
       
       var oldDropdown = cartContainer.querySelector('.addto__cart');
       if (oldDropdown) oldDropdown.remove();
       
       var dropdown = document.createElement('div');
+      dropdown.style.cssText = "width:300px !important; min-width:300px !important; max-width:300px !important; position:absolute !important; right:0 !important; left:auto !important; display:none !important; visibility:visible !important; z-index:999999 !important; overflow:hidden !important; background:#fff; border:1px solid #eee; box-shadow:0 4px 10px rgba(0,0,0,0.1);";      
       dropdown.className = 'addto__cart';
       cartContainer.appendChild(dropdown);
       
       function getCart() {
           return JSON.parse(localStorage.getItem('cart') || '[]');
       }
-      
-      function updateCartDropdown() {
+
+      // Глобальная функция удаления с защитой для мобилок
+      window.handleCartAction = function(action, index, event) {
+          if (event) {
+              event.preventDefault();
+              event.stopPropagation();
+          }
+
           var cart = getCart();
           
-          if (cart.length === 0) {
-              dropdown.innerHTML = `
-                  <div class="addto__empty">В корзине пока ничего нет</div>
-                  <div class="addto__buttons">
-                      <a href="../catalog.html" class="button small">Продолжить покупки</a>
-                      <a href="../cart.html" class="button small">В корзину</a>
-                  </div>
-              `;
-              return;
+          if (action === 'remove') {
+              cart.splice(index, 1);
+              localStorage.setItem('cart', JSON.stringify(cart));
+          } else if (action === 'clear') {
+              localStorage.removeItem('cart');
+              cart = [];
           }
+
+          // Обновляем счетчик
+          var countElem = document.querySelector('.cart__count');
+          if (countElem) {
+              var totalCount = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+              countElem.innerText = totalCount;
+          }
+
+          // КРИТИЧНО: Небольшая задержка перед перерисовкой, чтобы мобилка не "лагала"
+          setTimeout(function() {
+              updateCartDropdown();
+          }, 50);
+      };
+
+      function updateCartDropdown() {
+          var cart = getCart();
+          var itemsHtml = '';
           
-          var total = 0;
-          cart.forEach(function(item) {
-              total += (parseInt(item.price) || 0) * (item.quantity || 1);
-          });
-          
-          var itemsHtml = `
-              <div class="addto__title">
-                  <span>Всего товаров на:</span>
-                  <span>${total.toLocaleString()} ₽</span>
-              </div>
-              <div class="addto__items">
-          `;
-          
-          cart.forEach(function(item, index) {
-              var price = parseInt(item.price) || 0;
-              var quantity = item.quantity || 1;
-              var itemTotal = price * quantity;
-              itemsHtml += `
-                  <div class="addto__item">
-                      <div class="addto__image">
-    ${item.img ? `<img src="${escapeHtml(item.img)}" style="max-width:50px; max-height:50px;">` : '<span style="font-size:24px;">📦</span>'}
-</div>
-                      <div class="addto__info">
-                          <a href="${item.url || '#'}" class="addto__name">${escapeHtml(item.name)}</a>
-                          <div class="addto__quantity">${quantity} x ${price.toLocaleString()} ₽</div>
-                      </div>
-                      <div class="addto__price">${itemTotal.toLocaleString()} ₽</div>
-                      <span class="addto__remove" data-index="${index}">Удалить</span>
+          if (cart.length === 0) {
+              itemsHtml = `
+                  <div class="addto__empty" style="padding:20px; text-align:center;">В корзине пусто</div>
+                  <div class="addto__buttons" style="padding:10px; display:flex; justify-content:space-between;">
+                      <a href="catalog.html" class="button small">В каталог</a>
+                      <a href="cart.html" class="button small">В корзину</a>
                   </div>
               `;
-          });
-          
-          itemsHtml += `
-              </div>
-              <div class="addto__buttons">
-                  <span class="clear-cart">Очистить</span>
-                  <a href="../cart.html" class="cart-button">В корзину</a>
-              </div>
-          `;
+          } else {
+              var total = 0;
+              cart.forEach(function(item) {
+                  total += (parseInt(item.price) || 0) * (item.quantity || 1);
+              });
+              
+              itemsHtml = `
+                  <div class="addto__title" style="padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;">
+                      <span>Всего товаров на:</span>
+                      <span style="font-weight:bold;">${total.toLocaleString()} ₽</span>
+                  </div>
+                  <div class="addto__items" style="max-height:350px; overflow-y:auto; padding:0 10px;">
+              `;
+              
+              cart.forEach(function(item, index) {
+                  var price = parseInt(item.price) || 0;
+                  var quantity = item.quantity || 1;
+                  itemsHtml += `
+                      <div class="addto__item" style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee;">
+                          <div class="addto__image">
+                              ${item.img ? `<img src="${item.img}" style="width:50px; height:50px; object-fit: contain; margin-right:10px;">` : '📦'}
+                          </div>
+                          <div class="addto__info" style="flex: 1;">
+                              <a href="${item.url || '#'}" class="addto__name" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; font-size: 13px; color: #333; text-decoration: none; line-height: 1.2; max-height: 4.8em;">${item.name}</a>
+                              <div class="addto__quantity" style="font-weight: bold; font-size: 15px; color: #c60c30;">${quantity} x ${price.toLocaleString()} ₽</div>
+                          </div>
+                          <div class="addto__remove-wrapper" style="margin-left: 10px;">
+                              <span class="addto__remove" 
+                                    onclick="handleCartAction('remove', ${index}, event)" 
+                                    ontouchend="handleCartAction('remove', ${index}, event)" 
+                                    style="cursor: pointer; color: #999; font-size: 28px; display: inline-block; line-height: 1; -webkit-tap-highlight-color: transparent;">×</span>
+                          </div>
+                      </div>
+                  `;
+              });
+              
+              itemsHtml += `
+                  </div>
+                  <div class="addto__buttons" style="padding:10px; display:flex; justify-content:space-between; align-items:center;">
+                      <span class="clear-cart" 
+                            onclick="handleCartAction('clear', 0, event)" 
+                            ontouchend="handleCartAction('clear', 0, event)" 
+                            style="cursor:pointer; color:#666; text-decoration:underline; font-size:12px; padding:10px;">Очистить</span>
+                      <a href="cart.html" class="cart-button" style="background:#c60c30; color:#fff; padding:8px 15px; text-decoration:none; border-radius:3px;">В корзину</a>
+                  </div>
+              `;
+          }
           
           dropdown.innerHTML = itemsHtml;
-          
-          // Удаление товара
-          dropdown.querySelectorAll('.addto__remove').forEach(function(btn) {
-              btn.addEventListener('click', function(e) {
-                  e.stopPropagation();
-                  var index = parseInt(this.getAttribute('data-index'));
-                  var cart = getCart();
-                  cart.splice(index, 1);
-                  localStorage.setItem('cart', JSON.stringify(cart));
-                  updateCartDropdown();
-                  var countElem = document.querySelector('.cart__count');
-                  if (countElem) {
-                      var totalCount = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
-                      countElem.innerText = totalCount;
-                  }
-              });
-          });
-          
-          // Очистка корзины
-          var clearBtn = dropdown.querySelector('.clear-cart');
-          if (clearBtn) {
-              clearBtn.addEventListener('click', function(e) {
-                  e.preventDefault();
-                  localStorage.removeItem('cart');
-                  updateCartDropdown();
-                  var countElem = document.querySelector('.cart__count');
-                  if (countElem) countElem.innerText = '0';
-              });
-          }
       }
-      
+
+      // События для ПК
       cartContainer.addEventListener('mouseenter', function() {
           updateCartDropdown();
-          dropdown.classList.add('active');
+          dropdown.style.display = 'block';
       });
       
       cartContainer.addEventListener('mouseleave', function() {
-          dropdown.classList.remove('active');
+          dropdown.style.display = 'none';
       });
-      
-      function escapeHtml(str) {
-          if (!str) return '';
-          return str.replace(/[&<>]/g, function(m) {
-              if (m === '&') return '&amp;';
-              if (m === '<') return '&lt;';
-              if (m === '>') return '&gt;';
-              return m;
-          });
-      }
+
+      // Специально для мобилок: если тапнули вне корзины - закрыть её
+      document.addEventListener('touchstart', function(e) {
+          if (!cartContainer.contains(e.target)) {
+              dropdown.style.display = 'none';
+          }
+      });
   });
-  </script>
+</script>
+
+
+/* сделать 3 иконки серыми */
+<style>
+  /* Отключаем ненужные иконки */
+  .addto__links .favorites,
+  .addto__links .compare,
+  .addto__links .users {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: default;
+  }
+
+  /* 1. Отключаем лишнее */
+  .addto__links .favorites, .addto__links .compare, .addto__links .users {
+    opacity: 0.5; pointer-events: none;
+  }
+
+  /* 2. ПРИНУДИТЕЛЬНОЕ СУЖЕНИЕ ШАПКИ (чтобы не давила на корзину) */
+  #header-right, .header-right {
+    width: auto !important;
+    max-width: 300px !important; /* Ограничиваем саму зону корзины */
+    float: right !important;
+  }
+
+  /* 3. ЖЕСТКИЙ ФИКС ОКНА КОРЗИНЫ */
+  #cart-drop, .dropdown-cart {
+    display: block !important;
+    width: 250px !important;      /* Вот твои 250px */
+    min-width: 250px !important;
+    max-width: 250px !important;
+    position: absolute !important;
+    right: 0 !important;          /* Прижать к правому краю */
+    left: auto !important;
+    overflow: hidden !important;  /* Обрезать всё, что шире 250px */
+    z-index: 99999 !important;
+    background: #fff !important;
+  }
+
+  /* 4. УБИВАЕМ РАСПИРАНИЕ ИЗНУТРИ */
+  .dropdown-cart *, #cart-drop * {
+    white-space: normal !important; /* Разрешить перенос текста */
+    word-break: break-all !important;
+    max-width: 100% !important;
+  }
+
+  /* 5. КАРТИНКИ (чтобы не были огромными) */
+  .dropdown-cart img {
+    width: 40px !important;
+    height: auto !important;
+  }
+
+  /* ФИКС ДЛЯ МОБИЛОК (самый важный) */
+  @media screen and (max-width: 480px) {
+    #cart-drop, .dropdown-cart {
+      right: 0 !important;
+      position: fixed !important; /* Фиксируем положение относительно экрана */
+      top: 60px !important;
+      width: 250px !important;
+    }
+  }
+</style>
+
 
 
 </body> 
