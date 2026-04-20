@@ -281,29 +281,20 @@
 
 	
             <!-- Поиск (нужно сделать самим) -->	
-            <div class="search" itemscope="" itemtype="https://schema.org/WebSite">
-              <link itemprop="url" href="index.htm">
-              <form class="search__form bordered" action="/search/quick" method="get" title="Поиск по магазину" itemprop="potentialAction" itemscope="" itemtype="https://schema.org/SearchAction">
-                <meta itemprop="target" content="/search?q={q}">
-                <input type="hidden" name="goods_search_field_id" value="0">
-                <input type="text" name="q" value="" class="search__input" placeholder="Поиск" autocomplete="off" itemprop="query-input">
-                <span class="top"></span>
-                <span class="left"></span>
-                <span class="right"></span>
-                <span class="bottom"></span>
-                <button type="submit" class="search__submit" title="Искать"><i class="icon-search"></i></button>
-                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-                <div class="search__reset"><i class="material-icons">close</i></div>
-              </form>
-              <div id="search__result" style="display: none;">
-                <div class="inner">
-                  <div class="result__category"></div>
-                  <div class="result__goods">
-                    <div class="result__showAll button button4">все результаты</div>
-                  </div>
+<div class="search" itemscope="" itemtype="https://schema.org/WebSite">
+    <form class="search__form bordered" onsubmit="return false;">
+        <input type="text" id="mySearchInput" class="search__input" placeholder="Поиск товаров..." autocomplete="off" oninput="liveSearch()">
+        <button type="submit" class="search__submit"><i class="icon-search"></i></button>
+        <div class="search__reset" onclick="resetSearch()" style="cursor:pointer;"><i class="material-icons">close</i></div>
+    </form>
+    
+    <div id="search__result" style="display: none;">
+        <div class="inner">
+            <div id="searchResultsList" class="result__goods">
                 </div>
-              </div>
-            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -1317,5 +1308,6 @@
   }
 </style>
 <script src="cart.js"></script>
+<script src="search-data.js"></script>
 </body>
 </html>
