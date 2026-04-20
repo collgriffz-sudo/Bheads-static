@@ -169,27 +169,33 @@
             
             
              
-                          <div class="addto__links">
-                            <div class="favorites">
-                              <a href="javascript:void(0);" class="addto__label" title="Избранное" style="cursor: default;">
-                                <i class="icon-favorites"></i>
-                                <span class="favorites__count" data-count="0" style="display: none;">0</span>
-                              </a>
-                            </div>
-                            
-                            <div class="compare">
-                              <a href="javascript:void(0);" class="addto__label" title="Сравнение" style="cursor: default;">
-                                <i class="icon-compare"></i>
-                                <span class="compare__count" data-count="0" style="display: none;">0</span>
-                              </a>
-                            </div>
-                            
-                            <div class="users">
-                              <a href="javascript:void(0);" class="addto__label" title="Личный Кабинет" style="cursor: default;">
-                                <i class="icon-users"></i>
-                              </a>
-                            </div>
-                          </div>
+<div class="addto__links">
+  <div class="favorites dropdown">
+    <a href="../user/login.html" class="addto__label dropdown__open" title="Избранное" data-open="favorites">
+      <i class="icon-favorites"></i>
+      <span class="favorites__count" data-count="0">0</span>
+      <span class="dropdown__angle"></span>
+    </a>
+    <div id="addtoFavorites" class="addto__favorites dropdown__content" data-open="favorites">...</div>
+  </div>
+
+  <div class="compare dropdown">
+    <a href="../compare.html" class="addto__label dropdown__open" title="Сравнение" data-open="compare">
+      <i class="icon-compare"></i>
+      <span class="compare__count" data-count="0">0</span>
+      <span class="dropdown__angle"></span>
+    </a>
+    <div id="addtoCompare" class="addto__compare dropdown__content" data-open="compare">...</div>
+  </div>
+
+  <div class="users dropdown">
+    <a href="../user/login.html" class="addto__label dropdown__open" title="Личный Кабинет" data-open="users">
+      <i class="icon-users"></i>
+      <span class="dropdown__angle"></span>
+    </a>
+    <div id="addtoUsers" class="addto__content dropdown__content" data-open="users">...</div>
+  </div>
+</div>
             
             <div class="search" itemscope="" itemtype="https://schema.org/WebSite">
               <link itemprop="url" href="../index.htm">
