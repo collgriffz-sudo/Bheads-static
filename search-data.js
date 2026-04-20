@@ -41,7 +41,9 @@ function liveSearch() {
     }
 
     let html = '';
-    let found = productsData.filter(item => item.name.toLowerCase().includes(filter));
+    let found = productsData
+    .filter(item => item.name.toLowerCase().includes(filter))
+    .slice(0, 10); // Показывать только первые 10 результатов
 
     if (found.length > 0) {
         found.forEach(item => {
