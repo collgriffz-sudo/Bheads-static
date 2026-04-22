@@ -335,89 +335,58 @@
 </header>
     
 <section id="main">
-  <div class="container">
-    
-    <div id="breadcrumbs">
-      <ul itemscope="" itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="home">
-          <a itemprop="item" href="../index.html" title="Перейти на главную">
-            <i class="icon-house"></i><span itemprop="name">Главная</span>
-            <meta itemprop="position" content="1">
-          </a>
-        </li>
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-          <a itemprop="item" href="../catalog.html" title="Перейти в каталог">
-            <span itemprop="name">Каталог</span>
-            <meta itemprop="position" content="2">
-          </a>
-        </li>
-        <li><span>Фигурки</span></li>
-      </ul>
-    </div>
-    
-    <div id="page__title">
-      <div class="block__title">
-        <h1 class="title">Фигурки по фото</h1>
-      </div>
-    </div>
-
-    <div class="body">
-      <div class="block__left sidebar">
+      <div class="container">
         
-        <div class="sidebar__block catalog collapsible active">
-          <div class="sidebar__title collapsible__click"><span>Каталог</span><i class="icon-menu"></i></div>
-          <div class="sidebar__content collapsible__content">
-            <div class="catalog__items">
-              <div class="catalog__item">
-                <a href="Figurki.html" class="catalog__link active">
-                  <span>Фигурки</span>
-                </a>
-              </div>
-              </div>
-          </div>
-        </div>
-
-        <div id="filters" class="sidebar__block">
-          <div class="filters__title sidebar__title">
-            <span class="filters__icon">Параметры</span>
-            <span class="filters__clear">
-              <a href="Figurki.html" class="button4" title="Сбросить">Сброс</a>
-              <i class="icon-filter"></i>
-            </span>
-          </div>
-          <div class="sidebar__content" style="padding: 15px 0;">
-             <p style="font-size: 12px; color: #666;">Используйте сортировку для выбора вида отображения.</p>
-          </div>
+        <div id="breadcrumbs">
+          <ul itemscope="" itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="home"><a itemprop="item" href="../index.htm" title="Перейти на главную"><i class="icon-house"></i><span itemprop="name">Главная</span><meta itemprop="position" content="1"></a></li>
+                                          <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"><a itemprop="item" href="../catalog.html" title="Перейти в каталог продукции нашего магазина"><span itemprop="name">Каталог</span><meta itemprop="position" content="2"></a></li>
+                                                      <li><span>Фигурки</span></li>
+                                                                              </ul>
         </div>
         
-        <div class="sidebar__block compare">
-          <a href="../compare.html" class="sidebar__title"><span>Сравнение</span><i class="icon-compare"></i></a>
-        </div>
-        
-        <div class="sidebar__block favorites">
-          <a href="../user/login.html" class="sidebar__title"><span>Избранное</span><i class="icon-favorites"></i></a>
-        </div>
-      </div>
-
-      <div class="block__right hasLeft">
-        <div class="products">
-          
-          <div class="toolbar">
-            <div class="view__type">
-              <a href="Figurki-1.html" class="icon" title="Вид списком"><i class="icon-list"></i></a>
-              <div title="Вид сеткой" class="icon active"><i class="icon-grid"></i></div>
+        <div id="page__title">
+                    <div class="block__title"><h1 class="title"><a href="../catalog.html" title="Фигурки">Фигурки</a></h1></div>
+                  </div>
+        <div class="body">
+                    <div class="block__left sidebar">
+            
+            <div class="sidebar__block catalog collapsible active">
+              <div class="sidebar__title collapsible__click"><span>Каталог</span><i class="icon-menu"></i></div>
+              <div class="sidebar__content collapsible__content">
+                <div class="catalog__items">
+                                                              <div data-level="0" class="catalog__item  ">
+                    <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" data-level="0" class="catalog__link opened">
+                                             <span>Фигурки</span>
+                    </a>
+                    </div>                   </div>                                </div>
             </div>
-          </div>
-
-          <div class="products__grid">
-             <p style="padding: 20px;">Загрузка товаров...</p>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+          <div id="filters" class="sidebar__block  ">
+              <div class="filters__title sidebar__title">
+                <span class="filters__icon">Фильтры</span>
+                <span class="filters__clear">
+                  <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" class="goodsFilterClear button4" title="Очистить фильры">Очистить</a>
+                  <i class="icon-filter"></i>
+                </span>
+              </div>
+              <form action="" method="get" class="form__filters">
+                
+                                <div class="filter__list collapsible filters-price">
+                  <div class="filter__name collapsible__click"><span>Цена</span></div>
+                  <div class="filter__items collapsible__content">
+                    <div class="priceSlider">
+                      <input type="hidden" name="form[filter][available_price][min]" value="7190">
+                      <input type="hidden" name="form[filter][available_price][max]" value="19190">
+                      
+                      <div class="goodsFilterPriceRangePointers">
+                        <span class="min" style="display:none;">7190</span>
+                        <span class="max" style="display:none;">19190</span>
+                        <input id="goods-filter-min-price" class="inputText" type="text" name="form[filter][price][min]" value="7190" min="1" onkeypress="return keyPress(this, event);" onpaste="return false;">
+                        <input id="goods-filter-max-price" class="inputText" type="text" name="form[filter][price][max]" value="19190" min="1" onkeypress="return keyPress(this, event);" onpaste="return false;">
+                      </div>
+                      <div id="goods-filter-price-slider"></div>
+                      <div class="goodsFilterPriceSubmit">
+                        <button class="
   
   
   <div class="products__container">
