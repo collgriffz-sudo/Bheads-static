@@ -1191,7 +1191,7 @@
 
 
 <script>
-    // Кнопки "Подробнее" (тонкая настройка для веб)
+    // Кнопки "Подробнее" (возврат к стандартной высоте)
     document.addEventListener('DOMContentLoaded', function() {
         var products = document.querySelectorAll('.product__item');
         var isMobile = window.innerWidth <= 768;
@@ -1209,11 +1209,11 @@
             newBtn.className = 'button';
             
             if (isMobile) {
-                // Мобильная версия: во всю ширину, стандартная высота
+                // Мобильная версия - как была 100%
                 newBtn.style.cssText = 'display:block; width:100%; text-align:center; margin-top:10px;';
             } else {
-                // Веб-версия: делаем её тоньше (уменьшаем padding до 4px) и фиксируем высоту строки
-                newBtn.style.cssText = 'display:inline-block; width:auto; padding:4px 25px; line-height:24px; height:auto; text-align:center; margin-top:10px;';
+                // Веб-версия: высота 6px (золотая середина), шрифт не трогаем
+                newBtn.style.cssText = 'display:inline-block; width:auto; padding:6px 30px; text-align:center; margin-top:10px;';
             }
             
             var priceBlock = product.querySelector('.product__price');
