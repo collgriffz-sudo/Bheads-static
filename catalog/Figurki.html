@@ -1258,32 +1258,6 @@
       });
   });
 </script>
-
-<script>
-    // Кнопки "Подробнее"
-    document.addEventListener('DOMContentLoaded', function() {
-        var products = document.querySelectorAll('.product__item');
-        
-        products.forEach(function(product) {
-            var linkElem = product.querySelector('.product__name a');
-            var productUrl = linkElem ? linkElem.getAttribute('href') : '#';
-            
-            var linksBlock = product.querySelector('.product__links');
-            if (linksBlock) linksBlock.style.display = 'none';
-            
-            var newBtn = document.createElement('a');
-            newBtn.innerHTML = 'Подробнее';
-            newBtn.href = productUrl;
-            newBtn.className = 'button';
-            newBtn.style.cssText = 'display:inline-block; width:100%; text-align:center; margin-top:10px;';
-            
-            var priceBlock = product.querySelector('.product__price');
-            if (priceBlock) {
-                priceBlock.insertAdjacentElement('afterend', newBtn);
-            }
-        });
-    });
-</script>
 	
 <style>
   /* Отключаем ненужные иконки */
@@ -1355,9 +1329,8 @@
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   }
-
 </style>
 <script src="cart.js"></script>
 <script src="search-data.js"></script>
-</body> 
+</body>
 </html>
