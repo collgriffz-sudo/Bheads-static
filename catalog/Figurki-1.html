@@ -343,7 +343,7 @@
     <div id="breadcrumbs">
       <ul itemscope="" itemtype="https://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="home">
-          <a itemprop="item" href="../index.html" title="Перейти на главную">
+          <a itemprop="item" href="../index.htm" title="Перейти на главную">
             <i class="icon-house"></i><span itemprop="name">Главная</span><meta itemprop="position" content="1">
           </a>
         </li>
@@ -357,17 +357,55 @@
     </div>
     
     <div id="page__title">
-      <div class="block__title"><h1 class="title"><a href="../catalog.html" title="Фигурки">Фигурки</a></h1></div>
+      <div class="block__title"><h1 class="title">Фигурки</h1></div>
     </div>
 
     <div class="body">
       <div class="block__left sidebar">
+        
         <div class="sidebar__block catalog collapsible active">
           <div class="sidebar__title collapsible__click"><span>Каталог</span><i class="icon-menu"></i></div>
           <div class="sidebar__content collapsible__content">
             <div class="catalog__items">
               <div data-level="0" class="catalog__item">
-                <a href="../catalog.html" class="catalog__link opened"><span>Фигурки</span></a>
+                <a href="Figurki.html" class="catalog__link opened"><span>Фигурки из глины</span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="filters" class="sidebar__block">
+          <div class="filters__title sidebar__title">
+            <span class="filters__icon">Фильтры</span>
+          </div>
+          <form action="" method="get" class="form__filters">
+            <div class="filter__list collapsible filters-price active">
+              <div class="filter__name collapsible__click"><span>Цена</span></div>
+              <div class="filter__items collapsible__content">
+                <div class="priceSlider">
+                  <div class="goodsFilterPriceRangePointers">
+                    <input id="goods-filter-min-price" class="inputText" type="text" value="7190">
+                    <input id="goods-filter-max-price" class="inputText" type="text" value="19190">
+                  </div>
+                  <div class="goodsFilterPriceSubmit">
+                    <button class="button small" type="submit"><i class="icon-check"></i><span>Показать</span></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="sidebar__block viewed collapsible active">
+          <div class="sidebar__title collapsible__click"><span>Вы уже смотрели</span><i class="icon-eye"></i></div>
+          <div class="sidebar__content collapsible__content">
+            <div class="viewed__item">
+              <a href="#" class="viewed__image">
+                <img class="goods-image-medium" src="../design/placeholder.png" alt="Просмотренный товар">
+              </a>
+              <div class="viewed__shop">
+                <span class="viewed__name">Фигурка по фото</span>
+                <div class="viewed__price">9 490 руб.</div>
               </div>
             </div>
           </div>
@@ -376,17 +414,13 @@
 
       <div class="block__right hasLeft">
         <div class="products">
+          
           <div class="toolbar">
-            <noindex>
-              <form action="" class="form__toolbar">
-                <div class="view__type">
-                  <div title="Список" class="icon active"><i class="icon-list"></i></div>
-                  <a href="Figurki.html" title="Таблица" class="icon"><i class="icon-grid"></i></a>
-                </div>
-              </form>
-            </noindex>
+            <div class="view__type">
+              <div title="Список" class="icon active"><i class="icon-list"></i></div>
+              <a href="Figurki.html" title="Таблица" class="icon"><i class="icon-grid"></i></a>
+            </div>
           </div>
-
   
   
   <div class="products__container">
