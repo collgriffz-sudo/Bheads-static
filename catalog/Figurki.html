@@ -59,7 +59,7 @@
 
 
 	
-body class="nojs path-catalog">
+<body class="nojs path-catalog">
   <div class="wrapper">
     
     <noscript>
@@ -1007,17 +1007,8 @@ body class="nojs path-catalog">
   </style>
   
   
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105258695', 'ym');
-    ym(105258695, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="../watch/105258695" style="position:absolute; left:-9999px;" alt=""></div></noscript>
 <script src="cart-core.js"></script>
+
 
 <style>
 /* Стили корзины */
@@ -1143,20 +1134,6 @@ body class="nojs path-catalog">
   document.addEventListener('DOMContentLoaded', function() {
       var cartContainer = document.querySelector('.cart');
       if (!cartContainer) return;
-
-	        // 1. ФУНКЦИЯ ОБНОВЛЕНИЯ ЦИФРЫ (БАДЖА) в красном кружочке корзины 
-      function updateBadge() {
-          var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-          var countElem = document.querySelector('.cart__count');
-          if (countElem) {
-              var totalCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
-              countElem.innerText = totalCount;
-              countElem.style.display = totalCount > 0 ? 'block' : 'none';
-          }
-      }
-  
-      // Сразу обновляем цифру при загрузке
-      updateBadge();
       
       var oldDropdown = cartContainer.querySelector('.addto__cart');
       if (oldDropdown) oldDropdown.remove();
@@ -1281,53 +1258,7 @@ body class="nojs path-catalog">
       });
   });
 </script>
-
-
-<script>
-  // Кнопки "Подробнее"
-  document.addEventListener('DOMContentLoaded', function() {
-      var products = document.querySelectorAll('.product__item');
-      
-      products.forEach(function(product) {
-          var linkElem = product.querySelector('.product__name a');
-          var productUrl = linkElem ? linkElem.getAttribute('href') : '#';
-          
-          var linksBlock = product.querySelector('.product__links');
-          if (linksBlock) linksBlock.style.display = 'none';
-          
-          var newBtn = document.createElement('a');
-          newBtn.innerHTML = 'Подробнее';
-          newBtn.href = productUrl;
-          newBtn.className = 'button';
-          newBtn.style.cssText = 'display:inline-block; width:100%; text-align:center; margin-top:10px;';
-          
-          var priceBlock = product.querySelector('.product__price');
-          if (priceBlock) {
-              priceBlock.insertAdjacentElement('afterend', newBtn);
-          }
-      });
-  });
-</script>
-
-<script>
-  // Отключение сравнения
-  document.addEventListener('DOMContentLoaded', function() {
-      var productLinks = document.querySelectorAll('.product__item .product__name a');
-      productLinks.forEach(function(link) {
-          link.removeAttribute('onclick');
-          link.classList.remove('quickViewMod');
-      });
-      
-      var oldBuyBtns = document.querySelectorAll('.quickViewMod');
-      oldBuyBtns.forEach(function(btn) {
-          btn.removeAttribute('onclick');
-          btn.style.pointerEvents = 'none';
-          btn.style.opacity = '0.5';
-      });
-  });
-</script>
-
-
+	
 <style>
   /* Отключаем ненужные иконки */
   .addto__links .favorites,
@@ -1386,7 +1317,20 @@ body class="nojs path-catalog">
       width: 250px !important;
     }
   }
+
+/* НАСТРОЙКИ ПОИСКА */
+  #search__result {
+      max-height: 400px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #ddd;
+      z-index: 9999 !important; /* Сразу ставим максимальный приоритет */
+      position: absolute;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 </style>
-	<script src="../cart.js"></script>
-</body> 
+<script src="../cart.js"></script>
+<script src="../search-data.js"></script>
+</body>
 </html>
