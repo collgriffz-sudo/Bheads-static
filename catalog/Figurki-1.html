@@ -341,14 +341,14 @@
   <div class="container">
     
     <div id="breadcrumbs">
-      <ul itemscope="" itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="home">
-          <a itemprop="item" href="../index.htm" title="Перейти на главную">
+      <ul itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="home">
+          <a itemprop="item" href="../index.html" title="На главную">
             <i class="icon-house"></i><span itemprop="name">Главная</span><meta itemprop="position" content="1">
           </a>
         </li>
-        <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-          <a itemprop="item" href="../catalog.html" title="Перейти в каталог">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="../catalog.html" title="Каталог">
             <span itemprop="name">Каталог</span><meta itemprop="position" content="2">
           </a>
         </li>
@@ -368,7 +368,7 @@
           <div class="sidebar__content collapsible__content">
             <div class="catalog__items">
               <div data-level="0" class="catalog__item">
-                <a href="Figurki.html" class="catalog__link opened"><span>Фигурки из глины</span></a>
+                <a href="Figurki.html" class="catalog__link opened"><span>Фигурки</span></a>
               </div>
             </div>
           </div>
@@ -379,36 +379,25 @@
             <span class="filters__icon">Фильтры</span>
           </div>
           <form action="" method="get" class="form__filters">
-            <div class="filter__list collapsible filters-price active">
-              <div class="filter__name collapsible__click"><span>Цена</span></div>
-              <div class="filter__items collapsible__content">
-                <div class="priceSlider">
-                  <div class="goodsFilterPriceRangePointers">
-                    <input id="goods-filter-min-price" class="inputText" type="text" value="7190">
-                    <input id="goods-filter-max-price" class="inputText" type="text" value="19190">
-                  </div>
-                  <div class="goodsFilterPriceSubmit">
-                    <button class="button small" type="submit"><i class="icon-check"></i><span>Показать</span></button>
-                  </div>
-                </div>
-              </div>
-            </div>
+             <div class="filter__list collapsible filters-price active">
+               <div class="filter__name collapsible__click"><span>Цена</span></div>
+               <div class="filter__items collapsible__content">
+                 <div class="priceSlider">
+                   <input type="text" id="goods-filter-min-price" value="7190">
+                   <input type="text" id="goods-filter-max-price" value="19190">
+                   <div class="goodsFilterPriceSubmit">
+                     <button class="button small" type="submit">Показать</button>
+                   </div>
+                 </div>
+               </div>
+             </div>
           </form>
         </div>
 
-        <div class="sidebar__block viewed collapsible active">
+        <div class="sidebar__block viewed collapsible">
           <div class="sidebar__title collapsible__click"><span>Вы уже смотрели</span><i class="icon-eye"></i></div>
           <div class="sidebar__content collapsible__content">
-            <div class="viewed__item">
-              <a href="#" class="viewed__image">
-                <img class="goods-image-medium" src="../design/placeholder.png" alt="Просмотренный товар">
-              </a>
-              <div class="viewed__shop">
-                <span class="viewed__name">Фигурка по фото</span>
-                <div class="viewed__price">9 490 руб.</div>
-              </div>
-            </div>
-          </div>
+             </div>
         </div>
       </div> 
 
@@ -421,6 +410,9 @@
               <a href="Figurki.html" title="Таблица" class="icon"><i class="icon-grid"></i></a>
             </div>
           </div>
+
+          <div class="products__container list">
+
   
   
   <div class="products__container">
