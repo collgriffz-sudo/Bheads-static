@@ -337,83 +337,200 @@
 
 
 	  
-<section id="main">
-  <div class="container">
-    
-    <div id="breadcrumbs">
-      <ul itemscope itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" class="home">
-          <a itemprop="item" href="../index.html" title="На главную">
-            <i class="icon-house"></i><span itemprop="name">Главная</span><meta itemprop="position" content="1">
-          </a>
-        </li>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a itemprop="item" href="../catalog.html" title="Каталог">
-            <span itemprop="name">Каталог</span><meta itemprop="position" content="2">
-          </a>
-        </li>
-        <li><span>Фигурки</span></li>
-      </ul>
-    </div>
-    
-    <div id="page__title">
-      <div class="block__title"><h1 class="title">Фигурки</h1></div>
-    </div>
-
-    <div class="body">
-      <div class="block__left sidebar">
+    <section id="main">
+      <div class="container">
         
-        <div class="sidebar__block catalog collapsible active">
-          <div class="sidebar__title collapsible__click"><span>Каталог</span><i class="icon-menu"></i></div>
-          <div class="sidebar__content collapsible__content">
-            <div class="catalog__items">
-              <div data-level="0" class="catalog__item">
-                <a href="Figurki.html" class="catalog__link opened"><span>Фигурки</span></a>
+        <div id="breadcrumbs">
+          <ul itemscope="" itemtype="https://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem" class="home"><a itemprop="item" href="../index.htm" title="Перейти на главную"><i class="icon-house"></i><span itemprop="name">Главная</span><meta itemprop="position" content="1"></a></li>
+                                          <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem"><a itemprop="item" href="../catalog.html" title="Перейти в каталог продукции нашего магазина"><span itemprop="name">Каталог</span><meta itemprop="position" content="2"></a></li>
+                                                      <li><span>Фигурки</span></li>
+                                                                      </ul>
+        </div>
+        
+        <div id="page__title">
+                    <div class="block__title"><h1 class="title"><a href="../catalog.html" title="Фигурки">Фигурки</a></h1></div>
+                  </div>
+        <div class="body">
+                    <div class="block__left sidebar">
+            
+            <div class="sidebar__block catalog collapsible active">
+              <div class="sidebar__title collapsible__click"><span>Каталог</span><i class="icon-menu"></i></div>
+              <div class="sidebar__content collapsible__content">
+                <div class="catalog__items">
+                                                      <div data-level="0" class="catalog__item  ">
+                    <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" data-level="0" class="catalog__link opened">
+                                            <span>Фигурки</span>
+                    </a>
+                    </div>                  </div>                               </div>
+            </div>
+              
+            <div id="filters" class="sidebar__block  ">
+              <div class="filters__title sidebar__title">
+                <span class="filters__icon">Фильтры</span>
+                <span class="filters__clear">
+                  <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" class="goodsFilterClear button4" title="Очистить фильры">Очистить</a>
+                  <i class="icon-filter"></i>
+                </span>
+              </div>
+              <form action="" method="get" class="form__filters">
+             
+                                <div class="filter__list collapsible filters-price">
+                  <div class="filter__name collapsible__click"><span>Цена</span></div>
+                  <div class="filter__items collapsible__content">
+                    <div class="priceSlider">
+                      <input type="hidden" name="form[filter][available_price][min]" value="7190">
+                      <input type="hidden" name="form[filter][available_price][max]" value="19190">
+                      
+                      <div class="goodsFilterPriceRangePointers">
+                        <span class="min" style="display:none;">7190</span>
+                        <span class="max" style="display:none;">19190</span>
+                        <input id="goods-filter-min-price" class="inputText" type="text" name="form[filter][price][min]" value="7190" min="1" onkeypress="return keyPress(this, event);" onpaste="return false;">
+                        <input id="goods-filter-max-price" class="inputText" type="text" name="form[filter][price][max]" value="19190" min="1" onkeypress="return keyPress(this, event);" onpaste="return false;">
+                      </div>
+                      <div id="goods-filter-price-slider"></div>
+                      <div class="goodsFilterPriceSubmit">
+                        <button class="button small" type="submit" title="Показать"><i class="icon-check"></i><span>Показать</span></button>
+                        <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" class="clear" title="Очистить фильры"><i class="material-icons">close</i><span>Сбросить</span></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                                
+                                  
+                                <div class="filter__list filters__buttons">
+                  <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0.html" class="goodsFilterClear button button3 small" title="Очистить фильры"><span>Очистить фильры</span></a>
+                </div>
+              </form>
+            </div>
+            
+                        <div class="sidebar__block compare ">
+              <a href="../compare.html" class="sidebar__title"><span>Сравнение</span><i class="icon-compare"></i></a>
+            </div>
+                        
+            <div class="sidebar__block favorites ">
+              <a href="../user/login.html" class="sidebar__title"><span>Избранное</span><i class="icon-favorites"></i></a>
+            </div>
+            
+                      <div class="sidebar__block viewed collapsible">
+              <div class="sidebar__title collapsible__click"><span>Вы уже смотрели</span><i class="icon-eye"></i></div>
+              <div class="sidebar__content collapsible__content">
+                                <div class="viewed__item">
+                  <a href="../goods/Figurka-iz-gliny-dlya-1-cheloveka-4.html?mod_id=320830384" class="viewed__image" title="Фигурка человека по фото, из глины (Ручная работа)">
+                    <img class="goods-image-medium lozad" src="../design/placeholder.png?design=florist&lc=1774461103" data-src="https://BHeads7.ru/3/1754/217531185/075a3e/figurka-cheloveka-po-foto-iz-gliny-ruchnaya-rabota.jpg?lc=1774461094" alt="Фигурка человека по фото, из глины (Ручная работа)">
+                  </a>
+                  <div class="viewed__shop">
+                    
+                    <a class="viewed__name" href="../goods/Figurka-iz-gliny-dlya-1-cheloveka-4.html?mod_id=320830384" title="Фигурка человека по фото, из глины (Ручная работа)"><span>Фигурка человека по фото, из глины (Ручная работа)</span></a>
+                    
+                    <div class="viewed__price RUB">
+                                            <span class="price__old RUB"><span title="14 990 Российских рублей"><span class="num">14 990</span> <span>рублей</span></span></span>
+                                            <span class="price__now RUB" content="9490"><span title="9 490 Российских рублей"><span class="num">9 490</span> <span>рублей</span></span></span>
+                    </div>
+                  </div>
+                </div>
+                                <div class="viewed__item">
+                  <a href="../goods/Figurka-iz-gliny-dlya-pitomtsa-3.html?mod_id=320830386" class="viewed__image" title="Фигурка домашнего питомца из глины, по фото (Ручная работа)">
+                    <img class="goods-image-medium lozad" src="../design/placeholder.png?design=florist&lc=1774461103" data-src="https://BHeads7.ru/3/1754/217531188/075a3e/figurka-domashnego-pitomca-iz-gliny-po-foto-ruchnaya-rabota.jpg?lc=1774461094" alt="Фигурка домашнего питомца из глины, по фото (Ручная работа)">
+                  </a>
+                  <div class="viewed__shop">
+                    
+                    <a class="viewed__name" href="../goods/Figurka-iz-gliny-dlya-pitomtsa-3.html?mod_id=320830386" title="Фигурка домашнего питомца из глины, по фото (Ручная работа)"><span>Фигурка домашнего питомца из глины, по фото (Ручная работа)</span></a>
+                    
+                    <div class="viewed__price RUB">
+                                            <span class="price__old RUB"><span title="9 900 Российских рублей"><span class="num">9 900</span> <span>рублей</span></span></span>
+                                            <span class="price__now RUB" content="7190"><span title="7 190 Российских рублей"><span class="num">7 190</span> <span>рублей</span></span></span>
+                    </div>
+                  </div>
+                </div>
+                                <div class="viewed__item">
+                  <a href="../goods/Figurka-iz-gliny-dlya-2-cheloveka-3.html?mod_id=320830389" class="viewed__image" title="Фигурки 2 человек по фото, из глины (Ручная работа)">
+                    <img class="goods-image-medium lozad" src="../design/placeholder.png?design=florist&lc=1774461103" data-src="https://BHeads7.ru/3/1754/217531191/075a3e/figurki-2-chelovek-po-foto-iz-gliny-ruchnaya-rabota.jpg?lc=1774461094" alt="Фигурки 2 человек по фото, из глины (Ручная работа)">
+                  </a>
+                  <div class="viewed__shop">
+                    
+                    <a class="viewed__name" href="../goods/Figurka-iz-gliny-dlya-2-cheloveka-3.html?mod_id=320830389" title="Фигурки 2 человек по фото, из глины (Ручная работа)"><span>Фигурки 2 человек по фото, из глины (Ручная работа)</span></a>
+                    
+                    <div class="viewed__price RUB">
+                                            <span class="price__old RUB"><span title="21 990 Российских рублей"><span class="num">21 990</span> <span>рублей</span></span></span>
+                                            <span class="price__now RUB" content="17190"><span title="17 190 Российских рублей"><span class="num">17 190</span> <span>рублей</span></span></span>
+                    </div>
+                  </div>
+                </div>
+                                <div class="viewed__item">
+                  <a href="../goods/Figurka-iz-gliny-dlya-1-cheloveka-2-3.html?mod_id=320830391" class="viewed__image" title="Фигурка 1 человека + питомец по фото, из глины (Ручная работа)">
+                    <img class="goods-image-medium lozad" src="../design/placeholder.png?design=florist&lc=1774461103" data-src="https://BHeads7.ru/3/1754/217531194/075a3e/figurka-1-cheloveka-pitomec-po-foto-iz-gliny-ruchnaya-rabota.jpg?lc=1774461094" alt="Фигурка 1 человека + питомец по фото, из глины (Ручная работа)">
+                  </a>
+                  <div class="viewed__shop">
+                    
+                    <a class="viewed__name" href="../goods/Figurka-iz-gliny-dlya-1-cheloveka-2-3.html?mod_id=320830391" title="Фигурка 1 человека + питомец по фото, из глины (Ручная работа)"><span>Фигурка 1 человека + питомец по фото, из глины (Ручная работа)</span></a>
+                    
+                    <div class="viewed__price RUB">
+                                            <span class="price__old RUB"><span title="20 990 Российских рублей"><span class="num">20 990</span> <span>рублей</span></span></span>
+                                            <span class="price__now RUB" content="14490"><span title="14 490 Российских рублей"><span class="num">14 490</span> <span>рублей</span></span></span>
+                    </div>
+                  </div>
+                </div>
+                                <div class="viewed__buttons">
+                  <div class="button showAll"><span>Показать все</span></div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div id="filters" class="sidebar__block">
-          <div class="filters__title sidebar__title">
-            <span class="filters__icon">Фильтры</span>
-          </div>
-          <form action="" method="get" class="form__filters">
-             <div class="filter__list collapsible filters-price active">
-               <div class="filter__name collapsible__click"><span>Цена</span></div>
-               <div class="filter__items collapsible__content">
-                 <div class="priceSlider">
-                   <input type="text" id="goods-filter-min-price" value="7190">
-                   <input type="text" id="goods-filter-max-price" value="19190">
-                   <div class="goodsFilterPriceSubmit">
-                     <button class="button small" type="submit">Показать</button>
-                   </div>
-                 </div>
-               </div>
-             </div>
-          </form>
-        </div>
-
-        <div class="sidebar__block viewed collapsible">
-          <div class="sidebar__title collapsible__click"><span>Вы уже смотрели</span><i class="icon-eye"></i></div>
-          <div class="sidebar__content collapsible__content">
-             </div>
-        </div>
-      </div> 
-
-      <div class="block__right hasLeft">
-        <div class="products">
-          
-          <div class="toolbar">
-            <div class="view__type">
-              <div title="Список" class="icon active"><i class="icon-list"></i></div>
-              <a href="Figurki.html" title="Таблица" class="icon"><i class="icon-grid"></i></a>
-            </div>
-          </div>
-
-          <div class="products__container list">
-
+                      </div>
+                    <div class="block__right hasLeft">
+            <div class="products">
+           
+    
   
+  
+  
+    
+  <!-- <div class="toolbar">
+    <noindex>
+    <form action="" class="form__toolbar">
+      
+            
+      <div class="sort-by selectBox">
+        
+        <select class="select" name="goods_search_field_id" title="Название сортировки" onchange="this.form.submit();">
+                                  <option value="1" title="цене: Дорогие — Дешевые">
+                              Цена ↓
+                          </option>
+                                              <option value="2" title="цене: Дешевые — Дорогие">
+                              Цена ↑
+                          </option>
+                                                                                                                                      <option value="5" title="наличию: много — мало">
+                              Наличие
+                          </option>
+                                                                                                                <option value="11" title="рейтингу: Хорошие — Плохие">
+                              Рейтинг
+                          </option>
+                                                                    <option value="13" title="количеству отзывов: Много — Мало">
+                              Отзывы
+                          </option>
+                                                    </select>
+      </div>
+      
+      
+      <div class="show-by selectBox">
+        <select class="select" name="per_page" title="Лимит товаров на странице" onchange="this.form.submit();">
+                      <option value="20" selected="selected">20</option>
+                      <option value="40">40</option>
+                      <option value="60">60</option>
+                      <option value="80">80</option>
+                      <option value="100">100</option>
+                  </select>
+      </div>
+      
+    -->
+      <div class="view__type">
+                  <div title="Список" class="icon active"><i class="icon-list"></i></div>
+          <a href="%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0-2.html?goods_view_type=1" title="Таблица" class="icon"><i class="icon-grid"></i></a>
+              </div>
+      
+    </form>
+    </noindex>
+  </div>
   
   <div class="products__container">
     
