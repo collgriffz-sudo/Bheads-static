@@ -1191,9 +1191,11 @@
 
 
 <script>
-    // Кнопки "Подробнее"
+    // Кнопки "Подробнее" (100% на мобильных, авто на ПК)
     document.addEventListener('DOMContentLoaded', function() {
         var products = document.querySelectorAll('.product__item');
+        // Проверяем, мобильный ли это экран
+        var isMobile = window.innerWidth <= 768;
         
         products.forEach(function(product) {
             var linkElem = product.querySelector('.product__name a');
@@ -1206,7 +1208,13 @@
             newBtn.innerHTML = 'Подробнее';
             newBtn.href = productUrl;
             newBtn.className = 'button';
-            newBtn.style.cssText = 'display:inline-block; width:50%; text-align:center; margin-top:10px;';
+
+            // Условие только на ширину (width)
+            if (isMobile) {
+                newBtn.style.cssText = 'display:inline-block; width:100%; text-align:center; margin-top:10px;';
+            } else {
+                newBtn.style.cssText = 'display:inline-block; width:auto; padding-left:30px; padding-right:30px; text-align:center; margin-top:10px;';
+            }
             
             var priceBlock = product.querySelector('.product__price');
             if (priceBlock) {
