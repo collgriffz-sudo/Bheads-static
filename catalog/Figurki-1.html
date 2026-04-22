@@ -1003,19 +1003,8 @@
   </style>
   
   
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=105258695', 'ym');
-    ym(105258695, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
-</script>
-<noscript><div><img src="../watch/105258695" style="position:absolute; left:-9999px;" alt=""></div></noscript>
-  
-  
-<script src="cart-core.js"></script>
+ <!-- Написанный нами код и скрипты -->	
+<script src="../cart-core.js"></script>
 
 <style>
 /* Стили корзины */
@@ -1141,20 +1130,6 @@
   document.addEventListener('DOMContentLoaded', function() {
       var cartContainer = document.querySelector('.cart');
       if (!cartContainer) return;
-
-	        // 1. ФУНКЦИЯ ОБНОВЛЕНИЯ ЦИФРЫ (БАДЖА)
-      function updateBadge() {
-          var cart = JSON.parse(localStorage.getItem('cart') || '[]');
-          var countElem = document.querySelector('.cart__count');
-          if (countElem) {
-              var totalCount = cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
-              countElem.innerText = totalCount;
-              countElem.style.display = totalCount > 0 ? 'block' : 'none';
-          }
-      }
-  
-      // Сразу обновляем цифру при загрузке
-      updateBadge();
       
       var oldDropdown = cartContainer.querySelector('.addto__cart');
       if (oldDropdown) oldDropdown.remove();
@@ -1279,6 +1254,7 @@
       });
   });
 </script>
+
 
 <style>
   /* Отключаем ненужные иконки */
