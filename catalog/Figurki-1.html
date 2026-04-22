@@ -1191,7 +1191,7 @@
 
 
 <script>
-    // Кнопки "Подробнее" (возврат к стандартной высоте)
+    // Кнопки "Подробнее" (финальная подгонка высоты)
     document.addEventListener('DOMContentLoaded', function() {
         var products = document.querySelectorAll('.product__item');
         var isMobile = window.innerWidth <= 768;
@@ -1209,11 +1209,12 @@
             newBtn.className = 'button';
             
             if (isMobile) {
-                // Мобильная версия - как была 100%
+                // Мобильная версия - без изменений
                 newBtn.style.cssText = 'display:block; width:100%; text-align:center; margin-top:10px;';
             } else {
-                // Веб-версия: высота 6px (золотая середина), шрифт не трогаем
-                newBtn.style.cssText = 'display:inline-block; width:auto; padding:6px 30px; text-align:center; margin-top:10px;';
+                // Веб-версия: ставим 5px (ровно между 4 и 6)
+                // line-height: 1 делает высоту предсказуемой
+                newBtn.style.cssText = 'display:inline-block; width:auto; padding:5px 30px; line-height:1; text-align:center; margin-top:10px;';
             }
             
             var priceBlock = product.querySelector('.product__price');
