@@ -1299,37 +1299,46 @@
 </style>
 
 <style>
-  /* "Усы" для фото в режиме списка */
-  .products__container.list .product__image {
-      position: relative;
-      display: block;
-      padding: 5px;
+  /* Стили для карточки в списке, чтобы усы привязались к углам */
+  .products__container.list .product__item {
+      position: relative; /* Обязательно для позиционирования усов */
+      background: #fff;
+      border: 1px solid #eee; /* Легкая рамка для самой карточки */
+      transition: all 0.3s ease;
   }
 
-  /* Верхний левый ус */
-  .products__container.list .product__image:before {
+  /* Сами усы (делаем их тонкими, 1px черным, как на фото) */
+  .products__container.list .product__item:before,
+  .products__container.list .product__item:after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 15px;
-      height: 15px;
-      border-top: 2px solid #b2935f;
-      border-left: 2px solid #b2935f;
-      z-index: 2;
+      width: 20px;  /* Длина усика, как на скрине */
+      height: 20px;
+      border-color: #000; /* Черный цвет */
+      border-style: solid;
+      opacity: 0; /* Скрыты по умолчанию */
+      transition: all 0.3s ease;
+      z-index: 10;
   }
 
-  /* Нижний правый ус */
-  .products__container.list .product__image:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 15px;
-      height: 15px;
-      border-bottom: 2px solid #b2935f;
-      border-right: 2px solid #b2935f;
-      z-index: 2;
+  /* Верхний Левый ус */
+  .products__container.list .product__item:before {
+      top: -1px;  /* Смещение, чтобы ус наложился на рамку */
+      left: -1px;
+      border-width: 1px 0 0 1px; /* Верх и Лево */
+  }
+
+  /* Нижний Правый ус */
+  .products__container.list .product__item:after {
+      bottom: -1px;
+      right: -1px;
+      border-width: 0 1px 1px 0; /* Низ и Право */
+  }
+
+  /* ЭФФЕКТ ПРИ НАВЕДЕНИИ: Усы появляются */
+  .products__container.list .product__item:hover:before,
+  .products__container.list .product__item:hover:after {
+      opacity: 1;
   }
 </style>
 	
