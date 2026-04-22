@@ -599,16 +599,28 @@ if (true) {
   background: #fff;
   z-index: 1001;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  border-radius: 4px;
+  
+  /* 1. Увеличиваем скругление */
+  border-radius: 15px; 
+  
+  /* 2. МАГИЯ: эта строка обрезает острый скроллбар по углам */
+  overflow: hidden; 
 }
-.modal .modal__title {
-  padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
-}
+
+/* Это стиль для внутреннего контента, где и живет скроллбар */
 .modal .modal__content {
   padding: 1.5rem;
   max-height: 80vh;
   overflow-y: auto;
+  
+  /* Чтобы скроллбар не прилипал вплотную к скруглению */
+  border-radius: 0 0 15px 0; 
+}
+
+/* Остальное оставляем как есть */
+.modal .modal__title {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 .modal .form__fields {
   margin-bottom: 1rem;
