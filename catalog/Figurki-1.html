@@ -1191,10 +1191,9 @@
 
 
 <script>
-    // Кнопки "Подробнее" (финальная подгонка высоты)
+    // Кнопки "Подробнее"
     document.addEventListener('DOMContentLoaded', function() {
         var products = document.querySelectorAll('.product__item');
-        var isMobile = window.innerWidth <= 768;
         
         products.forEach(function(product) {
             var linkElem = product.querySelector('.product__name a');
@@ -1207,15 +1206,7 @@
             newBtn.innerHTML = 'Подробнее';
             newBtn.href = productUrl;
             newBtn.className = 'button';
-            
-            if (isMobile) {
-                // Мобильная версия - без изменений
-                newBtn.style.cssText = 'display:block; width:100%; text-align:center; margin-top:10px;';
-            } else {
-                // Веб-версия: ставим 5px (ровно между 4 и 6)
-                // line-height: 1 делает высоту предсказуемой
-                newBtn.style.cssText = 'display:inline-block; width:auto; padding:5px 30px; line-height:1; text-align:center; margin-top:10px;';
-            }
+            newBtn.style.cssText = 'display:inline-block; width:50%; text-align:center; margin-top:10px;';
             
             var priceBlock = product.querySelector('.product__price');
             if (priceBlock) {
