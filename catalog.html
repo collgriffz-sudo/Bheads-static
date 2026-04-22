@@ -283,12 +283,12 @@
 	
             <!-- Поиск -->	
 <div class="search" itemscope="" itemtype="https://schema.org/WebSite">
-	<span class="top"></span> <!-- Уголочки для поиска -->	
-    <span class="left"></span>
-    <span class="right"></span>
-    <span class="bottom"></span>
     <form class="search__form bordered" onsubmit="return false;">
         <input type="text" id="mySearchInput" class="search__input" placeholder="Поиск товаров..." autocomplete="off" oninput="liveSearch()">
+			<span class="top"></span> <!-- Уголочки для поиска -->	
+    		<span class="left"></span>
+    		<span class="right"></span>
+    		<span class="bottom"></span>
         <button type="submit" class="search__submit"><i class="icon-search"></i></button>
         <div class="search__reset" onclick="resetSearch()" style="cursor:pointer;"><i class="material-icons">close</i></div>
     </form>
