@@ -1299,45 +1299,76 @@
 </style>
 
 <style>
-  /* Стили для карточки в списке, чтобы усы привязались к углам */
+  /* Сама карточка в списке */
   .products__container.list .product__item {
-      position: relative; /* Обязательно для позиционирования усов */
+      position: relative;
       background: #fff;
-      border: 1px solid #eee; /* Легкая рамка для самой карточки */
+      /* Изначально рамка прозрачная, чтобы карточка не прыгала при наведении */
+      border: 1px solid transparent; 
       transition: all 0.3s ease;
+      padding: 15px; /* Чтобы содержимое не прилипало к будущей рамке */
   }
 
-  /* Сами усы (делаем их тонкими, 1px черным, как на фото) */
-  .products__container.list .product__item:before,
-  .products__container.list .product__item:after {
+  /* Общие настройки для всех 4 углов (усов) */
+  .products__container.list .product__item::before,
+  .products__container.list .product__item::after,
+  .products__container.list .product__item .product__name::before,
+  .products__container.list .product__item .product__name::after {
       content: "";
       position: absolute;
-      width: 20px;  /* Длина усика, как на скрине */
-      height: 20px;
-      border-color: #000; /* Черный цвет */
+      width: 15px;
+      height: 15px;
+      border-color: #000;
       border-style: solid;
-      opacity: 0; /* Скрыты по умолчанию */
+      border-width: 0;
+      opacity: 0; /* Полностью скрыты */
       transition: all 0.3s ease;
       z-index: 10;
   }
 
-  /* Верхний Левый ус */
-  .products__container.list .product__item:before {
-      top: -1px;  /* Смещение, чтобы ус наложился на рамку */
-      left: -1px;
-      border-width: 1px 0 0 1px; /* Верх и Лево */
+  /* 1. Верхний левый угол */
+  .products__container.list .product__item::before {
+      top: -1px; left: -1px;
+      border-top-width: 1px;
+      border-left-width: 1px;
   }
 
-  /* Нижний Правый ус */
-  .products__container.list .product__item:after {
-      bottom: -1px;
-      right: -1px;
-      border-width: 0 1px 1px 0; /* Низ и Право */
+  /* 2. Нижний правый угол */
+  .products__container.list .product__item::after {
+      bottom: -1px; right: -1px;
+      border-bottom-width: 1px;
+      border-right-width: 1px;
   }
 
-  /* ЭФФЕКТ ПРИ НАВЕДЕНИИ: Усы появляются */
-  .products__container.list .product__item:hover:before,
-  .products__container.list .product__item:hover:after {
+  /* Используем заголовок товара как зацепку для еще 2-х углов */
+  /* 3. Верхний правый угол */
+  .products__container.list .product__item .product__name::before {
+      top: -1px; right: -1px;
+      border-top-width: 1px;
+      border-right-width: 1px;
+      position: absolute; /* Переопределяем для заголовка */
+  }
+
+  /* 4. Нижний левый угол */
+  .products__container.list .product__item .product__name::after {
+      bottom: -1px; left: -1px;
+      border-bottom-width: 1px;
+      border-left-width: 1px;
+      position: absolute; /* Переопределяем для заголовка */
+  }
+
+  /* --- ЭФФЕКТ ПРИ НАВЕДЕНИИ --- */
+  
+  .products__container.list .product__item:hover {
+      /* Появляется серая окантовка */
+      border-color: #eee; 
+  }
+
+  .products__container.list .product__item:hover::before,
+  .products__container.list .product__item:hover::after,
+  .products__container.list .product__item:hover .product__name::before,
+  .products__container.list .product__item:hover .product__name::after {
+      /* Появляются все 4 черных уголка */
       opacity: 1;
   }
 </style>
