@@ -1191,7 +1191,7 @@
 
 
 <script>
-    // Кнопки "Подробнее" (адаптивный размер)
+    // Кнопки "Подробнее" (тонкая настройка для веб)
     document.addEventListener('DOMContentLoaded', function() {
         var products = document.querySelectorAll('.product__item');
         var isMobile = window.innerWidth <= 768;
@@ -1209,11 +1209,11 @@
             newBtn.className = 'button';
             
             if (isMobile) {
-                // Мобильная версия: во всю ширину
+                // Мобильная версия: во всю ширину, стандартная высота
                 newBtn.style.cssText = 'display:block; width:100%; text-align:center; margin-top:10px;';
             } else {
-                // Веб-версия: аккуратный размер по тексту, отступы по бокам 30px
-                newBtn.style.cssText = 'display:inline-block; width:auto; padding:8px 30px; text-align:center; margin-top:10px;';
+                // Веб-версия: делаем её тоньше (уменьшаем padding до 4px) и фиксируем высоту строки
+                newBtn.style.cssText = 'display:inline-block; width:auto; padding:4px 25px; line-height:24px; height:auto; text-align:center; margin-top:10px;';
             }
             
             var priceBlock = product.querySelector('.product__price');
