@@ -600,35 +600,25 @@ if (true) {
   z-index: 1001;
   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
   
-  /* 1. Увеличиваем скругление */
-  border-radius: 15px; 
+  /* 1. Увеличиваем радиус (был 4px, ставим 15px как на левой стороне) */
+  border-radius: 15px !important;
   
-  /* 2. МАГИЯ: эта строка обрезает острый скроллбар по углам */
-  overflow: hidden; 
+  /* 2. МАГИЯ: заставляем окно "обрезать" всё, что в него не влезает (включая углы скроллбара) */
+  overflow: hidden !important; 
 }
 
-/* Это стиль для внутреннего контента, где и живет скроллбар */
 .modal .modal__content {
   padding: 1.5rem;
   max-height: 80vh;
-  overflow-y: auto;
-  
-  /* Чтобы скроллбар не прилипал вплотную к скруглению */
-  border-radius: 0 0 15px 0; 
+  /* 3. Разрешаем скролл внутри, но благодаря 'overflow: hidden' выше, 
+     он будет обрезан по краям модалки */
+  overflow-y: auto; 
 }
 
-/* Остальное оставляем как есть */
+/* Остальные стили оставляем без изменений */
 .modal .modal__title {
   padding: 1rem;
   border-bottom: 1px solid #e0e0e0;
-}
-.modal .form__fields {
-  margin-bottom: 1rem;
-}
-.modal .form__buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 #overlay.modal-overlay {
   position: fixed;
