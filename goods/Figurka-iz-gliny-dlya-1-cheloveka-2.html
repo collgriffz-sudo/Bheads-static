@@ -412,10 +412,19 @@
 
 <!-- Заполенние звездочек в карточке товара в процентах -->
 	    <div class="productView__box">
-        <div class="productView__ratings">
-            <div class="ratings" title="Рейтинг товара">
-                <div class="rating" style="width:100%" title="Рейтинг: 5 из 5"></div>
-            </div>
+<div class="productView__ratings">
+  <div class="ratings-custom" title="Рейтинг: 5 из 5" style="color: #c09f62; font-size: 16px; display: inline-block;">
+    <span style="letter-spacing: -1px;">★</span>
+    <span style="letter-spacing: -1px;">★</span>
+    <span style="letter-spacing: -1px;">★</span>
+    <span style="letter-spacing: -1px;">★</span>
+    <span style="letter-spacing: -1px;">★</span>
+  </div>
+  <style>
+    /* Убираем старые невзрачные звезды, чтобы они не мешались */
+    .ratings { display: none !important; }
+  </style>
+</div>
         </div>
 
         <div class="productView__price" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
