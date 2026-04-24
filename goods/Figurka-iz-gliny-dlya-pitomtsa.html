@@ -1198,8 +1198,8 @@ var q = document.getElementsByTagName("input");for(var O=0; O < q.length; O++) {
         itemsHtml = `
           <div class="addto__empty" style="padding:20px; text-align:center;">В корзине пусто</div>
           <div class="addto__buttons" style="padding:10px; display:flex; justify-content:space-between;">
-              <a href="catalog.html" class="button small">В каталог</a>
-              <a href="cart.html" class="button small">В корзину</a>
+              <a href="/catalog.html" class="button small">В каталог</a>
+              <a href="/cart.html" class="button small">В корзину</a>
           </div>
         `;
       } else {
@@ -1245,7 +1245,7 @@ var q = document.getElementsByTagName("input");for(var O=0; O < q.length; O++) {
                     onclick="handleCartAction('clear', 0, event)" 
                     ontouchend="handleCartAction('clear', 0, event)" 
                     style="cursor:pointer; color:#666; text-decoration:underline; font-size:12px; padding:10px;">Очистить</span>
-              <a href="cart.html" class="cart-button" style="background:#c60c30; color:#fff; padding:8px 15px; text-decoration:none; border-radius:3px;">В корзину</a>
+              <a href="/cart.html" class="cart-button" style="background:#c60c30; color:#fff; padding:8px 15px; text-decoration:none; border-radius:3px;">В корзину</a>
           </div>
         `;
       }
