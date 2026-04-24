@@ -413,17 +413,24 @@
 <!-- Заполенние звездочек в карточке товара в процентах -->
 	    <div class="productView__box">
 <div class="productView__ratings">
-  <div class="ratings-custom" title="Рейтинг: 5 из 5" style="color: #c09f62; font-size: 16px; display: inline-block;">
-    <span style="letter-spacing: -1px;">★</span>
-    <span style="letter-spacing: -1px;">★</span>
-    <span style="letter-spacing: -1px;">★</span>
-    <span style="letter-spacing: -1px;">★</span>
-    <span style="letter-spacing: -1px;">★</span>
+  <div class="ratings" title="Рейтинг товара" style="background: none !important; border: none !important; width: auto !important; height: auto !important; display: block;">
+    
+    <div class="rating-new" style="
+        color: #ffcc00; 
+        font-size: 24px; 
+        line-height: 1; 
+        letter-spacing: 2px; 
+        text-shadow: 1px 1px 0px #d4a017, 2px 2px 3px rgba(0,0,0,0.2); 
+        cursor: default;
+        user-select: none;">
+      ★★★★★
+    </div>
+
+    <style>
+      .ratings .rating { display: none !important; }
+      .productView__ratings { margin-bottom: 10px; } /* Добавил отступ снизу для красоты */
+    </style>
   </div>
-  <style>
-    /* Убираем старые невзрачные звезды, чтобы они не мешались */
-    .ratings { display: none !important; }
-  </style>
 </div>
         </div>
 
