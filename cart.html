@@ -895,10 +895,23 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="finalCartItems" style="background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border:1px solid #eee;"></div>
 
     <div id="finalReview" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; font-size:0.9rem; line-height:1.5; border:1px solid #eee;"></div>
-    
+
+
+<!-- ВСТАВЛЯЙ ГАЛКУ СЮДА -->
+<div style="margin-bottom: 15px; padding: 0 5px; display: flex; align-items: flex-start; gap: 10px; text-align: left;">
+    <input type="checkbox" id="finalConsent" style="width: 18px; height: 18px; cursor: pointer; margin-top: 2px;">
+    <label for="finalConsent" style="font-size: 0.8rem; color: #555; cursor: pointer; line-height: 1.3;">
+        Я подтверждаю корректность данных и даю согласие на обработку персональных данных в соответствии с 
+        <a href="privacy.html" target="_blank" style="color: #b30020; text-decoration: underline;">политикой конфиденциальности</a> 
+        и принимаю условия <a href="oferta.html" target="_blank" style="color: #b30020; text-decoration: underline;">публичной оферты</a>.
+    </label>
+</div>
+	  
+	  
     <div style="display:flex; gap:10px;">
         <button onclick="nextStep(3)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
-        <button onclick="finishAndShowPayment()" style="flex:2; background:#28a745; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ОФОРМИТЬ ЗАКАЗ</button>
+        <!-- ВНИМАНИЕ: Здесь мы меняем finishAndShowPayment на handleFinishOrder -->
+        <button onclick="handleFinishOrder()" style="flex:2; background:#28a745; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ОФОРМИТЬ ЗАКАЗ</button>
     </div>
 </div>
           
@@ -1035,6 +1048,19 @@ document.addEventListener('DOMContentLoaded', function() {
   </button>
 </div>
 
+<script>
+// Эту функцию добавь туда, где у тебя лежат остальные скрипты (nextStep и т.д.)
+function handleFinishOrder() {
+    const consent = document.getElementById('finalConsent');
+    if (!consent.checked) {
+        alert('Пожалуйста, подтвердите согласие с политикой конфиденциальности и офертой.');
+        return;
+    }
+    // Если галка стоит — запускаем твою основную функцию
+    finishAndShowPayment(); 
+}
+</script>
+	  
 <script>
   function acceptCookie() {
     // Сохраняем метку на 365 дней (условно, пока пользователь не очистит кэш)
