@@ -895,9 +895,6 @@ document.addEventListener('DOMContentLoaded', function() {
     <div id="finalCartItems" style="background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border:1px solid #eee;"></div>
 
     <div id="finalReview" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; font-size:0.9rem; line-height:1.5; border:1px solid #eee;"></div>
-    
-    <div style="display:flex; gap:10px;">
-        <button onclick="nextStep(3)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
 
 <!-- Блок с галочкой -->
 <div style="margin: 15px 0; padding: 10px; background: #fff; border-radius: 8px; border: 1px solid #eee; display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
@@ -906,7 +903,9 @@ document.addEventListener('DOMContentLoaded', function() {
         Я подтверждаю правильность введённых данных и согласен с условиями заказа.
     </label>
 </div>
-		
+	  
+    <div style="display:flex; gap:10px;">
+        <button onclick="nextStep(3)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
         <button onclick="finishAndShowPayment()" style="flex:2; background:#28a745; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ОФОРМИТЬ ЗАКАЗ</button>
     </div>
 </div>
