@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="utf-8">
@@ -889,26 +889,16 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
   </div>
 
-<div id="step4" class="order-step" style="display:none;">
+  <div id="step4" class="order-step" style="display:none;">
     <h2 style="margin-top:0; font-size:1.4rem;">4. Всё верно?</h2>
     
     <div id="finalCartItems" style="background:#fff; padding:10px; border-radius:8px; margin-bottom:10px; border:1px solid #eee;"></div>
-    <div id="finalReview" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; font-size:0.9rem; line-height:1.5; border:1px solid #eee;"></div>
 
-    <!-- Исправленный блок с галкой -->
-    <div style="margin-bottom: 15px; padding: 10px; display: flex; align-items: flex-start; gap: 12px; text-align: left; background: #fff5f5; border-radius: 8px;">
-        <input type="checkbox" id="finalConsent" onchange="toggleOrderButton()" style="min-width: 20px; min-height: 20px; width: 20px; height: 20px; cursor: pointer; margin: 0; accent-color: #28a745; -webkit-appearance: checkbox !important; appearance: checkbox !important;">
-        <label for="finalConsent" style="font-size: 0.85rem; color: #333; cursor: pointer; line-height: 1.4; user-select: none;">
-            Я подтверждаю корректность данных и даю согласие на обработку персональных данных в соответствии с 
-            <a href="privacy.html" target="_blank" style="color: #b30020; text-decoration: underline;">политикой конфиденциальности</a> 
-            и принимаю условия <a href="oferta.html" target="_blank" style="color: #b30020; text-decoration: underline;">публичной оферты</a>.
-        </label>
-    </div>
-      
+    <div id="finalReview" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; font-size:0.9rem; line-height:1.5; border:1px solid #eee;"></div>
+    
     <div style="display:flex; gap:10px;">
         <button onclick="nextStep(3)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
-        <!-- Добавили id="submitOrderBtn", поставили disabled и прозрачность -->
-        <button id="submitOrderBtn" onclick="handleFinishOrder()" disabled style="flex:2; background:#28a745; color:#fff; border:none; border-radius:8px; cursor:not-allowed; font-weight:bold; opacity: 0.4; transition: 0.3s;">ОФОРМИТЬ ЗАКАЗ</button>
+        <button onclick="finishAndShowPayment()" style="flex:2; background:#28a745; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">ОФОРМИТЬ ЗАКАЗ</button>
     </div>
 </div>
           
@@ -1029,16 +1019,6 @@ document.addEventListener('DOMContentLoaded', function() {
       position: absolute;
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
-	  #finalConsent {
-    appearance: auto !important; /* Возвращает стандартный вид браузера */
-    -webkit-appearance: checkbox !important;
-    width: 18px !important;
-    height: 18px !important;
-    cursor: pointer;
-    vertical-align: middle;
-    margin-right: 10px;
-}
   }
 </style>
 <script src="cart.js"></script>
@@ -1055,19 +1035,6 @@ document.addEventListener('DOMContentLoaded', function() {
   </button>
 </div>
 
-<script>
-// Эту функцию добавь туда, где у тебя лежат остальные скрипты (nextStep и т.д.)
-function handleFinishOrder() {
-    const consent = document.getElementById('finalConsent');
-    if (!consent.checked) {
-        alert('Пожалуйста, подтвердите согласие с политикой конфиденциальности и офертой.');
-        return;
-    }
-    // Если галка стоит — запускаем твою основную функцию
-    finishAndShowPayment(); 
-}
-</script>
-	  
 <script>
   function acceptCookie() {
     // Сохраняем метку на 365 дней (условно, пока пользователь не очистит кэш)
@@ -1108,40 +1075,6 @@ function handleFinishOrder() {
     }
   };
 </script>
-
-
-// ВСТАВЛЯЙ ЭТО СЮДА, В САМЫЙ НИЗ ФАЙЛА
-function toggleOrderButton() {
-    const checkbox = document.getElementById('finalConsent');
-    const btn = document.getElementById('submitOrderBtn');
-    
-    // Если галочка стоит (true)
-    if (checkbox.checked) {
-        btn.disabled = false;            // Включаем кнопку
-        btn.style.opacity = "1";         // Делаем яркой
-        btn.style.cursor = "pointer";    // Меняем курсор на палец
-    } else {
-        btn.disabled = true;             // Выключаем
-        btn.style.opacity = "0.4";       // Делаем тусклой
-        btn.style.cursor = "not-allowed"; // Курсор "запрещено"
-    }
-}
-
-function handleFinishOrder() {
-    const checkbox = document.getElementById('finalConsent');
-    
-    if (!checkbox.checked) {
-        alert('Нужно поставить галочку, чтобы продолжить!');
-        return;
-    }
-    
-    // Вызываем твою основную функцию из cart.js
-    if (typeof finishAndShowPayment === 'function') {
-        finishAndShowPayment();
-    } else {
-        alert('Ошибка: не найдена функция оплаты в cart.js');
-    }
-}	   
 	  
 </body> 
 </html>
