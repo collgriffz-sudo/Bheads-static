@@ -1032,6 +1032,16 @@ document.addEventListener('DOMContentLoaded', function() {
       position: absolute;
       width: 100%;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+	  #finalConsent {
+    appearance: auto !important; /* Возвращает стандартный вид браузера */
+    -webkit-appearance: checkbox !important;
+    width: 18px !important;
+    height: 18px !important;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 10px;
+}
   }
 </style>
 <script src="cart.js"></script>
@@ -1101,6 +1111,8 @@ function handleFinishOrder() {
     }
   };
 </script>
+
+
 	  
 </body> 
 </html>
