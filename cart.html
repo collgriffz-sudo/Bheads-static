@@ -896,41 +896,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div id="finalReview" style="background:#f9f9f9; padding:15px; border-radius:10px; margin-bottom:15px; font-size:0.9rem; line-height:1.5; border:1px solid #eee;"></div>
 
-<!-- Блок оформления согласия -->
-<div style="margin: 15px 0; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer; -webkit-tap-highlight-color: transparent;" 
-     onclick="var ch = document.getElementById('finalAgree'); ch.checked = !ch.checked; ch.dispatchEvent(new Event('change'));">
+<!-- Блок согласия: работает везде -->
+<div style="margin: 15px 0; padding: 12px; background: #fff; border: 1px solid #ddd; border-radius: 10px; display: flex; align-items: center; gap: 12px; position: relative; min-height: 50px;">
     
-    <!-- Скрытый настоящий чекбокс -->
-    <input type="checkbox" id="finalAgree" style="display: none;">
-    
-    <!-- Наш кастомный квадрат, который ТОЧНО будет видно -->
-    <div id="customCheckVisual" style="width: 24px; height: 24px; border: 2px solid #ccc; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; transition: 0.2s;">
-        <!-- Сама галочка (рисуем её символом или кодом) -->
-        <span id="checkMark" style="display: none; color: #fff; font-size: 18px; font-weight: bold;">✓</span>
+    <!-- Оставляем видимый квадрат -->
+    <div id="customCheckVisual" style="width: 24px; height: 24px; border: 2px solid #b30020; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #fff; pointer-events: none;">
+        <span id="checkMark" style="display: none; color: #b30020; font-size: 18px; font-weight: bold;">✓</span>
     </div>
-    
-    <label style="font-size: 0.9rem; color: #444; cursor: pointer; line-height: 1.3; user-select: none;">
-        Я подтверждаю правильность введённых данных и согласен с условиями заказа.
-    </label>
-</div>
 
-<script>
-    // Следим за изменением скрытого чекбокса и меняем вид квадрата
-    document.getElementById('finalAgree').addEventListener('change', function() {
-        const box = document.getElementById('customCheckVisual');
-        const mark = document.getElementById('checkMark');
-        
-        if (this.checked) {
-            box.style.background = '#28a745'; // Цвет твоей кнопки "Оформить"
-            box.style.borderColor = '#28a745';
-            mark.style.display = 'block';
-        } else {
-            box.style.background = '#fff';
-            box.style.borderColor = '#ccc';
-            mark.style.display = 'none';
-        }
-    });
-</script>
+    <!-- Текст -->
+    <label style="font-size: 0.9rem; color: #333; pointer-events: none; line-height: 1.3;">
+        Я подтверждаю правильность данных и согласен с условиями заказа
+    </label>
+
+    <!-- СВЕРХУ накладываем невидимый, но кликабельный реальный чекбокс на всю площадь -->
+    <input type="checkbox" id="finalAgree" 
+           style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; margin: 0; z-index: 5;"
+           onchange="document.getElementById('checkMark').style.display = this.checked ? 'block' : 'none'; document.getElementById('customCheckVisual').style.borderColor = this.checked ? '#28a745' : '#b30020'; document.getElementById('checkMark').style.color = this.checked ? '#28a745' : '#b30020';">
+</div>
 	  
     <div style="display:flex; gap:10px;">
         <button onclick="nextStep(3)" style="flex:1; padding:15px; border:1px solid #999; border-radius:8px; background:#f0f0f0; color: #333; cursor:pointer; font-weight:bold;">← НАЗАД</button>
