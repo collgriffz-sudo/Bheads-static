@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /cart.html
+Disallow: /*?*
+
+Sitemap: https://bheads7.ru/sitemap.xml
