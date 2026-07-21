@@ -411,15 +411,27 @@ window.finishAndShowPayment = function() {
     // отправка для гугл таблицу
     const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
 
+   // 1. Отправляем данные в Google Таблицу (без no-cors, чтобы прочитать ответ!)
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors', // Обязательно для работы с Google
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Трюк для обхода CORS в Apps Script
         body: JSON.stringify(orderData)
     })
-    .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
-    .catch(error => console.error("Ошибка Google Script:", error));
+    .then(response => response.json())
+    .then(data => {
+        console.log("Ответ от Google:", data);
+        
+        // Если выбран СБП и Google прислал реквизиты, подставляем их
+        if (data && data.sbp && (orderData.payment.includes('СБП') || orderData.payment.includes('SBP'))) {
+            // Передаем полученные реквизиты в функцию показа деталей оплаты
+            showPaymentDetails(orderData.payment, data.sbp);
+        }
+    })
+    .catch(error => {
+        console.error("Ошибка Google Script:", error);
+    });
 
+    // 2. Формируем заголовок Шага 5
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
         titleElement.innerHTML = `Заказ №${orderID} принят!<br>
@@ -428,26 +440,22 @@ window.finishAndShowPayment = function() {
         </span>`;
     }
 
+    // 3. Обновляем ссылки на контакты (поменяли lordtitle на bheads7)
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
     if (waLink) waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
-    if (emailLink) emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
+    if (emailLink) emailLink.href = `mailto:info@bheads7.ru?subject=Фото к заказу №${orderID}`;
 
-    // Показываем стандартные детали оплаты
+    // 4. Показываем стандартные детали оплаты
     showPaymentDetails(orderData.payment);
     
-// ЛОГИКА ДЛЯ КРИПТЫ
+    // ЛОГИКА ДЛЯ КРИПТЫ
     if (orderData.payment && (orderData.payment.includes('Криптовалюта') || orderData.payment.includes('crypto'))) {
-        
-        // В твоем коде сумма лежит в переменной totalPriceDisplay (строка ~300)
-        // Мы берем её, так как она точно существует и содержит итоговую сумму
         const cleanSum = totalPriceDisplay.replace(/\D/g, '');
         
-        // Сохраняем данные для pay.html
         localStorage.setItem('cryptocloud_amount', cleanSum);
         localStorage.setItem('cryptocloud_order_id', orderID);
 
-        // Открываем окно оплаты
         console.log("Крипта выбрана, открываю pay.html для суммы:", cleanSum);
         window.open('pay.html', '_blank');
     }
