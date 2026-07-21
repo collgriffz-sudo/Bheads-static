@@ -375,6 +375,7 @@ window.finishAndShowPayment = function() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const totalPriceDisplay = (document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0') + " ₽";
 
+    const orderURL = `https://bheads7.ru/order.html?id=${orderID}`;
     const orderData = {
         orderNumber: orderID,
         name: document.getElementById('orderName')?.value || 'Не указано',
@@ -386,6 +387,7 @@ window.finishAndShowPayment = function() {
         payment: document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано',
         comment: document.getElementById('orderComment')?.value || '—',
         totalPrice: totalPriceDisplay,
+        orderURL: orderURL,
         // строка для отправки Vercel
       /*  cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })) */
 
@@ -416,8 +418,14 @@ window.finishAndShowPayment = function() {
     .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
     .catch(error => console.error("Ошибка Google Script:", error));
 
+    // Обновляем заголовок с выводом ссылки на заказ
     const titleElement = document.querySelector('#step5 h2');
-    if (titleElement) titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
+    if (titleElement) {
+        titleElement.innerHTML = `✅ Заказ №${orderID} принят!<br>
+        <span style="font-size: 14px; font-weight: normal; color: #555; display: block; margin-top: 10px;">
+            Ссылка на ваш заказ: <a href="${orderURL}" target="_blank" style="color: #b30020; text-decoration: underline;">${orderURL}</a>
+        </span>`;
+    }
 
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
