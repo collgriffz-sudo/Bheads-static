@@ -418,13 +418,18 @@ window.finishAndShowPayment = function() {
     .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
     .catch(error => console.error("Ошибка Google Script:", error));
 
-    // Обновляем заголовок с выводом ссылки на заказ
+   // 1. Обновляем заголовок шага
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
-        titleElement.innerHTML = `✅ Заказ №${orderID} принят!<br>
-        <span style="font-size: 14px; font-weight: normal; color: #555; display: block; margin-top: 10px;">
-            Ссылка на ваш заказ: <a href="${orderURL}" target="_blank" style="color: #b30020; text-decoration: underline;">${orderURL}</a>
-        </span>`;
+        titleElement.innerHTML = `✅ Заказ №${orderID} принят!`;
+    }
+
+    // 2. Выводим ссылку в подзаголовок (p) или создаем блок под ссылку
+    const subtitleElement = document.querySelector('#step5 p');
+    if (subtitleElement) {
+        subtitleElement.innerHTML = `Ваша заявка успешно отправлена менеджеру.<br><br>` +
+            `<strong>Ссылка на ваш заказ:</strong><br>` +
+            `<a href="${orderURL}" target="_blank" style="color: #b30020; text-decoration: underline; word-break: break-all; font-weight: bold;">${orderURL}</a>`;
     }
 
     const waLink = document.getElementById('whatsappLink');
