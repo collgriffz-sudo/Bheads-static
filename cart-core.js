@@ -281,7 +281,7 @@ window.prepareReview = function() {
     nextStep(4);
 };
 
-function showPaymentDetails(paymentMethod, sbpData = null) {
+function showPaymentDetails(paymentMethod) {
     const container = document.getElementById('paymentContent');
     if (!container) return;
     
@@ -302,67 +302,64 @@ function showPaymentDetails(paymentMethod, sbpData = null) {
     const sum = totalElement ? totalElement.innerText.replace(/\D/g, '') : '0';
 
     if (paymentMethod.includes("СБП")) {
-        // Берем реквизиты, если они переданы из ответа Google Таблицы
-        const phone = (sbpData && sbpData.phone) ? sbpData.phone : 'Уточняется при связи';
-        const bank = (sbpData && sbpData.bank) ? sbpData.bank : 'Уточняется при связи';
-        const recipient = (sbpData && sbpData.recipient) ? sbpData.recipient : '';
-
         container.innerHTML = `
-            <div style="padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3; text-align: left;">
-                <strong style="color: #0d47a1;">Реквизиты для оплаты по СБП:</strong><br>
+            <div style="padding: 15px; background: #e3f2fd; border-radius: 8px; border: 1px solid #2196f3;">
+                <strong>Реквизиты СБП:</strong><br>
                 Сумма к переводу: <b>${sum} ₽</b><br>
-                Номер телефона: <b>${phone}</b><br>
-                Банк: <b>${bank}</b><br>
-                ${recipient ? `Получатель: <b>${recipient}</b>` : ''}
+                Номер: <br> Банк: <br> Получатель: Н.
             </div>`;
         
     } else if (paymentMethod.includes("Юмани") || paymentMethod.includes("Карты")) {
         container.innerHTML = `
             <div style="text-align: center;">
-                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://Bheads7.ru/thanks.html&quickpay=shop&account=410016056320201" 
+                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
                 width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
             </div>`;
         
     } else if (paymentMethod.includes("Криптовалюта")) {
-        const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
-        
-        container.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px;">
-                <p style="font-weight: bold; color: #333;">К оплате: ${finalSum} руб.</p>
-                <div class="cc-payment-button"></div>
-            </div>
-        `;
+    // 1. Берем сумму из итоговой строки (убираем всё кроме цифр)
+    const finalSum = document.getElementById('finalTotal')?.innerText.replace(/\D/g, '') || '0';
+    
+    // 2. Создаем контейнер для кнопки
+    container.innerHTML = `
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; padding: 20px;">
+            <p style="font-weight: bold; color: #333;">К оплате: ${finalSum} руб.</p>
+            <div class="cc-payment-button"></div>
+        </div>
+    `;
 
-        if (!window.CryptoCloudWidget) {
-            const script = document.createElement('script');
-            script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
-            script.async = true;
-            script.onload = () => {
-                if (window.CryptoCloudWidget) {
-                    window.CryptoCloudWidget.CreateInvoiceButton({
-                        size: "standard",
-                        template: "variant1:dark",
-                        text: "Оплатить криптовалютой",
-                        amount: finalSum,
-                        currency: "RUB",
-                        shop_id: "7zTuAWJTvjF0Vf9A",
-                        locale: "ru",
-                    }).mount('.cc-payment-button');
-                }
-            };
-            document.head.appendChild(script);
-        } else {
-            window.CryptoCloudWidget.CreateInvoiceButton({
-                size: "standard",
-                template: "variant1:dark",
-                text: "Оплатить криптовалютой",
-                amount: finalSum,
-                currency: "RUB",
-                shop_id: "7zTuAWJTvjF0Vf9A",
-                locale: "ru",
-            }).mount('.cc-payment-button');
-        }
+    // 3. Подгружаем скрипт и сразу вешаем создание кнопки на его загрузку
+    if (!window.CryptoCloudWidget) {
+        const script = document.createElement('script');
+        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+        script.async = true;
+        script.onload = () => {
+            if (window.CryptoCloudWidget) {
+                window.CryptoCloudWidget.CreateInvoiceButton({
+                    size: "standard",
+                    template: "variant1:dark",
+                    text: "Оплатить криптовалютой",
+                    amount: finalSum,
+                    currency: "RUB",
+                    shop_id: "7zTuAWJTvjF0Vf9A",
+                    locale: "ru",
+                }).mount('.cc-payment-button');
+            }
+        };
+        document.head.appendChild(script);
+    } else {
+        // Если скрипт уже был на странице, просто рисуем кнопку
+        window.CryptoCloudWidget.CreateInvoiceButton({
+            size: "standard",
+            template: "variant1:dark",
+            text: "Оплатить криптовалютой",
+            amount: finalSum,
+            currency: "RUB",
+            shop_id: "7zTuAWJTvjF0Vf9A",
+            locale: "ru",
+        }).mount('.cc-payment-button');
     }
+}
 }
 function generateOrderNumber() {
     const now = new Date();
@@ -414,27 +411,15 @@ window.finishAndShowPayment = function() {
     // отправка для гугл таблицу
     const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
 
-   // 1. Отправляем данные в Google Таблицу (без no-cors, чтобы прочитать ответ!)
     fetch(scriptURL, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // Трюк для обхода CORS в Apps Script
+        mode: 'no-cors', // Обязательно для работы с Google
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Ответ от Google:", data);
-        
-        // Если выбран СБП и Google прислал реквизиты, подставляем их
-        if (data && data.sbp && (orderData.payment.includes('СБП') || orderData.payment.includes('SBP'))) {
-            // Передаем полученные реквизиты в функцию показа деталей оплаты
-            showPaymentDetails(orderData.payment, data.sbp);
-        }
-    })
-    .catch(error => {
-        console.error("Ошибка Google Script:", error);
-    });
+    .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
+    .catch(error => console.error("Ошибка Google Script:", error));
 
-    // 2. Формируем заголовок Шага 5
     const titleElement = document.querySelector('#step5 h2');
     if (titleElement) {
         titleElement.innerHTML = `Заказ №${orderID} принят!<br>
@@ -443,22 +428,26 @@ window.finishAndShowPayment = function() {
         </span>`;
     }
 
-    // 3. Обновляем ссылки на контакты (поменяли lordtitle на bheads7)
     const waLink = document.getElementById('whatsappLink');
     const emailLink = document.getElementById('emailLink');
     if (waLink) waLink.href = `https://wa.me/79001234567?text=Здравствуйте! Фото к заказу №${orderID}`;
-    if (emailLink) emailLink.href = `mailto:info@bheads7.ru?subject=Фото к заказу №${orderID}`;
+    if (emailLink) emailLink.href = `mailto:support@lordtitle.ru?subject=Фото к заказу №${orderID}`;
 
-    // 4. Показываем стандартные детали оплаты
+    // Показываем стандартные детали оплаты
     showPaymentDetails(orderData.payment);
     
-    // ЛОГИКА ДЛЯ КРИПТЫ
+// ЛОГИКА ДЛЯ КРИПТЫ
     if (orderData.payment && (orderData.payment.includes('Криптовалюта') || orderData.payment.includes('crypto'))) {
+        
+        // В твоем коде сумма лежит в переменной totalPriceDisplay (строка ~300)
+        // Мы берем её, так как она точно существует и содержит итоговую сумму
         const cleanSum = totalPriceDisplay.replace(/\D/g, '');
         
+        // Сохраняем данные для pay.html
         localStorage.setItem('cryptocloud_amount', cleanSum);
         localStorage.setItem('cryptocloud_order_id', orderID);
 
+        // Открываем окно оплаты
         console.log("Крипта выбрана, открываю pay.html для суммы:", cleanSum);
         window.open('pay.html', '_blank');
     }
