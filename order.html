@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказ | BHeads7</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background-color: #f4f4f7; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+        }
+        .order-container { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            text-align: center; 
+            width: 100%; 
+            max-width: 500px; 
+        }
+        .order-header { 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 15px; 
+            margin-bottom: 20px; 
+        }
+        .order-title { font-size: 20px; font-weight: bold; color: #333; margin: 0 0 5px 0; }
+        .order-id { color: #888; font-size: 14px; }
+        .amount { font-size: 28px; font-weight: bold; color: #b30020; margin: 15px 0; }
+        .details-box { 
+            background: #fafafa; 
+            border: 1px solid #eee; 
+            border-radius: 12px; 
+            padding: 15px; 
+            text-align: left; 
+            font-size: 14px; 
+            margin-bottom: 20px; 
+            line-height: 1.5;
+        }
+        .sbp-box {
+            padding: 15px; 
+            background: #e3f2fd; 
+            border-radius: 12px; 
+            border: 1px solid #2196f3; 
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .loading { color: #666; font-style: italic; }
+        .error-msg { color: #ff4444; font-weight: bold; }
+        .btn-home {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: underline;
+            font-size: 13px;
+        }
+        .contact-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #25d366;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="order-container">
+        <div id="content">
+            <p class="loading">Загрузка информации о заказе...</p>
+        </div>
+        <a href="index.html" class="btn-home">Вернуться на главную</a>
+    </div>
+
+    <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
+        
+        // Получаем ID заказа из URL (?id=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('id');
+
+        const contentDiv = document.getElementById('content');
+
+        if (!orderId) {
+            contentDiv.innerHTML = '<p class="error-msg">Заказ не найден (не указан ID заказа).</p>';
+        } else {
+            // Запрашиваем данные из Google Таблицы
+            fetch(`${scriptURL}?id=${encodeURIComponent(orderId)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.error) {
+                        contentDiv.innerHTML = '<p class="error-msg">Заказ не найден или был удалён.</p>';
+                        return;
+                    }
+
+                    // Очищаем сумму от лишних символов для виджетов
+                    const cleanSum = String(data.totalPrice).replace(/\D/g, '');
+
+                    let paymentHTML = '';
+
+                    // Формируем блок оплаты в зависимости от способа
+                    if (data.payment && data.payment.includes("СБП")) {
+                        const sbp = data.sbp || {};
+                        paymentHTML = `
+                            <div class="sbp-box">
+                                <strong style="color: #0d47a1;">Реквизиты для оплаты по СБП:</strong><br>
+                                Сумма к переводу: <b>${data.totalPrice}</b><br>
+                                Номер телефона: <b>${sbp.phone || 'Уточняется'}</b><br> 
+                                Банк: <b>${sbp.bank || 'Уточняется'}</b><br> 
+                                Получатель: <b>${sbp.recipient || 'Уточняется'}</b>
+                            </div>`;
+                    } else if (data.payment && (data.payment.includes("Юмани") || data.payment.includes("Карты"))) {
+                        paymentHTML = `
+                            <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${cleanSum}&button-text=02&payment-type-choice=on&hint=&successURL=https://Bheads7.ru/thanks.html&quickpay=shop&account=410016056320201" 
+                            width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>`;
+                    } else if (data.payment && (data.payment.includes("Криптовалюта") || data.payment.includes("crypto"))) {
+                        paymentHTML = `<div class="cc-payment-button"></div>`;
+                        
+                        localStorage.setItem('cryptocloud_amount', cleanSum);
+                        localStorage.setItem('cryptocloud_order_id', data.orderNumber);
+                        
+                        const script = document.createElement('script');
+                        script.src = "https://cdn.cryptocloud.plus/widget/v1/widget.js";
+                        script.async = true;
+                        script.onload = () => {
+                            if (window.CryptoCloudWidget) {
+                                window.CryptoCloudWidget.CreateInvoiceButton({
+                                    size: "standard",
+                                    template: "variant1:dark",
+                                    text: "Оплатить криптовалютой",
+                                    amount: cleanSum,
+                                    currency: "RUB",
+                                    shop_id: "7zTuAWJTvjF0Vf9A",
+                                    locale: "ru",
+                                }).mount('.cc-payment-button');
+                            }
+                        };
+                        document.head.appendChild(script);
+                    } else {
+                        paymentHTML = `<p style="color:#666;">Способ оплаты: <b>${data.payment}</b></p>`;
+                    }
+
+                    // Выводим все данные на страницу
+                    contentDiv.innerHTML = `
+                        <div class="order-header">
+                            <h2 class="order-title">Заказ №${data.orderNumber}</h2>
+                            <div class="order-id">Покупатель: ${data.name}</div>
+                        </div>
+                        <div class="amount">${data.totalPrice}</div>
+                        <div class="details-box">
+                            <strong>Состав заказа:</strong><br>
+                            <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.itemsString}</div>
+                        </div>
+                        <div id="paymentContainer">${paymentHTML}</div>
+                    `;
+                })
+                .catch(err => {
+                    console.error(err);
+                    contentDiv.innerHTML = `
+                        <p class="error-msg">Не удалось загрузить данные заказа.</p>
+                        <p style="font-size:13px; color:#666;">Попробуйте обновить страницу или свяжитесь с нами для уточнения деталей.</p>
+                    `;
+                });
+        }
+    </script>
+</body>
+</html>
