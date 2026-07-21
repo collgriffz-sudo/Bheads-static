@@ -406,13 +406,13 @@ window.finishAndShowPayment = function() {
     .catch(error => console.error("Ошибка:", error));
 */
 
-    // отправка для гугл таблицу
+// отправка для гугл таблицу
     const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
 
     fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors', // Обязательно для работы с Google
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(orderData)
     })
     .then(() => console.log("Заказ успешно отправлен в Google Таблицу и Telegram"))
