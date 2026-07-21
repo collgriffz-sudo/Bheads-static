@@ -382,9 +382,7 @@ window.finishAndShowPayment = function() {
     const orderURL = `https://bheads7.ru/order.html?id=${orderID}`;
 
     const orderData = {
- const orderData = {
         orderNumber: orderID,
-        orderURL: orderURL, // <-- НАША НОВАЯ ССЫЛКА
         name: document.getElementById('orderName')?.value || 'Не указано',
         phone: document.getElementById('orderPhone')?.value || 'Не указано',
         email: document.getElementById('orderEmail')?.value || 'Не указано',
@@ -394,6 +392,7 @@ window.finishAndShowPayment = function() {
         payment: document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано',
         comment: document.getElementById('orderComment')?.value || '—',
         totalPrice: totalPriceDisplay,
+        orderURL: orderURL, // <-- НАША НОВАЯ ССЫЛКА
         // строка для отправки Vercel
       /*  cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })) */
 
