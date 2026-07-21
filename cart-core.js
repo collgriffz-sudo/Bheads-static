@@ -383,6 +383,7 @@ window.finishAndShowPayment = function() {
 
     const orderData = {
         orderNumber: orderID,
+        orderURL: orderURL, // <-- НАША НОВАЯ ССЫЛКА
         name: document.getElementById('orderName')?.value || 'Не указано',
         phone: document.getElementById('orderPhone')?.value || 'Не указано',
         email: document.getElementById('orderEmail')?.value || 'Не указано',
@@ -392,14 +393,6 @@ window.finishAndShowPayment = function() {
         payment: document.querySelector('input[name="payType"]:checked')?.value || 'Не выбрано',
         comment: document.getElementById('orderComment')?.value || '—',
         totalPrice: totalPriceDisplay,
-        orderURL: orderURL, // <-- НАША НОВАЯ ССЫЛКА
-        // строка для отправки Vercel
-      /*  cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })) */
-
-        // строка для отправки гугл таблицу    
-        itemsString: cart.map(item => `• ${item.name} — ${item.quantity || 1} шт. (${item.price} ₽)`).join("\n")
-    };
-
         // строка для отправки Vercel
       /*  cartItems: cart.map(item => ({ name: item.name, quantity: item.quantity, price: item.price })) */
 
