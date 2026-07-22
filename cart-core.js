@@ -407,7 +407,7 @@ window.finishAndShowPayment = function() {
 */
 
 // отправка для гугл таблицу
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyZIyVkanuCOERv_tGT6EkJ1ZpURmr1Y6EdUjDx1zhfq-FC6HxoptUsgqHsTV0VQIem/exec";
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwzv9OC4ABBnMIpc02Bd1FWkZ2cZw6ldelu2kDsa1InPwJhTGox9xg4bPgAo5z5YcHe/exec";
 
     fetch(scriptURL, {
         method: 'POST',
