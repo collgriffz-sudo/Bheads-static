@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Заказ | BHeads7</title>
     <style>
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background-color: #fff3cd; /* Мягкий желтый по умолчанию */
+            color: #856404;
+            margin-top: 10px;
+        }
+        
         body { 
             margin: 0; 
             padding: 20px; 
@@ -73,7 +85,7 @@
 
     <script>
         // ⚠️ ВСТАВЬ СЮДА ТАКУЮ ЖЕ НОВУЮ ССЫЛКУ /exec, КАК В cart-core.js
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyr7UacxVFHO0LdguvaaQBavP_R1MODR-ggaCx3UJFW7ntF4YyFcmIPjHVd-euYkZo-/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbx8k19PnwLA1cV9Pnuwm20iJt02GrrqLMBWWbTd3JB4ts0GbbLnbETpVxq2kULv-k9a/exec";
         
         // Получаем ID заказа из URL (?id=...)
         const urlParams = new URLSearchParams(window.location.search);
@@ -141,37 +153,36 @@
                     }
 
                     // Выводим все данные на страницу
-                    contentDiv.innerHTML = `
-                        <div class="order-header">
-                            <h2 class="order-title">Заказ №${data.orderNumber}</h2>
-                            <div class="order-id">Покупатель: ${data.name}</div>
-                        </div>
-                        <div class="amount">Общая сумма заказа: ${data.totalPrice}</div>
-                        
+                contentDiv.innerHTML = `
+                    <div class="order-header">
+                        <h2 class="order-title">Заказ №${data.orderNumber}</h2>
+                        <div class="order-id">Покупатель: ${data.name}</div>
+                        <div class="status-badge">${data.status}</div>
+                    </div>
+                    <div class="amount">Общая сумма заказа: ${data.totalPrice}</div>
+                    
                     <div class="details-box">
-                            <strong>📋 Данные получателя и доставки:</strong><br>
-                            <div style="margin-top: 8px; color: #555; line-height: 1.5;">
-                                • <strong>Получатель:</strong> ${data.receiver || 'Не указан'}<br>
-                                • <strong>Телефон:</strong> ${data.phone || 'Не указан'}<br>
-                                • <strong>Email:</strong> ${data.email || 'Не указан'}<br>
-                                • <strong>Адрес доставки:</strong> ${data.address || 'Не указан'}<br>
-                                • <strong>Способ оплаты:</strong> ${data.payment || 'Не указана'}<br>
-                                ${data.comment ? `• <strong>Комментарий:</strong> ${data.comment}<br>` : ''}
-                            </div>
+                        <strong>📋 Данные получателя:</strong><br>
+                        <div style="margin-top: 8px; color: #555; line-height: 1.5;">
+                            • <strong>Получатель посылки:</strong> ${data.receiver || 'Не указан'}<br>
+                            • <strong>Телефон:</strong> ${data.phone || 'Не указан'}<br>
+                            • <strong>Email:</strong> ${data.email || 'Не указан'}<br>
+                            • <strong>Адрес доставки:</strong> ${data.address || 'Не указан'}<br>
+                            • <strong>Способ оплаты:</strong> ${data.payment || 'Не указана'}<br>
+                            ${data.comment ? `• <strong>Комментарий:</strong> ${data.comment}<br>` : ''}
                         </div>
-                        
-                        <div class="details-box">
-                            <strong>Состав заказа:</strong><br>
-                            <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.itemsString}</div>
+                    </div>
+                    
+                    <div class="details-box">
+                        <strong>📦 Состав заказа и доставка:</strong><br>
+                        <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.itemsString}</div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; color: #555;">
+                            • <strong>Способ доставки:</strong> ${data.delivery || 'Не указана'}
                         </div>
-
-                        <div class="details-box">
-                            <strong>Способ доставки:</strong><br>
-                            <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.delivery || 'Не указана'}</div>
-                        </div>
-                        
-                        <div id="paymentContainer">${paymentHTML}</div>
-                    `;
+                    </div>
+                
+                    <div id="paymentContainer">${paymentHTML}</div>
+                                    `;
                 })
                 .catch(err => {
                     console.error(err);
@@ -184,3 +195,4 @@
     </script>
 </body>
 </html>
+
