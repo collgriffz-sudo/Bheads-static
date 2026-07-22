@@ -148,23 +148,28 @@
                         </div>
                         <div class="amount">${data.totalPrice}</div>
                         
-<div class="details-box">
-        <strong>📋 Данные получателя и доставки:</strong><br>
-        <div style="margin-top: 8px; color: #555; line-height: 1.5;">
-            • <strong>Получатель:</strong> ${data.receiver || 'Не указан'}<br>
-            • <strong>Телефон:</strong> ${data.phone || 'Не указан'}<br>
-            • <strong>Email:</strong> ${data.email || 'Не указан'}<br>
-            • <strong>Адрес доставки:</strong> ${data.address || 'Не указан'}<br>
-            • <strong>Способ доставки:</strong> ${data.delivery || 'Не указана'}<br>
-            • <strong>Способ оплаты:</strong> ${data.payment || 'Не указана'}<br>
-            ${data.comment ? `• <strong>Комментарий:</strong> ${data.comment}<br>` : ''}
-        </div>
-    </div>
+                    <div class="details-box">
+                            <strong>📋 Данные получателя и доставки:</strong><br>
+                            <div style="margin-top: 8px; color: #555; line-height: 1.5;">
+                                • <strong>Получатель:</strong> ${data.receiver || 'Не указан'}<br>
+                                • <strong>Телефон:</strong> ${data.phone || 'Не указан'}<br>
+                                • <strong>Email:</strong> ${data.email || 'Не указан'}<br>
+                                • <strong>Адрес доставки:</strong> ${data.address || 'Не указан'}<br>
+                                • <strong>Способ оплаты:</strong> ${data.payment || 'Не указана'}<br>
+                                ${data.comment ? `• <strong>Комментарий:</strong> ${data.comment}<br>` : ''}
+                            </div>
+                        </div>
                         
                         <div class="details-box">
                             <strong>Состав заказа:</strong><br>
                             <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.itemsString}</div>
                         </div>
+
+                        <div class="details-box">
+                            <strong>Способ доставки:</strong><br>
+                            <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.delivery || 'Не указана'}</div>
+                        </div>
+                        
                         <div id="paymentContainer">${paymentHTML}</div>
                     `;
                 })
