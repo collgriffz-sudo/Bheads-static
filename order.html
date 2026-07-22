@@ -73,7 +73,7 @@
 
     <script>
         // ⚠️ ВСТАВЬ СЮДА ТАКУЮ ЖЕ НОВУЮ ССЫЛКУ /exec, КАК В cart-core.js
-        const scriptURL = "https://script.google.com/macros/s/AKfycbwzv9OC4ABBnMIpc02Bd1FWkZ2cZw6ldelu2kDsa1InPwJhTGox9xg4bPgAo5z5YcHe/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyr7UacxVFHO0LdguvaaQBavP_R1MODR-ggaCx3UJFW7ntF4YyFcmIPjHVd-euYkZo-/exec";
         
         // Получаем ID заказа из URL (?id=...)
         const urlParams = new URLSearchParams(window.location.search);
@@ -147,6 +147,20 @@
                             <div class="order-id">Покупатель: ${data.name}</div>
                         </div>
                         <div class="amount">${data.totalPrice}</div>
+                        
+<div class="details-box">
+        <strong>📋 Данные получателя и доставки:</strong><br>
+        <div style="margin-top: 8px; color: #555; line-height: 1.5;">
+            • <strong>Получатель:</strong> ${data.receiver || 'Не указан'}<br>
+            • <strong>Телефон:</strong> ${data.phone || 'Не указан'}<br>
+            • <strong>Email:</strong> ${data.email || 'Не указан'}<br>
+            • <strong>Адрес доставки:</strong> ${data.address || 'Не указан'}<br>
+            • <strong>Способ доставка:</strong> ${data.delivery || 'Не указана'}<br>
+            • <strong>Способ оплатаы:</strong> ${data.payment || 'Не указана'}<br>
+            ${data.comment ? `• <strong>Комментарий:</strong> ${data.comment}<br>` : ''}
+        </div>
+    </div>
+                        
                         <div class="details-box">
                             <strong>Состав заказа:</strong><br>
                             <div style="white-space: pre-line; margin-top: 5px; color: #555;">${data.itemsString}</div>
