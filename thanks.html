@@ -1,1 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата прошла успешно! — Магазин</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .success-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+        .success-icon {
+            font-size: 64px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #111;
+        }
+        p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .order-info {
+            background: #f4f6f8;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #111;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="success-card">
+        <div class="success-icon">✅</div>
+        <h1>Спасибо за заказ!</h1>
+        <p>Оплата прошла успешно. Мы уже получили информацию о вашем заказе и скоро начнем его сборку.</p>
+        
+        <div class="order-info" id="order-block">
+            Заказ №<span id="order-id">загрузка...</span>
+        </div>
+      
+        <a href="/" class="btn">Вернуться на главную</a>
+    </div>
+
+    <script>
+        // Скрипт автоматически ловит номер заказа из ссылки (например: success.html?id=777)
+        // Ловим номер заказа от ЛЮБОЙ платежной системы
+const urlParams = new URLSearchParams(window.location.search);
+
+const orderId = urlParams.get('id')         // Базовый вариант
+             || urlParams.get('order_id')   // Частый вариант
+             || urlParams.get('invoice_id') // Вариант CryptoCloud
+             || urlParams.get('label')      // Вариант ЮMoney (перевод физлицу)
+             || urlParams.get('orderId')    // Вариант ЮKassa
+             || 'не указан (но оплата прошла)';
+
+document.getElementById('order-id').textContent = orderId;
+    </script>
+
+</body>
+</html>
