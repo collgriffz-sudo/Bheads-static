@@ -315,7 +315,7 @@ function showPaymentDetails(paymentMethod, sbpData = null) {
     } else if (paymentMethod.includes("Юмани") || paymentMethod.includes("Карты")) {
         container.innerHTML = `
             <div style="text-align: center;">
-                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://lordtitle.ru/thanks.html&quickpay=shop&account=410016056320201" 
+                <iframe src="https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets-hint=&default-sum=${sum}&button-text=02&payment-type-choice=on&hint=&successURL=https://bheads7.ru/thanks.html&quickpay=shop&account=410016056320201" 
                 width="100%" height="250" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
             </div>`;
         
