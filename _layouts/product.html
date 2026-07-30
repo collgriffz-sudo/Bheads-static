@@ -592,12 +592,12 @@
 <!-- Цикл для генерации скрытых блоков с ценами и артикулами для каждого размера -->
     {% for size in page.sizes %}
       <div class="goodsModificationsList" rel="{{ modification.value_id }}">
-        <input type="hidden" name="id" value="{{ size.id }}">
-        <input type="hidden" name="art_number" value="{{ size.art }}">
-        <input type="hidden" name="price_now" value="{{ size.price }}">
-        <input type="hidden" name="price_old" value="{{ size.old }}">
-        <div class="price_now_formated" style="display:none"><span title="{{ size.price }} Российских рублей"><span class="num">{{ size.price }}</span> <span>рублей</span></span></div>
-        <div class="price_old_formated" style="display:none"><span title="{{ size.old }} Российских рублей"><span class="num">{{ size.old }}</span> <span>рублей</span></span></div>
+        <input type="hidden" name="id" value="{{ modification.value_znachenie }}">
+        <input type="hidden" name="art_number" value="{{ page.article }}">
+        <input type="hidden" name="price_now" value="{{ page.newprice }}">
+        <input type="hidden" name="price_old" value="{{ page.oldprice }}">
+        <div class="price_now_formated" style="display:none"><span title="{{ page.newprice }} Российских рублей"><span class="num">{{ page.newprice }}</span> <span>рублей</span></span></div>
+        <div class="price_old_formated" style="display:none"><span title="{{ page.oldprice }} Российских рублей"><span class="num">{{ page.oldprice }}</span> <span>рублей</span></span></div>
         <input type="hidden" name="rest_value" value="900">
         <input type="hidden" name="measure_id" value="1">
         <input type="hidden" name="measure_name" value="шт">
@@ -626,12 +626,14 @@
         </div>
 
         <div class="productView__notify">
-          <a class="button" title="Уведомить" data-tooltip="Уведомить" rel="nofollow" data-fancybox="" data-src="#fancybox__notify" href="javascript:;" data-name="Фигурка домашнего питомца из глины, по фото (Ручная работа)" data-art="BHS_A5">
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Фигурка домашнего питомца из глины, по фото (Ручная работа) / BHS_A5 🔴 -->  
+			{{ page.name }}
+          <a class="button" title="Уведомить" data-tooltip="Уведомить" rel="nofollow" data-fancybox="" data-src="#fancybox__notify" href="javascript:;" data-name="{{ page.name }}" data-art="{{ page.article }}">
             <span>Уведомить</span>
           </a>
         </div>
-
-        <button type="submit" class="add-cart" title="Положить &laquo;Фигурка домашнего питомца из глины, по фото (Ручная работа)&raquo; в корзину"><span>Купить</span></button>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Фигурка домашнего питомца из глины, по фото (Ручная работа) 🔴 --> 
+        <button type="submit" class="add-cart" title="Положить &laquo;{{ page.name }}&raquo; в корзину"><span>Купить</span></button>
         </div>
     </form>
   </div>
@@ -653,42 +655,37 @@
     <div class="productView__description active" data-tab="1">
       <div class="htmlDataBlock">
         <p>
-          <div><span style="font-size:14px;"><strong>Фигурка домашнего питомца из глины (Ручная работа)</strong></span><br></div><br/>
-          <div><span style="font-size:14px;">Высота фигурки 5 - 10 см.</span></div></br>
-          <div><span style="font-size:14px;">В стоимость включена 1 фигурка животного и подставка для нее.</span></div>
-          <div><br><span style="font-size:14px;"><strong>Как заказать фигурку из глины по фото?</strong></span></div><br/>
-          <div><span style="font-size:14px;">Для мастера необходимо предоставить 2 фото в хорошем качестве (1 - мордочка крупным планом, 2 - фото животного в полный рост).</span></div></br>
-          <div><span style="font-size:14px;">Можно взять одежду для фигурки с другого фото (тоже необходимо приложить фото).</span></div></br>
-          <div> </div>
-          <div>
-            <span style="font-size:14px;">Фото прикладываются в процессе оформления заказа.</span><br></br>
-            <div><span style="font-size:14px;">Заказ берется в работу после предоставления фотографий и оплаты заказа.</span></div></br>
-          </div>
-          <div> </div>
-          <div><span style="font-size:14px;">Дополнительный реквизит оплачивается отдельно, в зависимости от сложности его изготовления.</span></div></br>
-          <div> </div>
-          <div><span style="font-size:14px;">Изготовление фигурки занимает около 4-5 дней. В процессе изготовления мы с Вами свяжемся для согласования получившегося.</span></div>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Тут полное описание товара 🔴 --> 
+          {{ page.description }}
         </p>
       </div>
     </div>
 
 
-	  
-<!-- Описание попункта доставки-->
+<!-- 🔴 🔴 -->	  
+<!-- Описание подпункта доставки-->
     <div class="productView__delivery" data-tab="3">
+	{% if page.delivery and page.delivery.size > 0 %}
+    {% for item in page.delivery %}
       <div class="delivery__item">
         <div class="delivery__name">
-          <span class="delivery__index">1</span>
-          <span>Доставка почтой с номером отслеживания</span>
+<!-- Автоматический порядковый номер: 1, 2, 3... -->
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: 1 🔴 --> 
+          <span class="delivery__index">{{ forloop.index }}</span>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Доставка почтой с номером отслеживания 🔴 --> 
+          <span>{{ delivery.name }}</span>
         </div>
         <div class="delivery__text">
-      <div><span style="font-size:14px;">Доставка производится почтой напрямую из мастерской в г. Гуанчжоу.</span></div><br/>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Описание доставки 🔴 --> 
+			{{ delivery.description }}
+     <!--  <div><span style="font-size:14px;">Доставка производится почтой напрямую из мастерской в г. Гуанчжоу.</span></div><br/>
       <div><span style="font-size:14px;">Срок доставки 14 - 28 дней.</span></div></br>
-      <div><span style="font-size:14px;">Возможно отслеживание по трек номеру.</span></div>
+      <div><span style="font-size:14px;">Возможно отслеживание по трек номеру.</span></div> -->
     </div>
     <div class="delivery__price">
       <span>Стоимость доставки: </span>
-      <strong><span title="490 Российских рублей"><span class="num">490</span> <span>рублей</span></span></strong>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: 490 Российских рублей \ 490 🔴 --> 
+      <strong><span title="{{ delivery.price }} Российских рублей"><span class="num">{{ delivery.price }}</span> <span>рублей</span></span></strong>
     </div>
   </div>
 </div>
