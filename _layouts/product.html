@@ -370,14 +370,16 @@
           </a>
         </li>
         <li itemprop="itemListElement" itemscope="" itemtype="https://schema.org/ListItem">
-          <span itemprop="name">Фигурка домашнего питомца из глины по фото</span><meta itemprop="position" content="4">
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Фигурка домашнего питомца из глины по фото 🔴 -->
+          <span itemprop="name">{{ page.title }}</span><meta itemprop="position" content="4">
         </li>
       </ul>
     </div>
     
     <div id="page__title">
       <div class="block__title">
-        <h1 class="title">Фигурка домашнего питомца из глины по фото (Ручная работа)</h1>
+<!-- 🔴 [ДИНАМИЧЕСКОЕ ПОЛЕ] Пример: Фигурка домашнего питомца из глины по фото (Ручная работа) 🔴 -->
+        <h1 class="title">{{ page.name }}</h1>
       </div>
     </div>
 
@@ -666,7 +668,7 @@
 <!-- Описание подпункта доставки-->
     <div class="productView__delivery" data-tab="3">
 	{% if page.delivery and page.delivery.size > 0 %}
-    {% for item in page.delivery %}
+    {% for delivery in page.delivery %}
       <div class="delivery__item">
         <div class="delivery__name">
 <!-- Автоматический порядковый номер: 1, 2, 3... -->
@@ -688,6 +690,8 @@
       <strong><span title="{{ delivery.price }} Российских рублей"><span class="num">{{ delivery.price }}</span> <span>рублей</span></span></strong>
     </div>
   </div>
+		{% endfor %}
+  {% endif %}
 </div>
 
           </div>
